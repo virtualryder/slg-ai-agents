@@ -1,4 +1,8 @@
 # Whole-of-Government (WoG) Orchestration Platform
+
+
+> **The WoG platform is additive, not a prerequisite.** Every agent deploys standalone with its own VPC, KMS, WORM audit, gateway, and human gate (`docs/DEPLOYMENT-MODELS.md`). Adopt this orchestration layer agent-by-agent when ready; the same agents become saga steps with no rewrite.
+
 *The strategic layer: move from dozens of isolated chatbots to governed digital workers coordinated across agencies.*
 
 Five pillars, each a module — all run with **no API key** (23 tests).

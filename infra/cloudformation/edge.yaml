@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  SLG Suite - Edge / front-end security. Amazon CloudFront (TLS 1.2+) fronting the agent
+  API, protected by AWS WAF (AWS Managed Rules: Common/OWASP, Known-Bad-Inputs, IP reputation,
+  plus a rate-based rule) and AWS Shield Standard. Part of every STANDALONE agent stack.
+  NOTE: a CLOUDFRONT-scoped WebACL must be created in us-east-1.
+Parameters:
+  AgentId: {Type: String, Default: 01-resident-services-311}
+  Environment: {Type: String, Default: dev}
+  OriginDomain: {Type: String, Description: "API Gateway / ALB domain that CloudFront fronts"}
+Resources:
+  WebAcl:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: !Sub "slg-${AgentId}-${Environment}-waf"
+      Scope: CLOUDFRONT
+      DefaultAction: {Allow: {}}
+      VisibilityConfig: {SampledRequestsEnabled: true, CloudWatchMetricsEnabled: true, MetricName: !Sub "slg-${AgentId}-waf"}
+      Rules:
+        - Name: AWSCommon
+          Priority: 0
+          OverrideAction: {None: {}}
+          Statement: {ManagedRuleGroupStatement: {VendorName: AWS, Name: AWSManagedRulesCommonRuleSet}}
+          VisibilityConfig: {SampledRequestsEnabled: true, CloudWatchMetricsEnabled: true, MetricName: common}
+        - Name: AWSKnownBadInputs
+          Priority: 1
+          OverrideAction: {None: {}}
+          Statement: {ManagedRuleGroupStatement: {VendorName: AWS, Name: AWSManagedRulesKnownBadInputsRuleSet}}
+          VisibilityConfig: {SampledRequestsEnabled: true, CloudWatchMetricsEnabled: true, MetricName: knownbad}
+        - Name: AWSIpReputation
+          Priority: 2
+          OverrideAction: {None: {}}
+          Statement: {ManagedRuleGroupStatement: {VendorName: AWS, Name: AWSManagedRulesAmazonIpReputationList}}
+          VisibilityConfig: {SampledRequestsEnabled: true, CloudWatchMetricsEnabled: true, MetricName: iprep}
+        - Name: RateLimit
+          Priority: 3
+          Action: {Block: {}}
+          Statement: {RateBasedStatement: {Limit: 2000, AggregateKeyType: IP}}
+          VisibilityConfig: {SampledRequestsEnabled: true, CloudWatchMetricsEnabled: true, MetricName: ratelimit}
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub "slg-${AgentId}-${Environment}"
+        WebACLId: !GetAtt WebAcl.Arn
+        DefaultCacheBehavior:
+          TargetOriginId: agent-origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad   # CachingDisabled (dynamic API)
+          OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac  # AllViewerExceptHostHeader
+        ViewerCertificate: {CloudFrontDefaultCertificate: true, MinimumProtocolVersion: TLSv1.2_2021}
+        Origins:
+          - Id: agent-origin
+            DomainName: !Ref OriginDomain
+            CustomOriginConfig: {OriginProtocolPolicy: https-only, OriginSSLProtocols: [TLSv1.2]}
+Outputs:
+  CloudFrontDomain: {Value: !GetAtt Distribution.DomainName}
+  WebAclArn: {Value: !GetAtt WebAcl.Arn}

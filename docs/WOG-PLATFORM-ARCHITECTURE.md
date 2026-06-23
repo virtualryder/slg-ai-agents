@@ -1,5 +1,9 @@
 # Whole-of-Government Orchestration Platform — Reference Architecture
 
+
+> **The WoG platform is additive, not a prerequisite.** Every agent deploys standalone with its own VPC, KMS, WORM audit, gateway, and human gate (`docs/DEPLOYMENT-MODELS.md`). Adopt this orchestration layer agent-by-agent when ready; the same agents become saga steps with no rewrite.
+
+
 ## The problem this layer solves
 The obstacle to whole-of-government service is **not the model**. It is identity, consent, interagency data-sharing, incompatible systems, and *which agency has the authority to act*. A resident who moves should not have to understand which of a DMV, a 311 CRM, an elections office, and a sanitation department owns each sub-task. This platform organizes services around the **life event**, coordinates the agencies, and keeps a single compliance record — without any agency surrendering control of its system of record.
 

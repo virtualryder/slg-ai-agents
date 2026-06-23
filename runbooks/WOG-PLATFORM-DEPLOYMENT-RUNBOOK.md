@@ -44,7 +44,7 @@ Deploy the network stack (VPC, private subnets, NAT, security groups, **Bedrock 
 aws cloudformation deploy --template-file infra/cloudformation/network.yaml \
   --stack-name slg-net-dev --parameter-overrides Environment=dev
 ```
-No public inbound; all inter-service traffic stays in the VPC. Front public entry points with **CloudFront + AWS WAF**.
+No public inbound; all inter-service traffic stays in the VPC. Front public entry points with **CloudFront + AWS WAF + AWS Shield** — deploy `infra/cloudformation/edge.yaml` (WebACL with AWS Managed Rules: OWASP common, known-bad-inputs, IP reputation + a rate-based rule; CLOUDFRONT-scoped WebACL must be created in us-east-1).
 
 ---
 
@@ -57,7 +57,7 @@ aws cloudformation deploy --template-file infra/cloudformation/security.yaml \
 KMS_ARN=$(aws cloudformation describe-stacks --stack-name slg-sec-dev \
   --query "Stacks[0].Outputs[?OutputKey=='KmsKeyArn'].OutputValue" --output text)
 ```
-Map your IdP groups → `custom:slg_role`. This claim is what the gateway authorizes against (`agent grant ∩ user entitlement`).
+**Identity / JWT exchange:** Amazon Cognito federates the agency IdP (SAML/OIDC, MFA at the IdP) and issues a short-lived **JWT** — no credentials are stored in AWS. API Gateway's Cognito JWT authorizer validates the token at the edge; the MCP gateway then re-validates the JWT and its `custom:slg_role` claim and authorizes each tool call (`agent grant ∩ user entitlement`), minting a short-lived tool-scoped token (AgentCore Identity / STS) per call. Map your IdP groups → `custom:slg_role`.
 
 ---
 

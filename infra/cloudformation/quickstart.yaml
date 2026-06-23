@@ -1,16 +1,26 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: >
-  SLG AI Agent Suite - MASTER quick-deploy. Nests security, data, gateway (portable|agentcore),
-  and agent (native|container) into a customer-isolated environment. New account -> running agent.
+  SLG AI Agent Suite - MASTER quick-deploy for a STANDALONE agent. Nests network (own VPC +
+  Flow Logs + Bedrock VPC endpoint), security (KMS, Guardrail, Cognito, least-privilege role),
+  data (append-only audit + S3 Object Lock WORM), and the agent (native|container) into a
+  customer-isolated environment. NO dependency on the Whole-of-Government platform — deploy one
+  agent with a complete secure, governed, logged architecture. New account -> running agent.
 Parameters:
   AgentId: {Type: String, Default: 01-resident-services-311}
   Environment: {Type: String, Default: dev, AllowedValues: [dev, test, prod]}
   GatewayMode: {Type: String, Default: portable, AllowedValues: [portable, agentcore]}
   DeployMode: {Type: String, Default: native, AllowedValues: [native, container]}
   TemplateBaseUrl: {Type: String, Description: "S3 base URL where nested templates are staged"}
+  OriginDomain: {Type: String, Default: "", Description: "API Gateway/ALB domain CloudFront fronts (from the gateway stack output)"}
 Conditions:
   UsePortable: !Equals [!Ref GatewayMode, portable]
+  HasOrigin: !Not [!Equals [!Ref OriginDomain, ""]]
 Resources:
+  Network:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "${TemplateBaseUrl}/network.yaml"
+      Parameters: {AgentId: !Ref AgentId, Environment: !Ref Environment}
   Security:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -24,6 +34,12 @@ Resources:
         AgentId: !Ref AgentId
         Environment: !Ref Environment
         KmsKeyArn: !GetAtt Security.Outputs.KmsKeyArn
+  Edge:
+    Type: AWS::CloudFormation::Stack
+    Condition: HasOrigin
+    Properties:
+      TemplateURL: !Sub "${TemplateBaseUrl}/edge.yaml"
+      Parameters: {AgentId: !Ref AgentId, Environment: !Ref Environment, OriginDomain: !Ref OriginDomain}
   Agent:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -34,6 +50,8 @@ Resources:
         DeployMode: !Ref DeployMode
         AgentRoleArn: !GetAtt Security.Outputs.AgentRoleArn
 Outputs:
+  VpcId: {Value: !GetAtt Network.Outputs.VpcId}
+  CloudFrontDomain: {Condition: HasOrigin, Value: !GetAtt Edge.Outputs.CloudFrontDomain}
   GuardrailId: {Value: !GetAtt Security.Outputs.GuardrailId}
   AuditTable: {Value: !GetAtt Data.Outputs.AuditTableName}
   WormBucket: {Value: !GetAtt Data.Outputs.WormBucketName}

@@ -1,5 +1,5 @@
 # Benefits / HHS Caseworker Assist — AWS Deployment Guide
 
-Reference architecture mirrors the suite: CloudFront + WAF → API Gateway (Cognito JWT) → agent runtime (AgentCore Runtime container, or Step Functions + Lambda with a `waitForTaskToken` human gate) → MCP Authorization Gateway (AgentCore Gateway + Identity, or API Gateway + STS — portable path works in GovCloud) → connector Lambdas (Integrated eligibility system, IDP, Identity, KB) → Bedrock (Claude) + Guardrails + Knowledge Bases. Cross-cutting: KMS CMK · DynamoDB append-only audit · S3 Object Lock (WORM) · CloudWatch · CloudTrail · VPC.
+**The step-by-step, follow-along deployment instructions for this agent live in [`DEPLOY-RUNBOOK.md`](DEPLOY-RUNBOOK.md)** (prerequisites → local proof → shared foundation → role mapping → connectors → package → deploy → guardrail → HITL → smoke tests → go-live, each with a Verify checkpoint).
 
-Deploy: `scripts/deploy.sh 04-benefits-caseworker dev portable native`. Full step-by-step: `runbooks/WOG-PLATFORM-DEPLOYMENT-RUNBOOK.md`. Sources: `SOURCES.md`.
+Reference architecture and AWS service mapping for the whole suite: `../../docs/SUITE-ARCHITECTURE.md`. Full platform foundation deploy: `../../runbooks/WOG-PLATFORM-DEPLOYMENT-RUNBOOK.md`. Sources: `../../SOURCES.md`.

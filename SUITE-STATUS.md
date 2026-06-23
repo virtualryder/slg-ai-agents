@@ -11,7 +11,7 @@
 | Agents 02–08 (forms-idp · permitting · benefits · records-foia · procurement · govops · public-safety) | Flagship — **per-intent action mapping**, withheld consequential actions, 4 docs + **deploy runbook** + **customer deck** each, AWS-native rebuilds | 63 ✓ |
 | IaC — CloudFormation (6 templates) | Valid, deployable | parsed ✓ |
 | IaC — Terraform + GovCloud overlay (6 files) | Valid HCL | parsed ✓ |
-| Decks | **all 8 agent customer decks** + suite exec overview + WoG platform | — |
+| Decks (`decks/`) | 8 per-agent narrative decks + WoG platform + suite exec overview — grounded/cited figures + speaker-note talk tracks (`decks/DECK-SOURCES.md`) | — |
 | Per-agent deploy runbooks | `<agent>/docs/DEPLOY-RUNBOOK.md` (real-AWS, step-by-step) for all 8 | — |
 | Sources | `SOURCES.md` verified Jun 2026 | — |
 
