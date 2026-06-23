@@ -2,7 +2,7 @@
   {
     "request_id": "05-search",
     "channel": "WEB",
-    "raw_request": "find for my case",
+    "raw_request": "find",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "RECORDS_TECH"
@@ -11,7 +11,7 @@
   {
     "request_id": "05-classify",
     "channel": "WEB",
-    "raw_request": "classify for my case",
+    "raw_request": "classify",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "RECORDS_TECH"
@@ -20,7 +20,7 @@
   {
     "request_id": "05-redact",
     "channel": "WEB",
-    "raw_request": "redact for my case",
+    "raw_request": "redact",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "RECORDS_TECH"
@@ -29,7 +29,7 @@
   {
     "request_id": "05-package",
     "channel": "WEB",
-    "raw_request": "package for my case",
+    "raw_request": "package",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "RECORDS_TECH"
@@ -38,7 +38,7 @@
   {
     "request_id": "05-status",
     "channel": "WEB",
-    "raw_request": "status for my case",
+    "raw_request": "status",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "RECORDS_TECH"

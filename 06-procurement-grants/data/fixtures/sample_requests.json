@@ -2,7 +2,7 @@
   {
     "request_id": "06-find",
     "channel": "WEB",
-    "raw_request": "find a contract for my case",
+    "raw_request": "find a contract",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "PROCUREMENT_ANALYST"
@@ -11,7 +11,7 @@
   {
     "request_id": "06-draft_rfp",
     "channel": "WEB",
-    "raw_request": "draft for my case",
+    "raw_request": "draft",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "PROCUREMENT_ANALYST"
@@ -20,7 +20,7 @@
   {
     "request_id": "06-compare",
     "channel": "WEB",
-    "raw_request": "compare for my case",
+    "raw_request": "compare",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "PROCUREMENT_ANALYST"
@@ -29,7 +29,7 @@
   {
     "request_id": "06-status",
     "channel": "WEB",
-    "raw_request": "status for my case",
+    "raw_request": "status",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "PROCUREMENT_ANALYST"

@@ -6,4 +6,4 @@ COPY governance /app/governance
 COPY 02-forms-idp /app/02-forms-idp
 RUN pip install --no-cache-dir -e /app/platform_core && pip install --no-cache-dir langgraph>=0.2 streamlit>=1.36
 EXPOSE 8080 8501
-CMD ["python", "/app/02-forms-idp/agent/serve.py"]
+CMD ["python","/app/02-forms-idp/agent/serve.py"]

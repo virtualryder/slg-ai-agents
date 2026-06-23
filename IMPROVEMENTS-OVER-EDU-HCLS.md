@@ -11,9 +11,13 @@ You asked me to build to the EDU/HCLS bar as a minimum and exceed it. Here is ex
 6. **Full IaC parity from day one for commercial *and* GovCloud**, with the GovCloud AgentCore carve-outs (Memory/semantic-search/Policy/Registry not yet available) handled by pinning the portable gateway path — a currency detail most references miss.
 7. **Currency corrections captured in `SOURCES.md`:** ADA 2027/2028 deadlines, MARS-E→ARC-AMPE, AgentCore GA + GovCloud status, Strands 1.0, named 2026 deployments.
 
+## Also delivered since
+- **Whole-of-Government platform** deepened to flagship: govern-tool-access contract, durable saga with compensation, canonical adapters, compliance evidence, **5 life-event templates** (moving/job_loss/new_business/disaster/bereavement), AWS-native runnable saga (gate/step/compensate Lambdas + DynamoDB/EventBridge backends + Step Functions emulator), and a deployable `wog-platform.yaml`.
+- **GTM + deploy assets:** `gtm/WOG-PLATFORM-GTM-STORY.md` and a 16-stage architect deployment runbook, plus per-agent deploy runbooks.
+
 ## Honest backlog (next passes)
-- **Agents 02–08** are scaffolded; replicate Agent 01's flagship depth (graph + tools + docs + native rebuild + deck) across them. Agent 01 is the gold template.
-- **Per-agent decks** for 02–08 and the suite executive overview (Agent 01 deck + suite deck shipped this pass).
+- ~~Agents 02–08~~ **DONE** — all eight built to flagship depth with per-intent action mapping, withheld consequential actions (issue_permit/adjudicate/release/award), 4 docs + a deploy runbook + a customer deck each, and AWS-native rebuilds.
+- ~~Per-agent decks~~ **DONE** — all 8 agent customer decks + suite executive + WoG platform deck shipped.
 - **Live connectors** for Accela/Tyler, the integrated eligibility system, ECMS/records, ServiceNow — interfaces are defined; adapters are stubs.
 - **Bedrock Knowledge Base ingestion** pipeline (the retrieval substrate is referenced; the ingestion IaC is a stub).
 - **axe-core CI job** to complement the deterministic WCAG pre-flight with full automated auditing.

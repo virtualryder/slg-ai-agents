@@ -2,7 +2,7 @@
   {
     "request_id": "03-requirements",
     "channel": "WEB",
-    "raw_request": "what do i need for my case",
+    "raw_request": "what do i need",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "PERMIT_TECH"
@@ -11,7 +11,7 @@
   {
     "request_id": "03-status",
     "channel": "WEB",
-    "raw_request": "status for my case",
+    "raw_request": "status",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "PERMIT_TECH"
@@ -20,7 +20,7 @@
   {
     "request_id": "03-apply",
     "channel": "WEB",
-    "raw_request": "apply for my case",
+    "raw_request": "apply",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "PERMIT_TECH"
@@ -29,7 +29,7 @@
   {
     "request_id": "03-route",
     "channel": "WEB",
-    "raw_request": "route for my case",
+    "raw_request": "route",
     "acting_user_claims": {
       "sub": "staff-1",
       "custom:slg_role": "PERMIT_TECH"

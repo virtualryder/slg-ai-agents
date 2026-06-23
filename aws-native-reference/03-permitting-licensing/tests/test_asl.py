@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
-
-def test_asl_has_waitfortasktoken():
-    asl = json.loads((Path(__file__).resolve().parents[1] / "stepfunctions/03_permitting_licensing.asl.json").read_text())
+def test_asl_waitfortasktoken():
+    asl=json.loads((Path(__file__).resolve().parents[1]/"stepfunctions/03_permitting_licensing.asl.json").read_text())
     assert "waitForTaskToken" in asl["States"]["HumanGate"]["Resource"]
     assert asl["States"]["Finalize"]["End"] is True

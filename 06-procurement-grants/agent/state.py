@@ -5,8 +5,10 @@ from typing import Any, Dict, List, Optional, TypedDict
 
 
 class RecommendedAction(str, Enum):
+    FIND_VEHICLES = "FIND_VEHICLES"
     DRAFT_RFP = "DRAFT_RFP"
     COMPARE_BIDS = "COMPARE_BIDS"
+    STATUS_LOOKUP = "STATUS_LOOKUP"
     ESCALATE = "ESCALATE"
     REVISE = "REVISE"
 

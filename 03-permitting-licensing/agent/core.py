@@ -1,6 +1,6 @@
 # agent/core.py — Permitting & Licensing
-# Framework-free workflow (runs in EXTRACT_MODE=demo with no LLM). graph.py wires
-# these same node functions into a LangGraph StateGraph with a HITL interrupt.
+# Framework-free workflow (runs in EXTRACT_MODE=demo with no LLM). Each intent maps
+# to a distinct recommended action, system-of-record tool, and outcome status.
 from __future__ import annotations
 import os
 from typing import Any, Dict
@@ -12,20 +12,21 @@ from slg_agent_platform.pii import mask
 from tools import gateway_tools as gw
 from agent.state import RecommendedAction
 
-INTENTS = {'requirements': ['what do i need', 'requirement', 'required', 'do i need a permit'], 'status': ['status', 'where is my permit', 'holding'], 'apply': ['apply', 'application', 'submit', 'start a permit'], 'route': ['route', 'review', 'send to']}
+INTENTS = {'requirements': ['what do i need', 'requirement', 'required', 'do i need a permit'], 'status': ['status', 'where is my permit', 'holding'], 'apply': ['apply', 'start a permit', 'submit application', 'new permit'], 'route': ['route', 'send for review', 'route to']}
+INTENT_ACTIONS = {'requirements': {'action': 'EXPLAIN_REQUIREMENTS', 'tool': 'permitting.check_requirements', 'args': {'permit_type': 'Building'}, 'write': False, 'done': 'REQUIREMENTS_PROVIDED'}, 'status': {'action': 'STATUS_LOOKUP', 'tool': 'permitting.get_permit', 'args': {'permit_id': 'PRM-2026-0481'}, 'write': False, 'done': 'STATUS_PROVIDED'}, 'apply': {'action': 'CREATE_APPLICATION', 'tool': 'permitting.create_application', 'args': {'type': 'Building'}, 'write': True, 'done': 'APPLICATION_CREATED'}, 'route': {'action': 'ROUTE_REVIEW', 'tool': 'permitting.route_review', 'args': {'permit_id': 'PRM-2026-0481', 'reviewers': ['Zoning', 'Fire']}, 'write': True, 'done': 'ROUTED'}}
 PERSONAL_INTENTS = set(['status'])
 DEFAULT_INTENT = 'requirements'
-GATHER_TOOL = 'permitting.check_requirements'
-GATHER_ARGS = {'permit_type': 'Building'}
-WRITE_TOOL = 'permitting.create_application'
-WRITE_ARGS = {'type': 'Building'}
-WRITE_ACTION = 'CREATE_APPLICATION'
-DONE_STATUS = 'APPLICATION_CREATED'
+CONTEXT_READ_TOOL = 'permitting.check_requirements'
+CONTEXT_READ_ARGS = {'permit_type': 'Building'}
 WITHHELD_TOOL = 'permitting.issue_permit'   # legally consequential action the agent may NOT call
 
 
 def _demo() -> bool:
     return os.getenv("EXTRACT_MODE", "demo").strip().lower() == "demo"
+
+
+def _spec(state: Dict[str, Any]) -> Dict[str, Any]:
+    return INTENT_ACTIONS.get(state.get("intent"), INTENT_ACTIONS[DEFAULT_INTENT])
 
 
 def intake(state: Dict[str, Any]) -> Dict[str, Any]:
@@ -60,19 +61,23 @@ def check_identity(state: Dict[str, Any]) -> Dict[str, Any]:
 
 def gather(state: Dict[str, Any]) -> Dict[str, Any]:
     claims = state.get("acting_user_claims", {})
-    res = gw.call(claims, GATHER_TOOL, dict(GATHER_ARGS))
+    spec = _spec(state)
+    # read-action intents call their own tool; write intents read a safe context tool to ground the draft
+    if spec.get("tool") and not spec["write"]:
+        tool, args = spec["tool"], spec.get("args", {})
+    else:
+        tool, args = CONTEXT_READ_TOOL, CONTEXT_READ_ARGS
+    res = gw.call(claims, tool, dict(args)) if tool else None
     return {"gathered": (res.result if res and res.allowed else None),
             "current_step": "gather",
             "completed_steps": state.get("completed_steps", []) + ["gather"]}
 
 
 def produce(state: Dict[str, Any]) -> Dict[str, Any]:
-    gathered = state.get("gathered")
-    # Demo: deterministic artifact strictly from gathered data (no fabrication).
-    artifact = {"summary": "permit application package prepared from approved source data.",
-                "source": gathered, "withheld_action": WITHHELD_TOOL}
-    text = artifact["summary"]
-    return {"artifact": artifact, "artifact_text": text, "produced_by": "demo-stub",
+    artifact = {"summary": "Artifact prepared from the approved source record.",
+                "intent": state.get("intent"), "source": state.get("gathered"),
+                "withheld_action": WITHHELD_TOOL}
+    return {"artifact": artifact, "artifact_text": artifact["summary"], "produced_by": "demo-stub",
             "current_step": "produce",
             "completed_steps": state.get("completed_steps", []) + ["produce"]}
 
@@ -83,12 +88,9 @@ def compliance_check(state: Dict[str, Any]) -> Dict[str, Any]:
     access = check_plain_language(text)
     pii_ok = mask(text) == text
     findings = []
-    if not grounding.grounded:
-        findings.append("ungrounded claim in artifact")
-    if not access.passes:
-        findings.append("plain-language/accessibility issue")
-    if not pii_ok:
-        findings.append("PII present in artifact")
+    if not grounding.grounded: findings.append("ungrounded claim in artifact")
+    if not access.passes: findings.append("plain-language/accessibility issue")
+    if not pii_ok: findings.append("PII present in artifact")
     if state.get("needs_identity") and not state.get("identity_verified"):
         findings.append("personal data requested without verified identity")
     return {"grounding_report": grounding.to_audit_dict(),
@@ -106,13 +108,14 @@ def routing_decision(state: Dict[str, Any]) -> str:
 
 
 def set_recommended_action(state: Dict[str, Any]) -> Dict[str, Any]:
-    if state.get("needs_identity") and not state.get("identity_verified"):
-        action = RecommendedAction.ESCALATE
-    elif state.get("intent") in ("escalate",):
+    spec = _spec(state)
+    if state.get("needs_identity") and not state.get("identity_verified") \
+            and "VERIFY_IDENTITY" in RecommendedAction.__members__:
+        action = RecommendedAction.VERIFY_IDENTITY
+    elif state.get("intent") == "escalate":
         action = RecommendedAction.ESCALATE
     else:
-        action = RecommendedAction[WRITE_ACTION] if WRITE_ACTION in RecommendedAction.__members__ \
-            else RecommendedAction.ESCALATE
+        action = RecommendedAction[spec["action"]]
     return {"recommended_action": action,
             "revision_count": state.get("revision_count", 0) + (1 if state.get("quality_findings") else 0),
             "current_step": "human_review_gate",
@@ -120,21 +123,27 @@ def set_recommended_action(state: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def finalize(state: Dict[str, Any]) -> Dict[str, Any]:
-    action = state.get("recommended_action")
+    spec = _spec(state)
     approval = state.get("human_approval")
     claims = state.get("acting_user_claims", {})
     out = {"current_step": "finalize",
            "completed_steps": state.get("completed_steps", []) + ["finalize"]}
-    if str(action) == f"RecommendedAction.{WRITE_ACTION}" and approval:
-        res = gw.call(claims, WRITE_TOOL, dict(WRITE_ARGS), approval=approval)
-        out["write_result"] = res.result if res and res.allowed else None
-        out["case_status"] = DONE_STATUS if (res and res.allowed) else "BLOCKED"
-    elif action == RecommendedAction.ESCALATE:
+    if state.get("needs_identity") and not state.get("identity_verified"):
         out["case_status"] = "PENDING_REVIEW"
+    elif spec["write"]:
+        if approval:
+            res = gw.call(claims, spec["tool"], dict(spec.get("args", {})), approval=approval)
+            if res and res.allowed:
+                out["write_result"] = res.result
+                out["case_status"] = spec["done"]
+            else:  # e.g. acting role not entitled to a high-risk tool (run_runbook needs SRE)
+                out["case_status"] = "BLOCKED_NEEDS_APPROVER"
+        else:
+            out["case_status"] = "PENDING_APPROVAL"
     else:
-        out["case_status"] = "PENDING_OFFICIAL" if WITHHELD_TOOL else "ESCALATED"
+        out["case_status"] = spec["done"]   # read-action intents complete without a write
     out["audit_trail"] = state.get("audit_trail", []) + [{
-        "action": str(action), "case_status": out["case_status"],
+        "action": str(state.get("recommended_action")), "case_status": out["case_status"],
         "grounded": state.get("grounding_report", {}).get("grounded"),
         "withheld_action_never_called": True}]
     return out
@@ -154,6 +163,5 @@ def run_until_gate(initial: Dict[str, Any]) -> Dict[str, Any]:
 
 def resume(state: Dict[str, Any], approval=None) -> Dict[str, Any]:
     s = dict(state); s["_paused_at_gate"] = False
-    if approval is not None:
-        s["human_approval"] = approval
+    if approval is not None: s["human_approval"] = approval
     s.update(finalize(s)); return s

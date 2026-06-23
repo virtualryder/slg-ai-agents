@@ -7,7 +7,7 @@ A systems integrator deploying AI for a state agency, county, or city cannot han
 
 The result is a deployable accelerator — not a certified product — that gives an engagement team a credible, compliant starting point across the highest-value SLG workflows, plus the **Whole-of-Government Orchestration Platform** the agents compose into.
 
-**Status:** platform core + governance + WoG orchestration (5 life-events, runnable saga) + **all 8 agents** built to flagship depth · AWS-native rebuilds (Strands + Step Functions) · CloudFormation + Terraform IaC with **commercial *and* GovCloud** parity · **179 automated tests passing with no API key** · GTM story + architect deployment runbook · grounded in current AWS + SLG sources (`SOURCES.md`).
+**Status:** platform core + governance + WoG orchestration (5 life-events, runnable saga) + **all 8 agents** built to flagship depth (per-intent action mapping, withheld consequential actions) · AWS-native rebuilds (Strands + Step Functions) · CloudFormation + Terraform IaC, **commercial *and* GovCloud** · **179 automated tests passing with no API key** · **per-agent customer decks + per-agent AWS deploy runbooks** · GTM story + platform deploy runbook · grounded in current AWS + SLG sources (`SOURCES.md`).
 
 ---
 
@@ -22,6 +22,8 @@ The result is a deployable accelerator — not a certified product — that give
 | **06** | Procurement, Contracting & Grants | Slow, document-heavy solicitations and grants | Procurement/ERP, IDP | **Award stays with a procurement officer** |
 | **07** | GovOps IT Service Desk & Modernization | Legacy systems, workforce shortages, ticket volume | ITSM, KB | No destructive ops without approval |
 | **08** | Public Safety / Public Health Case & Report | Narrative-heavy reports; surveillance queries | Incident systems, surveillance DB | CJIS/PHI separation; **no probable cause / enforcement by AI** |
+
+Every agent ships a runnable workflow (per-intent action mapping), gateway-backed tools, a test suite, a README + four-document set, **an AWS deploy runbook** (`<agent>/docs/DEPLOY-RUNBOOK.md`), **a customer deck**, and an AWS-native Strands/Step Functions rebuild.
 
 Plus: the **Whole-of-Government Orchestration Platform** (`gov_platform/wog_orchestration/`) and five documented future use cases (`docs/FUTURE-USE-CASES.md`).
 
@@ -55,7 +57,7 @@ cd 01-resident-services-311 && EXTRACT_MODE=demo python demo/demo_run.py
 `infra/cloudformation/quickstart.yaml` (master) + Terraform parity (`infra/terraform/`), both commercial and **GovCloud** (`infra/terraform/govcloud/`). Two gateway paths (`portable` API Gateway+Cognito for any region incl. GovCloud, or `agentcore`), two run modes (`native` Step Functions+Lambda, or `container` ECS/AgentCore Runtime). See `docs/` and `SOURCES.md`.
 
 ## Go-to-market & deploy assets
-`gtm/WOG-PLATFORM-GTM-STORY.md` (pitch narrative, personas, objection-handling Q&A, scalability, cost, regulatory alignment) · `runbooks/WOG-PLATFORM-DEPLOYMENT-RUNBOOK.md` (16-stage architect deploy: prerequisites → networking → KMS/Cognito → Bedrock + Guardrails → knowledge base → gateway → agents → WoG saga → HITL → audit/WORM → accessibility → smoke tests → go-live) · three decks (Agent 01 customer, suite executive, WoG platform).
+`gtm/WOG-PLATFORM-GTM-STORY.md` (pitch narrative, personas, objection-handling Q&A, scalability, cost, regulatory alignment) · `runbooks/WOG-PLATFORM-DEPLOYMENT-RUNBOOK.md` (16-stage architect deploy: prerequisites → networking → KMS/Cognito → Bedrock + Guardrails → knowledge base → gateway → agents → WoG saga → HITL → audit/WORM → accessibility → smoke tests → go-live) · **eleven decks** (all 8 agent customer decks + suite executive + WoG platform + Agent 01) · **per-agent AWS deploy runbooks** for all 8 agents (`<agent>/docs/DEPLOY-RUNBOOK.md`).
 
 ## Compliance disclaimer
 A **decision-support accelerator** for qualified government staff — not a certified system, an ATO, or an approved adjudication tool. AI-generated content requires human review before any consequential action. The AI never takes irreversible action autonomously. Customers own ATO/GovRAMP, IdP integration, connector validation, Guardrail configuration, and change control.

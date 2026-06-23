@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional, TypedDict
 
 
 class RecommendedAction(str, Enum):
+    SUMMARIZE = "SUMMARIZE"
     DRAFT_REPORT = "DRAFT_REPORT"
     RUN_QUERY = "RUN_QUERY"
     ESCALATE = "ESCALATE"

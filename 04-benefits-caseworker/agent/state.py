@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, TypedDict
 
 class RecommendedAction(str, Enum):
     PRESCREEN = "PRESCREEN"
+    STATUS_LOOKUP = "STATUS_LOOKUP"
     CREATE_APPLICATION = "CREATE_APPLICATION"
     DRAFT_NOTICE = "DRAFT_NOTICE"
     VERIFY_IDENTITY = "VERIFY_IDENTITY"

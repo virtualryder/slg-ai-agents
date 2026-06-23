@@ -5,10 +5,15 @@
 
 **Problem.** Counties hold deeds, court records, emails, video and scanned paper. Staff must find responsive records, dedupe, detect exemptions, redact, and meet a statutory clock.
 
-**Maturity:** Demonstrated + Deployable-by-design. Runs end-to-end with **no API key** (`EXTRACT_MODE=demo`).\n> **Withheld in code:** `records.release` (release) is **not** in this agent's grants — a human role holds it (verified by test).
+**Maturity:** Demonstrated + Deployable-by-design. Runs end-to-end with **no API key** (`EXTRACT_MODE=demo`).
+> **Withheld in code:** `records.release` (release) is **not** in this agent's grants — a human role holds it (verified by test).
 
-## What it does
-Classifies intent (search · classify · redact · package · status), gathers from approved systems via the governed gateway, produces a **FOIA production package**, runs a compliance check (grounding · accessibility · PII · domain guard), pauses at the **human review gate**, and finalizes only after approval.
+## Intent → action → outcome
+- **search** → `SEARCH` (read) → SEARCH_COMPLETE
+- **classify** → `CLASSIFY` (read) → CLASSIFIED
+- **redact** → `PROPOSE_REDACTION` (read) → REDACTIONS_PROPOSED
+- **package** → `ASSEMBLE_PACKAGE` (write · HITL) → PACKAGE_READY
+- **status** → `STATUS_LOOKUP` (read) → STATUS_PROVIDED
 
 **Guardrail.** The agent PROPOSES redactions and flags exemptions; it never applies a final redaction or releases records — a records officer reviews and releases. Prompts and AI traces may themselves be records subject to retention.
 
@@ -20,6 +25,6 @@ PYTHONPATH=../platform_core:..:. python -m pytest tests -q
 ```
 
 ## Architecture
-LangGraph `StateGraph` with `interrupt_before=["human_review_gate"]` (`agent/graph.py`); a framework-free runner (`agent/core.py`) honors the same HITL contract for testing. Every system touch flows through the deny-by-default MCP gateway (agent grant ∩ user entitlement). AWS-native rebuild: `../aws-native-reference/05-public-records-foia/` (Strands + Step Functions, `waitForTaskToken` gate). See `docs/`.
+LangGraph `StateGraph` with `interrupt_before=["human_review_gate"]` (`agent/graph.py`); a framework-free runner (`agent/core.py`) honors the same HITL contract for testing. Every system touch flows through the deny-by-default MCP gateway (agent grant ∩ user entitlement). AWS-native rebuild: `../aws-native-reference/05-public-records-foia/`. See `docs/`.
 
 **Key systems:** Records/ECMS, OpenSearch, KB. **Key obligations:** state public-records law, retention/legal-hold, personal-privacy exemptions.

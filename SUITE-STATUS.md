@@ -8,10 +8,11 @@
 | WoG saga AWS-native (gate/step/compensate Lambdas, **DynamoDB+EventBridge backends**, Step Functions emulator) | Deployable + live-ready | 14 ✓ |
 | Agent 01 — Resident Services & 311 | Flagship (LangGraph + tools + 4 docs + app + container) | 7 ✓ / 1 skip |
 | Agent 01 AWS-native (Strands + Step Functions) | Deployable reference | 5 ✓ |
-| Agents 02–08 (forms-idp · permitting · benefits · records-foia · procurement · govops · public-safety) | Flagship (core+tools+graph+4 docs+app+container+AWS-native) | 63 ✓ |
+| Agents 02–08 (forms-idp · permitting · benefits · records-foia · procurement · govops · public-safety) | Flagship — **per-intent action mapping**, withheld consequential actions, 4 docs + **deploy runbook** + **customer deck** each, AWS-native rebuilds | 63 ✓ |
 | IaC — CloudFormation (6 templates) | Valid, deployable | parsed ✓ |
 | IaC — Terraform + GovCloud overlay (6 files) | Valid HCL | parsed ✓ |
-| Decks | Agent 01 + suite exec overview + **WoG platform** | — |
+| Decks | **all 8 agent customer decks** + suite exec overview + WoG platform | — |
+| Per-agent deploy runbooks | `<agent>/docs/DEPLOY-RUNBOOK.md` (real-AWS, step-by-step) for all 8 | — |
 | Sources | `SOURCES.md` verified Jun 2026 | — |
 
 **Totals: 179 automated tests passing with no API key + 2 eval cases.** See `IMPROVEMENTS-OVER-EDU-HCLS.md` for the backlog.

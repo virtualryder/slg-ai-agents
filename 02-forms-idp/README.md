@@ -7,8 +7,11 @@
 
 **Maturity:** Demonstrated + Deployable-by-design. Runs end-to-end with **no API key** (`EXTRACT_MODE=demo`).
 
-## What it does
-Classifies intent (extract · validate · assemble · status), gathers from approved systems via the governed gateway, produces a **assembled form package**, runs a compliance check (grounding · accessibility · PII · domain guard), pauses at the **human review gate**, and finalizes only after approval.
+## Intent → action → outcome
+- **extract** → `EXTRACT` (read) → EXTRACTED
+- **validate** → `VALIDATE` (read) → VALIDATED
+- **assemble** → `ASSEMBLE` (write · HITL) → ASSEMBLED
+- **status** → `STATUS_LOOKUP` (read) → STATUS_PROVIDED
 
 **Guardrail.** The agent must not infer or fabricate a legally significant fact (income, identity, dates) the applicant did not supply — it may only identify a missing item.
 
@@ -20,6 +23,6 @@ PYTHONPATH=../platform_core:..:. python -m pytest tests -q
 ```
 
 ## Architecture
-LangGraph `StateGraph` with `interrupt_before=["human_review_gate"]` (`agent/graph.py`); a framework-free runner (`agent/core.py`) honors the same HITL contract for testing. Every system touch flows through the deny-by-default MCP gateway (agent grant ∩ user entitlement). AWS-native rebuild: `../aws-native-reference/02-forms-idp/` (Strands + Step Functions, `waitForTaskToken` gate). See `docs/`.
+LangGraph `StateGraph` with `interrupt_before=["human_review_gate"]` (`agent/graph.py`); a framework-free runner (`agent/core.py`) honors the same HITL contract for testing. Every system touch flows through the deny-by-default MCP gateway (agent grant ∩ user entitlement). AWS-native rebuild: `../aws-native-reference/02-forms-idp/`. See `docs/`.
 
 **Key systems:** IDP (Bedrock Data Automation / Textract), KB, Identity, Consent, 311/CRM. **Key obligations:** IRS Pub 1075 (FTI), HIPAA, DPPA, state privacy.

@@ -6,4 +6,4 @@ COPY governance /app/governance
 COPY 04-benefits-caseworker /app/04-benefits-caseworker
 RUN pip install --no-cache-dir -e /app/platform_core && pip install --no-cache-dir langgraph>=0.2 streamlit>=1.36
 EXPOSE 8080 8501
-CMD ["python", "/app/04-benefits-caseworker/agent/serve.py"]
+CMD ["python","/app/04-benefits-caseworker/agent/serve.py"]

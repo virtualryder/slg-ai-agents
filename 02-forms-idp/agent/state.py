@@ -5,8 +5,10 @@ from typing import Any, Dict, List, Optional, TypedDict
 
 
 class RecommendedAction(str, Enum):
+    EXTRACT = "EXTRACT"
+    VALIDATE = "VALIDATE"
     ASSEMBLE = "ASSEMBLE"
-    REQUEST_MISSING_INFO = "REQUEST_MISSING_INFO"
+    STATUS_LOOKUP = "STATUS_LOOKUP"
     VERIFY_IDENTITY = "VERIFY_IDENTITY"
     ESCALATE = "ESCALATE"
     REVISE = "REVISE"
