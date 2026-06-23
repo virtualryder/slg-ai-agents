@@ -57,6 +57,8 @@ cd 01-resident-services-311 && EXTRACT_MODE=demo python demo/demo_run.py
 `infra/cloudformation/quickstart.yaml` (master) + Terraform parity (`infra/terraform/`), both commercial and **GovCloud** (`infra/terraform/govcloud/`). Two gateway paths (`portable` API Gateway+Cognito for any region incl. GovCloud, or `agentcore`), two run modes (`native` Step Functions+Lambda, or `container` ECS/AgentCore Runtime). See `docs/` and `SOURCES.md`.
 
 ## Go-to-market & deploy assets
+**Sellers & SAs start here:** `gtm/SELLER-SA-FIELD-GUIDE.md` — how to understand, qualify, position, pick the deck, and make it fit a customer's security architecture (9-phase playbook + checklists).
+
 `gtm/WOG-PLATFORM-GTM-STORY.md` (pitch narrative, personas, objection-handling Q&A, scalability, cost, regulatory alignment) · `runbooks/WOG-PLATFORM-DEPLOYMENT-RUNBOOK.md` (16-stage architect deploy: prerequisites → networking → KMS/Cognito → Bedrock + Guardrails → knowledge base → gateway → agents → WoG saga → HITL → audit/WORM → accessibility → smoke tests → go-live) · **decks in one place — `decks/`** (8 per-agent narrative decks + WoG platform deck + suite executive overview), each with grounded, cited figures and a full speaker-note talk track (`decks/DECK-SOURCES.md`) · **per-agent AWS deploy runbooks** for all 8 agents (`<agent>/docs/DEPLOY-RUNBOOK.md`).
 
 ## Deployment models — standalone first, platform when ready
