@@ -1,0 +1,4 @@
+{"raw_request": "There is a pothole on Oak Street, please report it.",
+ "retrieved_sources": [{"title": "Report a Problem", "snippet": "Use 311 to report road issues.", "url": "https://city.example.gov/311"}],
+ "acting_user_claims": {"sub": "rep-1", "custom:slg_role": "RESIDENT_SERVICES_AGENT"},
+ "identity_verified": false}

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "prompts": {
+    "01-resident-services.intent": {
+      "version": "1.0.0",
+      "sha256": "0131e7085649fd24a0664004e8deefc32ba67f6dd0a5af51d56934061e31b73d"
+    },
+    "01-resident-services.answer": {
+      "version": "1.0.0",
+      "sha256": "2141271be2ba83977d528d555f81fcf76392c4fbabec82e4bf8a432367d0f58b"
+    }
+  }
+}

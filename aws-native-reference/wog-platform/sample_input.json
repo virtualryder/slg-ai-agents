@@ -1,0 +1,7 @@
+{"event": "moving",
+ "resident_ref": "RES-55021",
+ "claims": {"sub": "res-self", "custom:slg_role": "INTAKE_SPECIALIST,RESIDENT_SERVICES_AGENT"},
+ "approval": {"approved": true, "reviewer": {"sub": "supervisor"}},
+ "correlation_id": "MOVE-DEMO-1",
+ "confirmations": {"form": true, "service_request": true, "appointment": true},
+ "steps": "<built from LIFE_EVENT_TEMPLATES['moving'] by the orchestrator>"}

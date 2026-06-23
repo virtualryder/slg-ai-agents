@@ -1,0 +1,32 @@
+{
+  "Comment": "WoG life-event saga (generic). Sequential Map over declarative step specs; each iteration gates (waitForTaskToken in prod) then writes; a top-level Catch compensates committed steps in reverse.",
+  "StartAt": "RunSteps",
+  "States": {
+    "RunSteps": {
+      "Type": "Map",
+      "ItemsPath": "$.steps",
+      "MaxConcurrency": 1,
+      "Parameters": {
+        "spec.$": "$$.Map.Item.Value",
+        "event.$": "$.event",
+        "claims.$": "$.claims",
+        "approval.$": "$.approval",
+        "resident_ref.$": "$.resident_ref",
+        "correlation_id.$": "$.correlation_id",
+        "confirmations.$": "$.confirmations"
+      },
+      "Iterator": {
+        "StartAt": "Gate",
+        "States": {
+          "Gate": {"Type": "Task", "Resource": "${GateFn}", "Next": "Step"},
+          "Step": {"Type": "Task", "Resource": "${StepFn}", "End": true}
+        }
+      },
+      "Catch": [{"ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "Compensate"}],
+      "Next": "Done"
+    },
+    "Compensate": {"Type": "Task", "Resource": "${CompensateFn}", "Next": "Failed"},
+    "Failed": {"Type": "Fail", "Error": "SagaCompensated"},
+    "Done": {"Type": "Succeed"}
+  }
+}

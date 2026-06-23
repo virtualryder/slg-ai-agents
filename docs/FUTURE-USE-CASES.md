@@ -1,0 +1,8 @@
+# Future Use Cases (on the SLG horizon) — and how this platform solves them
+Each composes the same governed primitives: gateway + canonical data + consent + compliance events + HITL.
+
+1. **Whole-of-Government Life-Event Agent** *(built — `gov_platform/wog_orchestration/`)*. Organizes services around an event (moving, new child, business, job loss, disaster, bereavement) not agency structure. The hard part is identity, consent, and interagency authority — solved by the consent ledger (AAL-gated) + canonical data + explicit confirmation before each material action. AWS: supervisor + agency subagents, EventBridge, Step Functions, MCP tool catalog.
+2. **End-to-end Benefits Orchestration.** Identify eligible programs → prefill → verify → **deterministic eligibility** → exceptions → notices → renewals → prevent coverage loss. Risk: a wrong action removes food/healthcare/housing — so human oversight, appeal rights, explanations, and a deterministic engine are mandatory (already the platform stance).
+3. **Multi-agent Permitting & Inspection Orchestration.** Parallel planning/fire/engineering/environmental/legal/inspection agents; the team distinguishes a deterministic code rule from an official's discretion. AWS: supervisor + Step Functions parallel + rules engine.
+4. **Fraud / Waste / Revenue-Recovery Agent.** Entity resolution + Neptune graph + SageMaker anomaly + Bedrock synthesis. Strict controls: an anomaly is not proof; four-fifths disparate-impact testing (`governance/fairness/`); no automated adverse action.
+5. **Emergency-Management & Field-Operations Agent.** Ingest weather/GIS/911/shelter/utility; common operating picture; sit-reps; resource matching. Human incident command retains authority; edge/disconnected capability where required.

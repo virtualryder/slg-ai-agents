@@ -1,0 +1,171 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  SLG Whole-of-Government Orchestration Platform - shared substrate: compliance
+  event bus (EventBridge), append-only event store + consent store (DynamoDB),
+  durable saga (Step Functions), WORM evidence (S3 Object Lock), KMS.
+Parameters:
+  Environment: {Type: String, Default: dev, AllowedValues: [dev, test, prod]}
+  KmsKeyArn: {Type: String}
+  CodeBucket: {Type: String, Description: "S3 bucket holding the WoG saga Lambda zip"}
+  CodeKey: {Type: String, Default: wog-platform-lambdas.zip}
+  DeploymentResidency: {Type: String, Default: us, AllowedValues: [us, us-gov]}
+Resources:
+  ComplianceBus:
+    Type: AWS::Events::EventBus
+    Properties: {Name: !Sub "slg-wog-compliance-${Environment}"}
+  EventStore:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "slg-wog-events-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: correlation_id, AttributeType: S}
+        - {AttributeName: ts, AttributeType: S}
+      KeySchema:
+        - {AttributeName: correlation_id, KeyType: HASH}   # case-level partition
+        - {AttributeName: ts, KeyType: RANGE}
+      PointInTimeRecoverySpecification: {PointInTimeRecoveryEnabled: true}
+      SSESpecification: {SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref KmsKeyArn}
+  ConsentStore:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "slg-wog-consent-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: resident_ref, AttributeType: S}
+        - {AttributeName: scope, AttributeType: S}
+      KeySchema:
+        - {AttributeName: resident_ref, KeyType: HASH}
+        - {AttributeName: scope, KeyType: RANGE}
+      SSESpecification: {SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref KmsKeyArn}
+  EvidenceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "slg-wog-evidence-${Environment}-${AWS::AccountId}"
+      ObjectLockEnabled: true
+      ObjectLockConfiguration:
+        ObjectLockEnabled: Enabled
+        Rule: {DefaultRetention: {Mode: COMPLIANCE, Days: 2190}}   # 6-yr FTI/PHI floor
+      VersioningConfiguration: {Status: Enabled}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - {ServerSideEncryptionByDefault: {SSEAlgorithm: aws:kms, KMSMasterKeyID: !Ref KmsKeyArn}}
+      PublicAccessBlockConfiguration:
+        {BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true}
+  IdempotencyTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "slg-wog-idempotency-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{AttributeName: idempotency_key, AttributeType: S}]
+      KeySchema: [{AttributeName: idempotency_key, KeyType: HASH}]
+      TimeToLiveSpecification: {AttributeName: ttl, Enabled: true}
+      SSESpecification: {SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref KmsKeyArn}
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement: [{Effect: Allow, Principal: {Service: lambda.amazonaws.com}, Action: "sts:AssumeRole"}]
+      ManagedPolicyArns: ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]
+      Policies:
+        - PolicyName: wog-saga
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - {Effect: Allow, Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:Query], Resource: [!GetAtt EventStore.Arn, !GetAtt ConsentStore.Arn, !GetAtt IdempotencyTable.Arn]}
+              - {Effect: Allow, Action: [events:PutEvents], Resource: !GetAtt ComplianceBus.Arn}
+              - {Effect: Allow, Action: [bedrock:InvokeModel, bedrock:ApplyGuardrail], Resource: "*"}
+              - {Effect: Allow, Action: [kms:Decrypt, kms:GenerateDataKey], Resource: !Ref KmsKeyArn}
+  GateFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "slg-wog-gate-${Environment}"
+      Runtime: python3.12
+      Architectures: [arm64]
+      Handler: gate.handler
+      Timeout: 30
+      Role: !GetAtt LambdaRole.Arn
+      Code: {S3Bucket: !Ref CodeBucket, S3Key: !Ref CodeKey}
+      Environment:
+        Variables:
+          WOG_BACKEND: aws
+          CONSENT_TABLE: !Ref ConsentStore
+          EVENT_TABLE: !Ref EventStore
+          EVENT_BUS_NAME: !Ref ComplianceBus
+          DEPLOYMENT_RESIDENCY: !Ref DeploymentResidency
+  StepFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "slg-wog-step-${Environment}"
+      Runtime: python3.12
+      Architectures: [arm64]
+      Handler: step.handler
+      Timeout: 60
+      Role: !GetAtt LambdaRole.Arn
+      Code: {S3Bucket: !Ref CodeBucket, S3Key: !Ref CodeKey}
+      Environment:
+        Variables:
+          WOG_BACKEND: aws
+          CONSENT_TABLE: !Ref ConsentStore
+          EVENT_TABLE: !Ref EventStore
+          EVENT_BUS_NAME: !Ref ComplianceBus
+          IDEMPOTENCY_TABLE: !Ref IdempotencyTable
+          DEPLOYMENT_RESIDENCY: !Ref DeploymentResidency
+  CompensateFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "slg-wog-compensate-${Environment}"
+      Runtime: python3.12
+      Architectures: [arm64]
+      Handler: compensate.handler
+      Timeout: 60
+      Role: !GetAtt LambdaRole.Arn
+      Code: {S3Bucket: !Ref CodeBucket, S3Key: !Ref CodeKey}
+      Environment:
+        Variables:
+          WOG_BACKEND: aws
+          EVENT_TABLE: !Ref EventStore
+          EVENT_BUS_NAME: !Ref ComplianceBus
+  SagaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement: [{Effect: Allow, Principal: {Service: states.amazonaws.com}, Action: "sts:AssumeRole"}]
+      Policies:
+        - PolicyName: saga
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - {Effect: Allow, Action: [lambda:InvokeFunction], Resource: [!GetAtt GateFunction.Arn, !GetAtt StepFunction.Arn, !GetAtt CompensateFunction.Arn]}
+              - {Effect: Allow, Action: [events:PutEvents], Resource: !GetAtt ComplianceBus.Arn}
+  LifeEventSaga:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: !Sub "slg-wog-lifeevent-${Environment}"
+      RoleArn: !GetAtt SagaRole.Arn
+      DefinitionSubstitutions:
+        GateFn: !GetAtt GateFunction.Arn
+        StepFn: !GetAtt StepFunction.Arn
+        CompensateFn: !GetAtt CompensateFunction.Arn
+      DefinitionString: |
+        {
+          "Comment": "Generic WoG life-event saga. Sequential Map over declarative step specs; Gate (waitForTaskToken in prod) -> Step; top-level Catch -> Compensate (reverse-order rollback).",
+          "StartAt": "RunSteps",
+          "States": {
+            "RunSteps": {"Type": "Map", "ItemsPath": "$.steps", "MaxConcurrency": 1,
+              "Parameters": {"spec.$": "$$.Map.Item.Value", "event.$": "$.event", "claims.$": "$.claims", "approval.$": "$.approval", "resident_ref.$": "$.resident_ref", "correlation_id.$": "$.correlation_id", "confirmations.$": "$.confirmations"},
+              "Iterator": {"StartAt": "Gate", "States": {"Gate": {"Type": "Task", "Resource": "${GateFn}", "Next": "Step"}, "Step": {"Type": "Task", "Resource": "${StepFn}", "End": true}}},
+              "Catch": [{"ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "Compensate"}], "Next": "Done"},
+            "Compensate": {"Type": "Task", "Resource": "${CompensateFn}", "Next": "Failed"},
+            "Failed": {"Type": "Fail", "Error": "SagaCompensated"},
+            "Done": {"Type": "Succeed"}
+          }
+        }
+Outputs:
+  ComplianceBusName: {Value: !Ref ComplianceBus}
+  EventStore: {Value: !Ref EventStore}
+  ConsentStore: {Value: !Ref ConsentStore}
+  EvidenceBucket: {Value: !Ref EvidenceBucket}
+  SagaArn: {Value: !Ref LifeEventSaga}

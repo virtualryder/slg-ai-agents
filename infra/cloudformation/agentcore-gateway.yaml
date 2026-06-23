@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SLG Suite - MCP gateway (AGENTCORE path - Bedrock AgentCore Gateway + Identity). AgentCore-enabled regions.
+Parameters:
+  AgentId: {Type: String, Default: 01-resident-services-311}
+  Environment: {Type: String, Default: dev}
+  ConnectorFnArn: {Type: String}
+  GatewayRoleArn: {Type: String}
+Resources:
+  # AgentCore Gateway registers each connector Lambda as an MCP tool TARGET.
+  # Targets map 1:1 to TOOL_REGISTRY names (<kind>.<method>). Inbound auth via
+  # AgentCore Identity (Cognito/OIDC); outbound auth via the gateway role.
+  ResidentGateway:
+    Type: AWS::BedrockAgentCore::Gateway
+    Properties:
+      Name: !Sub "slg-${AgentId}-${Environment}"
+      RoleArn: !Ref GatewayRoleArn
+      ProtocolType: MCP
+      AuthorizerType: AWS_IAM
+  Crm311Target:
+    Type: AWS::BedrockAgentCore::GatewayTarget
+    Properties:
+      GatewayIdentifier: !Ref ResidentGateway
+      Name: crm311
+      TargetConfiguration:
+        Mcp: {Lambda: {LambdaArn: !Ref ConnectorFnArn}}
+Outputs:
+  GatewayId: {Value: !Ref ResidentGateway}
+  Note: {Value: "AgentCore Gateway/Identity is not yet in GovCloud (Memory/semantic search/Policy/Registry excluded as of 2026-05); use gateway-portable.yaml for GovCloud."}

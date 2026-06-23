@@ -1,0 +1,14 @@
+[
+  {"request_id": "RS-0001", "channel": "WEB", "locale": "en-US",
+   "raw_request": "How do I find out my residential trash pickup day?",
+   "acting_user_claims": {"sub": "rep-1", "custom:slg_role": "RESIDENT_SERVICES_AGENT"}},
+  {"request_id": "RS-0002", "channel": "CHAT", "locale": "en-US",
+   "raw_request": "There is a big pothole on my street I want to report it.",
+   "acting_user_claims": {"sub": "rep-1", "custom:slg_role": "RESIDENT_SERVICES_AGENT"}},
+  {"request_id": "RS-0003", "channel": "WEB", "locale": "en-US",
+   "raw_request": "What is the status of my building permit application?",
+   "acting_user_claims": {"sub": "rep-1", "custom:slg_role": "RESIDENT_SERVICES_AGENT"}},
+  {"request_id": "RS-0004", "channel": "CHAT", "locale": "en-US",
+   "raw_request": "I want to schedule an appointment at the permit counter.",
+   "acting_user_claims": {"sub": "rep-1", "custom:slg_role": "RESIDENT_SERVICES_AGENT"}}
+]

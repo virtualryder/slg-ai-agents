@@ -1,0 +1,2 @@
+# WoG saga Lambdas run on AgentCore Runtime / Lambda with platform_core as a layer.
+boto3>=1.34

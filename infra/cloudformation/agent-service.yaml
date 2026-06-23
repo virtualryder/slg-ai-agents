@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SLG Suite - Agent service (native Step Functions+Lambda HITL gate | container ECS Fargate / AgentCore Runtime).
+Parameters:
+  AgentId: {Type: String, Default: 01-resident-services-311}
+  Environment: {Type: String, Default: dev}
+  DeployMode: {Type: String, Default: native, AllowedValues: [native, container]}
+  AgentRoleArn: {Type: String}
+Conditions:
+  IsNative: !Equals [!Ref DeployMode, native]
+Resources:
+  AgentStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Condition: IsNative
+    Properties:
+      StateMachineName: !Sub "slg-${AgentId}-${Environment}"
+      RoleArn: !Ref AgentRoleArn
+      DefinitionString: |
+        {"Comment":"placeholder; deploy from aws-native-reference/<agent>/stepfunctions/*.asl.json",
+         "StartAt":"Done","States":{"Done":{"Type":"Pass","End":true}}}
+Outputs:
+  Mode: {Value: !Ref DeployMode}

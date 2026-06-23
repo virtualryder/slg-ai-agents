@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SLG Suite - Data stack (append-only audit DynamoDB, WORM S3 Object Lock, HITL queue).
+Parameters:
+  AgentId: {Type: String, Default: 01-resident-services-311}
+  Environment: {Type: String, Default: dev}
+  KmsKeyArn: {Type: String}
+Resources:
+  AuditTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "slg-${AgentId}-${Environment}-audit"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: audit_id, AttributeType: S}
+        - {AttributeName: ts, AttributeType: S}
+      KeySchema:
+        - {AttributeName: audit_id, KeyType: HASH}
+        - {AttributeName: ts, KeyType: RANGE}
+      PointInTimeRecoverySpecification: {PointInTimeRecoveryEnabled: true}
+      SSESpecification: {SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref KmsKeyArn}
+  HitlTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "slg-${AgentId}-${Environment}-hitl"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{AttributeName: review_id, AttributeType: S}]
+      KeySchema: [{AttributeName: review_id, KeyType: HASH}]
+      SSESpecification: {SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref KmsKeyArn}
+  WormBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "slg-${AgentId}-${Environment}-worm-${AWS::AccountId}"
+      ObjectLockEnabled: true
+      ObjectLockConfiguration:
+        ObjectLockEnabled: Enabled
+        Rule: {DefaultRetention: {Mode: COMPLIANCE, Days: 2555}}   # 7-year retention (tune to schedule)
+      VersioningConfiguration: {Status: Enabled}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - {ServerSideEncryptionByDefault: {SSEAlgorithm: aws:kms, KMSMasterKeyID: !Ref KmsKeyArn}}
+      PublicAccessBlockConfiguration:
+        {BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true}
+Outputs:
+  AuditTableName: {Value: !Ref AuditTable}
+  WormBucketName: {Value: !Ref WormBucket}
+  # NOTE: an SCP / resource policy denying dynamodb:UpdateItem & DeleteItem on the
+  # audit table partition is applied at the account/Org level (see runbooks/).

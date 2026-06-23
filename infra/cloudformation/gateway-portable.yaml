@@ -1,0 +1,45 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SLG Suite - MCP gateway (PORTABLE path - API Gateway HTTP API + Cognito JWT authorizer). Any region incl. GovCloud.
+Parameters:
+  AgentId: {Type: String, Default: 01-resident-services-311}
+  Environment: {Type: String, Default: dev}
+  UserPoolId: {Type: String}
+  UserPoolClientId: {Type: String}
+  AuthorizerFnArn: {Type: String}
+  ConnectorFnArn: {Type: String}
+Resources:
+  GatewayApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub "slg-${AgentId}-${Environment}-gateway"
+      ProtocolType: HTTP
+  JwtAuthorizer:
+    Type: AWS::ApiGatewayV2::Authorizer
+    Properties:
+      ApiId: !Ref GatewayApi
+      AuthorizerType: JWT
+      IdentitySource: ["$request.header.Authorization"]
+      Name: cognito-jwt
+      JwtConfiguration:
+        Audience: [!Ref UserPoolClientId]
+        Issuer: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPoolId}"
+  ToolIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref GatewayApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Ref ConnectorFnArn
+      PayloadFormatVersion: "2.0"
+  ToolRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref GatewayApi
+      RouteKey: "POST /tool/{kind}/{method}"
+      AuthorizationType: JWT
+      AuthorizerId: !Ref JwtAuthorizer
+      Target: !Sub "integrations/${ToolIntegration}"
+  Stage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties: {ApiId: !Ref GatewayApi, StageName: !Ref Environment, AutoDeploy: true}
+Outputs:
+  GatewayUrl: {Value: !Sub "https://${GatewayApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}"}

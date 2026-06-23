@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SLG Suite - Security stack (KMS CMK, Bedrock Guardrail, Cognito, least-privilege agent role).
+Parameters:
+  AgentId: {Type: String, Default: 01-resident-services-311}
+  Environment: {Type: String, Default: dev, AllowedValues: [dev, test, prod]}
+Resources:
+  AgentKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub "CMK for SLG agent ${AgentId} (${Environment})"
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: EnableRoot
+            Effect: Allow
+            Principal: {AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"}
+            Action: "kms:*"
+            Resource: "*"
+  AgentKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/slg-${AgentId}-${Environment}"
+      TargetKeyId: !Ref AgentKey
+  ResidentGuardrail:
+    Type: AWS::Bedrock::Guardrail
+    Properties:
+      Name: !Sub "slg-${AgentId}-${Environment}"
+      Description: PII masking, denied topics, and contextual grounding for resident-facing AI.
+      BlockedInputMessaging: "I can't help with that request."
+      BlockedOutputsMessaging: "I can't provide that information."
+      ContentPolicyConfig:
+        FiltersConfig:
+          - {Type: PROMPT_ATTACK, InputStrength: HIGH, OutputStrength: NONE}
+      SensitiveInformationPolicyConfig:
+        PiiEntitiesConfig:
+          - {Type: US_SOCIAL_SECURITY_NUMBER, Action: BLOCK}
+          - {Type: US_BANK_ACCOUNT_NUMBER, Action: BLOCK}
+          - {Type: CREDIT_DEBIT_CARD_NUMBER, Action: BLOCK}
+          - {Type: DRIVER_ID, Action: ANONYMIZE}
+          - {Type: EMAIL, Action: ANONYMIZE}
+          - {Type: PHONE, Action: ANONYMIZE}
+      TopicPolicyConfig:
+        TopicsConfig:
+          - Name: UnauthorizedLegalAdvice
+            Definition: Providing binding legal or eligibility determinations the agent is not authorized to make.
+            Type: DENY
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub "slg-${AgentId}-${Environment}"
+      AdminCreateUserConfig: {AllowAdminCreateUserOnly: true}
+      Schema:
+        - {Name: slg_role, AttributeDataType: String, Mutable: true}
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: !Sub "slg-${AgentId}-${Environment}-app"
+      GenerateSecret: false
+      ExplicitAuthFlows: [ALLOW_USER_SRP_AUTH, ALLOW_REFRESH_TOKEN_AUTH]
+  AgentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "slg-${AgentId}-${Environment}-agent"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: {Service: [lambda.amazonaws.com, states.amazonaws.com, ecs-tasks.amazonaws.com]}
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: least-privilege
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - {Effect: Allow, Action: [bedrock:InvokeModel, bedrock:ApplyGuardrail], Resource: "*"}
+              - {Effect: Allow, Action: [kms:Decrypt, kms:GenerateDataKey], Resource: !GetAtt AgentKey.Arn}
+Outputs:
+  KmsKeyArn: {Value: !GetAtt AgentKey.Arn, Export: {Name: !Sub "slg-${AgentId}-${Environment}-kms"}}
+  GuardrailId: {Value: !Ref ResidentGuardrail}
+  UserPoolId: {Value: !Ref UserPool}
+  AgentRoleArn: {Value: !GetAtt AgentRole.Arn, Export: {Name: !Sub "slg-${AgentId}-${Environment}-role"}}
