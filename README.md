@@ -7,7 +7,7 @@ A systems integrator deploying AI for a state agency, county, or city cannot han
 
 The result is a deployable accelerator — not a certified product — that gives an engagement team a credible, compliant starting point across the highest-value SLG workflows, plus the **Whole-of-Government Orchestration Platform** the agents compose into.
 
-**Status:** platform core + governance + WoG orchestration + Agent 01 (reference) built to flagship depth · AWS-native rebuild (Strands + Step Functions) · CloudFormation + Terraform IaC with **commercial *and* GovCloud** parity · **64 automated tests passing with no API key** · grounded in current AWS + SLG sources (`SOURCES.md`).
+**Status:** platform core + governance + WoG orchestration (5 life-events, runnable saga) + **all 8 agents** built to flagship depth · AWS-native rebuilds (Strands + Step Functions) · CloudFormation + Terraform IaC with **commercial *and* GovCloud** parity · **179 automated tests passing with no API key** · GTM story + architect deployment runbook · grounded in current AWS + SLG sources (`SOURCES.md`).
 
 ---
 
@@ -53,6 +53,9 @@ cd 01-resident-services-311 && EXTRACT_MODE=demo python demo/demo_run.py
 
 ## AWS deployment
 `infra/cloudformation/quickstart.yaml` (master) + Terraform parity (`infra/terraform/`), both commercial and **GovCloud** (`infra/terraform/govcloud/`). Two gateway paths (`portable` API Gateway+Cognito for any region incl. GovCloud, or `agentcore`), two run modes (`native` Step Functions+Lambda, or `container` ECS/AgentCore Runtime). See `docs/` and `SOURCES.md`.
+
+## Go-to-market & deploy assets
+`gtm/WOG-PLATFORM-GTM-STORY.md` (pitch narrative, personas, objection-handling Q&A, scalability, cost, regulatory alignment) · `runbooks/WOG-PLATFORM-DEPLOYMENT-RUNBOOK.md` (16-stage architect deploy: prerequisites → networking → KMS/Cognito → Bedrock + Guardrails → knowledge base → gateway → agents → WoG saga → HITL → audit/WORM → accessibility → smoke tests → go-live) · three decks (Agent 01 customer, suite executive, WoG platform).
 
 ## Compliance disclaimer
 A **decision-support accelerator** for qualified government staff — not a certified system, an ATO, or an approved adjudication tool. AI-generated content requires human review before any consequential action. The AI never takes irreversible action autonomously. Customers own ATO/GovRAMP, IdP integration, connector validation, Guardrail configuration, and change control.

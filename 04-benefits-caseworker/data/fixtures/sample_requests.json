@@ -1,0 +1,38 @@
+[
+  {
+    "request_id": "04-prescreen",
+    "channel": "WEB",
+    "raw_request": "qualify for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "ELIGIBILITY_CASEWORKER"
+    }
+  },
+  {
+    "request_id": "04-status",
+    "channel": "WEB",
+    "raw_request": "status for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "ELIGIBILITY_CASEWORKER"
+    }
+  },
+  {
+    "request_id": "04-apply",
+    "channel": "WEB",
+    "raw_request": "apply for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "ELIGIBILITY_CASEWORKER"
+    }
+  },
+  {
+    "request_id": "04-notice",
+    "channel": "WEB",
+    "raw_request": "notice for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "ELIGIBILITY_CASEWORKER"
+    }
+  }
+]

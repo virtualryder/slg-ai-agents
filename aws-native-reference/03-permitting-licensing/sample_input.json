@@ -1,0 +1,7 @@
+{
+  "raw_request": "what do i need",
+  "acting_user_claims": {
+    "sub": "staff-1",
+    "custom:slg_role": "PERMIT_TECH"
+  }
+}

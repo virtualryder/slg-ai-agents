@@ -1,0 +1,7 @@
+{
+  "raw_request": "summarize",
+  "acting_user_claims": {
+    "sub": "staff-1",
+    "custom:slg_role": "PUBLIC_SAFETY_ANALYST"
+  }
+}

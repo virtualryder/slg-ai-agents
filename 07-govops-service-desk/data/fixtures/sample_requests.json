@@ -1,0 +1,38 @@
+[
+  {
+    "request_id": "07-support",
+    "channel": "WEB",
+    "raw_request": "how do i for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "IT_ANALYST"
+    }
+  },
+  {
+    "request_id": "07-incident",
+    "channel": "WEB",
+    "raw_request": "incident for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "IT_ANALYST"
+    }
+  },
+  {
+    "request_id": "07-runbook",
+    "channel": "WEB",
+    "raw_request": "restart for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "IT_ANALYST"
+    }
+  },
+  {
+    "request_id": "07-status",
+    "channel": "WEB",
+    "raw_request": "status for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "IT_ANALYST"
+    }
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "raw_request": "find a contract",
+  "acting_user_claims": {
+    "sub": "staff-1",
+    "custom:slg_role": "PROCUREMENT_ANALYST"
+  }
+}

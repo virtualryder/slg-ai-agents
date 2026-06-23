@@ -1,0 +1,38 @@
+[
+  {
+    "request_id": "02-extract",
+    "channel": "WEB",
+    "raw_request": "upload for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "INTAKE_SPECIALIST"
+    }
+  },
+  {
+    "request_id": "02-validate",
+    "channel": "WEB",
+    "raw_request": "validate for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "INTAKE_SPECIALIST"
+    }
+  },
+  {
+    "request_id": "02-assemble",
+    "channel": "WEB",
+    "raw_request": "assemble for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "INTAKE_SPECIALIST"
+    }
+  },
+  {
+    "request_id": "02-status",
+    "channel": "WEB",
+    "raw_request": "status for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "INTAKE_SPECIALIST"
+    }
+  }
+]

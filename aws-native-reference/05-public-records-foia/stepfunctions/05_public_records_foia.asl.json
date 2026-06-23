@@ -1,0 +1,38 @@
+{
+  "Comment": "Public Records / FOIA & Redaction \u2014 native agent. Human gate = waitForTaskToken.",
+  "StartAt": "Classify",
+  "States": {
+    "Classify": {
+      "Type": "Task",
+      "Resource": "${ClassifyFn}",
+      "Next": "Draft"
+    },
+    "Draft": {
+      "Type": "Task",
+      "Resource": "${DraftFn}",
+      "Next": "Check"
+    },
+    "Check": {
+      "Type": "Task",
+      "Resource": "${CheckFn}",
+      "Next": "HumanGate"
+    },
+    "HumanGate": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+      "Parameters": {
+        "FunctionName": "${HitlNotifyFn}",
+        "Payload": {
+          "input.$": "$",
+          "token.$": "$$.Task.Token"
+        }
+      },
+      "Next": "Finalize"
+    },
+    "Finalize": {
+      "Type": "Task",
+      "Resource": "${FinalizeFn}",
+      "End": true
+    }
+  }
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "request_id": "08-summarize",
+    "channel": "WEB",
+    "raw_request": "summarize for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "PUBLIC_SAFETY_ANALYST"
+    }
+  },
+  {
+    "request_id": "08-report",
+    "channel": "WEB",
+    "raw_request": "report for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "PUBLIC_SAFETY_ANALYST"
+    }
+  },
+  {
+    "request_id": "08-surveillance",
+    "channel": "WEB",
+    "raw_request": "how many for my case",
+    "acting_user_claims": {
+      "sub": "staff-1",
+      "custom:slg_role": "PUBLIC_SAFETY_ANALYST"
+    }
+  }
+]
