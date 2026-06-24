@@ -14,6 +14,7 @@
 | Decks (`decks/`) | 8 per-agent + WoG + suite exec overview — example-style 6-slide narrative, **true AWS architecture diagrams** (boxes + traffic flow), **grounded results from named deployments** (Nevada DETR, Honolulu, CDC, Leon County, IBM/ServiceNow), vendor/peer-reviewed labeled, RCT counter-evidence on-slide; talk tracks in notes (`decks/DECK-SOURCES.md`) | — |
 | Seller / SA enablement | `gtm/SELLER-SA-FIELD-GUIDE.md` (9-phase playbook) + `gtm/SELLER-FIRST-MEETING-CHEATSHEET.md` (one-pager) | — |
 | Per-agent deploy runbooks | `<agent>/docs/DEPLOY-RUNBOOK.md` (real-AWS, step-by-step) for all 8 | — |
+| Production-readiness & RACI | `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` — gap assessment + shared-responsibility matrix + go-live checklist | — |
 | Sources | `SOURCES.md` verified Jun 2026 | — |
 
 **Totals: 179 automated tests passing with no API key + 2 eval cases.** See `IMPROVEMENTS-OVER-EDU-HCLS.md` for the backlog.

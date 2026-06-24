@@ -113,7 +113,9 @@ This is where deals are won or lost in SLG. Walk it explicitly.
 
 **6.6 Run it through Well-Architected + the GenAI Lens** during the SA's review; the controls above map cleanly to Security, Reliability, and Operational Excellence.
 
-**6.7 Security review checklist (give to the CISO):**
+**6.7 Hand the review board the gap assessment + RACI.** `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` states what's built vs. to-build (live connectors, ATO/GovRAMP, pen test) and who owns each piece (AWS · Partner · Customer) — it pre-answers the board's hardest questions and frames the engagement scope honestly.
+
+**6.8 Security review checklist (give to the CISO):**
 - [ ] Data classes identified; isolation boundaries chosen
 - [ ] Region/posture (commercial | GovCloud) + gateway path decided
 - [ ] IdP federation + `custom:slg_role` mapping designed

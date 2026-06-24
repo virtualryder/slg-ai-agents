@@ -24,7 +24,8 @@
       "Bash(PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=platform_core:. python -m pytest 01-resident-services-311/tests/test_graph.py 02-forms-idp/tests/test_graph.py -v -s --co)",
       "Bash(PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=platform_core:. python -m pytest platform_core governance gov_platform 01-resident-services-311 02-forms-idp 03-permitting-licensing 04-benefits-caseworker 05-public-records-foia 06-procurement-grants 07-govops-service-desk 08-public-safety-health aws-native-reference -q)",
       "Bash(PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=platform_core:. python -m pytest platform_core governance gov_platform 01-resident-services-311 02-forms-idp 03-permitting-licensing 04-benefits-caseworker 05-public-records-foia 06-procurement-grants 07-govops-service-desk 08-public-safety-health aws-native-reference)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(find . -newer decks/SLG-Agentic-AI-Suite-Executive-Overview.pptx -not -path ./.git/* -not -path ./__pycache__/* -not -path ./_qa*/* -type f)"
     ]
   }
 }
