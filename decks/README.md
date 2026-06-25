@@ -31,7 +31,9 @@ These decks are built to resonate with three buyers. The talk-track in each slid
 
 ## One-page leave-behinds (`leave-behinds/`)
 
-Each of the 8 agents also has a **single-page seller leave-behind** (portrait letter, same AWS theme) in `decks/leave-behinds/` — as both **PDF** (email/print) and editable **PPTX**. Layout: header → **FROM-X-TO-Y** hook → **The Problem** → **The Governed Solution** (numbered pipeline + teal human gate) → **The ROI** (named-deployment stats + executive case) → **Security & Compliance** (the four control areas) → deploy/footer.
+All **10** items (8 agents + the WoG platform + the suite overview) have a **single-page seller leave-behind** (portrait letter, same AWS theme) in `decks/leave-behinds/` — as both **PDF** (email/print) and editable **PPTX**. Layout: header → **FROM-X-TO-Y** hook → **The Problem** → **The Governed Solution** (numbered pipeline + teal human gate) → **The ROI** (named-deployment stats + executive case) → **Security & Compliance** (the four control areas) → deploy/footer.
+
+`SLG-AI-Agents-ALL-OnePagers.pdf` is the **combined distribution PDF** — all 10 pages in one file, ordered suite overview → agents 01–08 → WoG platform. Send the whole portfolio, or pull a single page.
 
 Use the **deck to sell in the room, the one-pager to survive the forward** — it's what a champion emails to the CIO/CISO/architect after the meeting. Figures and labels match the decks and `DECK-SOURCES.md`.
 
