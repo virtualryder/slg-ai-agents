@@ -9,6 +9,7 @@ All 10 decks are rebuilt on the **AWS interview-deck template** (squid-ink navy 
 | `SLG-01-Resident-Services-311.pptx` … `SLG-08-Public-Safety-Health.pptx` | Per-agent customer/executive decks (8) |
 | `SLG-WoG-Orchestration-Platform.pptx` | Whole-of-Government platform — the CIO/architect strategic deck |
 | `SLG-Agentic-AI-Suite-Executive-Overview.pptx` | One-deck overview of all 8 agents + the platform (the opener / leave-behind) |
+| `SLG-Agentic-AI-Suite-COMBINED.pptx` | **All 10 decks merged into one 60-slide walkthrough** (suite overview → agents 01–08 → WoG), full speaker notes preserved — for a single end-to-end session |
 
 ## The 6-slide narrative (every deck)
 
