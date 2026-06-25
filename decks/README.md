@@ -29,6 +29,12 @@ These decks are built to resonate with three buyers. The talk-track in each slid
 
 **Sequencing tip (in the suite-overview notes):** lead with the agent that fits the room — **311** for citizen value, **benefits** for mission, **public safety** for credibility — then sell the **platform** underneath.
 
+## One-page leave-behinds (`leave-behinds/`)
+
+Each of the 8 agents also has a **single-page seller leave-behind** (portrait letter, same AWS theme) in `decks/leave-behinds/` — as both **PDF** (email/print) and editable **PPTX**. Layout: header → **FROM-X-TO-Y** hook → **The Problem** → **The Governed Solution** (numbered pipeline + teal human gate) → **The ROI** (named-deployment stats + executive case) → **Security & Compliance** (the four control areas) → deploy/footer.
+
+Use the **deck to sell in the room, the one-pager to survive the forward** — it's what a champion emails to the CIO/CISO/architect after the meeting. Figures and labels match the decks and `DECK-SOURCES.md`.
+
 ## Sourcing discipline (read before presenting)
 
 - Every figure is grounded and labeled by evidence tier in **`DECK-SOURCES.md`** — **[GOV]**, **[PEER-REVIEWED]**, **[VENDOR-REPORTED]**, **[ANALYST]**. On-slide tags show the tier; speaker notes give the precise attribution.

@@ -35,7 +35,7 @@ The pain is specific, documented, and expensive:
 | **03** | Permitting & Licensing | Code pre-check, flag, structured review | Permitting **"weeks and months → hours and days"** (State of California, 2025, *gov*); **~50%** zoning review (Austin) |
 | **04** | Benefits / HHS Caseworker | Prescreen, evidence, notices | SNAP error **10.93%** (USDA, *gov*); appeal ruling **minutes vs. hours** (Nevada DETR) |
 | **05** | Public Records / FOIA | Search, classify, propose redactions, package | Backlog **267,056** / **$723.4M** cost (DOJ, *gov*); records search **hours → seconds** (Kofile, AWS) |
-| **06** | Procurement & Grants | Draft solicitations, organize bid evidence | **57-day** avg RFP cycle (Euna); **~70%** drafting-time cut (vendor, unnamed agency) |
+| **06** | Procurement & Grants | Draft solicitations, organize bid evidence | **57-day** avg RFP cycle (Euna); **$6.8B** inefficiencies flagged / all spend reviewed in **60 days** (Oklahoma OMES, *named state*) |
 | **07** | GovOps IT Service Desk | Triage, tickets, runbooks, modernization | **75%** queries self-resolved (IBM AskIT); MTTR **>10%** (ServiceNow ITSM AI/ML) |
 | **08** | Public Safety / Public Health | Summaries, reports, validated surveillance | Cooling-tower ID **−98%**, 4 hr → 5 min (CDC, ***gov + peer-reviewed***); report time **−61%** (Leon County) |
 
