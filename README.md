@@ -30,16 +30,16 @@ The pain is specific, documented, and expensive:
 
 | # | Agent | What it does | Documented gain (cited; vendor-reported where noted) |
 |---|---|---|---|
-| **01** | Resident Services & 311 | Right service, cited answers, gated 311 actions | **−35%** call volume / **50%** faster (Grupo TX); **−4,000 calls/mo** (Indiana) |
-| **02** | Forms & Document Processing | Extract, validate, assemble official forms | **45 min → <20s** (Anne Arundel); **49%** auto-approved (Arizona) |
-| **03** | Permitting & Licensing | Requirements, prefill, parallel routing | **−70%** residential plan-review time (Honolulu) |
-| **04** | Benefits / HHS Caseworker | Prescreen, evidence, notices | Appeal decision **3 hrs → 5 min** (Nevada DETR); backlog **40k → <5k** |
-| **05** | Public Records / FOIA | Search, classify, propose redactions, package | Redaction **−98%**, files **32× faster** (HSI lab) |
-| **06** | Procurement & Grants | Draft solicitations, organize bid evidence | **−50%** internal review cycle; **−17%** RFP completion |
-| **07** | GovOps IT Service Desk | Triage, tickets, runbooks, modernization | **75%** queries self-resolved (IBM); **−50–70%** MTTR (ServiceNow) |
-| **08** | Public Safety / Public Health | Summaries, reports, validated surveillance | Cooling-tower ID **−98%** (CDC, *peer-reviewed*); report time **−61%** (Leon County) |
+| **01** | Resident Services & 311 | Right service, cited answers, gated 311 actions | Live contact **$8.01 → $0.10** (Gartner); **~20%** of 311 interactions / **45%** peak staffing cut (Denver "Sunny") |
+| **02** | Forms & Document Processing | Extract, validate, assemble official forms | **45 min → <20s** (Anne Arundel, AWS); **~1%** baseline manual key-entry error (JAMIA, peer-reviewed) |
+| **03** | Permitting & Licensing | Code pre-check, flag, structured review | Permitting **"weeks and months → hours and days"** (State of California, 2025, *gov*); **~50%** zoning review (Austin) |
+| **04** | Benefits / HHS Caseworker | Prescreen, evidence, notices | SNAP error **10.93%** (USDA, *gov*); appeal ruling **minutes vs. hours** (Nevada DETR) |
+| **05** | Public Records / FOIA | Search, classify, propose redactions, package | Backlog **267,056** / **$723.4M** cost (DOJ, *gov*); records search **hours → seconds** (Kofile, AWS) |
+| **06** | Procurement & Grants | Draft solicitations, organize bid evidence | **57-day** avg RFP cycle (Euna); **~70%** drafting-time cut (vendor, unnamed agency) |
+| **07** | GovOps IT Service Desk | Triage, tickets, runbooks, modernization | **75%** queries self-resolved (IBM AskIT); MTTR **>10%** (ServiceNow ITSM AI/ML) |
+| **08** | Public Safety / Public Health | Summaries, reports, validated surveillance | Cooling-tower ID **−98%**, 4 hr → 5 min (CDC, ***gov + peer-reviewed***); report time **−61%** (Leon County) |
 
-> Numbers are documented results from named deployments and published benchmarks; vendor-reported figures are labeled, and the public-safety deck carries the peer-reviewed **null-result RCT** on-slide for honesty. Full citations: `decks/DECK-SOURCES.md`.
+> Numbers are documented results from named deployments and published benchmarks; every figure is labeled by evidence tier on-slide (**[GOV] / [PEER-REVIEWED] / [VENDOR-REPORTED] / [ANALYST]**). Counter-evidence and caveats — e.g. the peer-reviewed **null-result RCT** on AI police-report writing — live in the **speaker notes** for presenters to volunteer. The unvalidated Honolulu permitting figure was removed and replaced with the [GOV] State-of-California source. Full citations: `decks/DECK-SOURCES.md`.
 
 **The five controls that make it deployable** (this is the product):
 1. **Deny-by-default gateway, least-privilege intersection** — `permitted ⇔ agent grant ∩ user entitlement`; the agent can never exceed the employee it acts for.

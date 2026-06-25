@@ -11,7 +11,7 @@
 | Agents 02–08 (forms-idp · permitting · benefits · records-foia · procurement · govops · public-safety) | Flagship — **per-intent action mapping**, withheld consequential actions, 4 docs + **deploy runbook** + **customer deck** each, AWS-native rebuilds | 63 ✓ |
 | IaC — CloudFormation (6 templates) | Valid, deployable | parsed ✓ |
 | IaC — Terraform + GovCloud overlay (6 files) | Valid HCL | parsed ✓ |
-| Decks (`decks/`) | 8 per-agent + WoG + suite exec overview — example-style 6-slide narrative, **true AWS architecture diagrams** (boxes + traffic flow), **grounded results from named deployments** (Nevada DETR, Honolulu, CDC, Leon County, IBM/ServiceNow), vendor/peer-reviewed labeled, RCT counter-evidence on-slide; talk tracks in notes (`decks/DECK-SOURCES.md`) | — |
+| Decks (`decks/`) | 8 per-agent + WoG + suite exec overview — **rebuilt on the AWS template** (squid-ink/orange/teal), 6-slide narrative, **true AWS architecture diagrams** (boxes + Cognito-JWT traffic flow + control cards), **grounded results from named deployments** (State of California permitting, Anne Arundel, Denver "Sunny", DOJ FOIA, Nevada DETR, CDC TowerScout, IBM/ServiceNow), **evidence-tier labeled on-slide** ([GOV]/[PEER-REVIEWED]/[VENDOR-REPORTED]/[ANALYST]); counter-evidence + caveats in **speaker notes**; Honolulu removed (`decks/DECK-SOURCES.md`) | 10 ✓ |
 | Seller / SA enablement | `gtm/SELLER-SA-FIELD-GUIDE.md` (9-phase playbook) + `gtm/SELLER-FIRST-MEETING-CHEATSHEET.md` (one-pager) | — |
 | Per-agent deploy runbooks | `<agent>/docs/DEPLOY-RUNBOOK.md` (real-AWS, step-by-step) for all 8 | — |
 | Production-readiness & RACI | `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` — gap assessment + shared-responsibility matrix + go-live checklist | — |
