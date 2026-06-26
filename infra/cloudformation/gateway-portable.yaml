@@ -1,11 +1,16 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: SLG Suite - MCP gateway (PORTABLE path - API Gateway HTTP API + Cognito JWT authorizer). Any region incl. GovCloud.
+Description: >
+  SLG Suite - MCP gateway SCAFFOLDING (PORTABLE path: API Gateway HTTP API + Cognito JWT
+  authorizer). Any region incl. GovCloud. NOTE: the fully wired gateway (access logging,
+  throttling, Lambda invoke permission, smoke test) ships in infra/golden-path-311/ (SAM).
+  WAF is applied at the CloudFront edge (edge.yaml) since WAFv2 does not associate to HTTP APIs.
+  The dynamic POST /tool/{kind}/{method} route is constrained by the deny-by-default
+  TOOL_REGISTRY allowlist in platform_core (unknown tools are denied before any connector runs).
 Parameters:
   AgentId: {Type: String, Default: 01-resident-services-311}
   Environment: {Type: String, Default: dev}
   UserPoolId: {Type: String}
   UserPoolClientId: {Type: String}
-  AuthorizerFnArn: {Type: String}
   ConnectorFnArn: {Type: String}
 Resources:
   GatewayApi:
@@ -38,8 +43,31 @@ Resources:
       AuthorizationType: JWT
       AuthorizerId: !Ref JwtAuthorizer
       Target: !Sub "integrations/${ToolIntegration}"
+  GatewayAccessLogs:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/slg/${AgentId}/${Environment}/gateway-access"
+      RetentionInDays: 365
   Stage:
     Type: AWS::ApiGatewayV2::Stage
-    Properties: {ApiId: !Ref GatewayApi, StageName: !Ref Environment, AutoDeploy: true}
+    Properties:
+      ApiId: !Ref GatewayApi
+      StageName: !Ref Environment
+      AutoDeploy: true
+      AccessLogSettings:
+        DestinationArn: !GetAtt GatewayAccessLogs.Arn
+        Format: '{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","route":"$context.routeKey","status":"$context.status","sub":"$context.authorizer.claims.sub"}'
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 20
+        ThrottlingRateLimit: 10
+  ConnectorInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ConnectorFnArn
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${GatewayApi}/*"
 Outputs:
   GatewayUrl: {Value: !Sub "https://${GatewayApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}"}

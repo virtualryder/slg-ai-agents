@@ -3,9 +3,24 @@
 
 > **The agent is not the product. The governance that makes it deployable, auditable, and compliant in a regulated government environment is.**
 
-A field-ready accelerator of **8 governed SLG AI agents** — each deployable **standalone** with its own complete secure AWS architecture — plus an **optional Whole-of-Government orchestration platform** that coordinates them across agencies. **179 automated tests pass with no API key.** Grounded in current AWS and SLG sources (`SOURCES.md`, `decks/DECK-SOURCES.md`).
+A **reference accelerator** of **8 governed SLG AI agents** — each with a **standalone reference architecture** (own VPC, identity, data, and audit stack) — plus an **optional Whole-of-Government orchestration platform** that coordinates them across agencies. A no-API-key automated test suite — including new negative-case tests for bound approvals, cryptographic JWT verification, append-only audit, and fail-closed masking — exercises the governance and control-plane logic. Grounded in current AWS and SLG sources (`SOURCES.md`, `decks/DECK-SOURCES.md`).
 
-> **Reviewing this for production?** Start with §5 and `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` — an honest gap assessment + a RACI shared-responsibility matrix. This is a **production-shaped accelerator, not an authorized, production-ready system**; live connectors, ATO/GovRAMP, and security testing are engagement work.
+> **Status & maturity (read first).** This is a **reference accelerator for discovery, architecture workshops, and scoped pilots — not an AWS-authorized, production-ready system.** Resident Services / 311 is the **deployable golden-path reference**; the other seven are **patterns** that inherit the same foundation. Live connectors, production identity, security testing, and an authorization (ATO / StateRAMP / FedRAMP) are customer-engagement work. See `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` (gap assessment + RACI) and `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` (independent review, verified findings, and the gap-closure plan currently in progress).
+
+---
+
+## ▶ Start here — what to read first
+**New to this repo, read in this order:**
+1. **This README** — the need, the solution, the regulations, and who owns what.
+2. **`docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md`** — an independent review with **verified findings** and the gap-closure status. **P0–P2 are closed:** claims aligned to reality, one **golden-path agent wired end-to-end**, and the **control plane hardened** (bound/single-use approvals, cryptographic JWT verification, append-only audit, scoped IAM, fail-closed masking) — all unit-tested and `cfn-lint`-clean.
+3. **`docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`** — honest gap assessment + RACI (read before any production decision).
+4. **`infra/golden-path-311/DEPLOY-GOLDEN-PATH.md`** — deploy the one fully-wired agent: `sam build && sam deploy` → `./smoke_test.sh`.
+
+**I want to…**
+- **See it / pitch it** → `decks/` (10 narrative decks) + `decks/leave-behinds/` (one-pagers) + `gtm/SELLER-SA-FIELD-GUIDE.md`.
+- **Deploy the golden path** → `infra/golden-path-311/` (SAM, one command + smoke test + teardown).
+- **Review the security model** → §3 + the CIO/CISO/Architect section, then the **security package**: `SECURITY.md`, `docs/THREAT-MODEL.md`, `docs/NIST-800-53-CONTROL-MATRIX.md`, `docs/OWASP-LLM-ATLAS-MAPPING.md`, `docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md`.
+- **Run the tests** → `pytest` (no API key needed; includes the new control-plane negative-case tests).
 
 ---
 
@@ -82,6 +97,30 @@ Each control is marked **Implemented** (in the platform) vs **Configurable** (th
 
 ---
 
+## 3a. For the CIO, CISO & Director of Architecture — why this clears review
+The shared concern: **an AI agent that can touch systems of record is a governance, audit, and least-privilege problem before it is a model problem.** This accelerator is built around exactly that, and the controls below are implemented and unit-tested (not just described) — see `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md`.
+
+**CISO — security & compliance concerns, and how they're alleviated**
+
+- *"Could the AI take a consequential action on its own?"* No. Every consequential action (issue permit, adjudicate, release records, award) is **withheld from the agent in code** and verified by tests; it executes only after a **bound, single-use, separation-of-duties** human approval (approver ≠ requestor; the approval token is cryptographically bound to the exact tool and arguments, expires, and cannot be replayed or retargeted).
+- *"Can I trust the identity and roles?"* Identity is **cryptographically verified** (RS256 over the Cognito JWKS, with issuer/audience/expiry checks and an alg-confusion guard); client-supplied roles are never trusted. Authorization is **deny-by-default with least privilege as an intersection** — the agent can never exceed the employee it acts for.
+- *"Will the audit trail hold up?"* The audit store is **append-only by enforcement** (PutItem-only IAM with an explicit Update/Delete deny + conditional writes), with **WORM (S3 Object Lock)** retention keyed to data classification, and **PII/CJI/FTI masking that fails closed**. Every tool attempt — allow, deny, pending-approval, error — is recorded with lineage.
+- *"Where does the data go?"* Inference stays **in-account** (Amazon Bedrock via VPC endpoint) with **Guardrails on input and output**. Maps to **CJIS v6.0, IRS Pub 1075, HIPAA/ARC-AMPE, NIST AI RMF, ADA Title II** (§3); the CISO security-review checklist is in `gtm/SELLER-SA-FIELD-GUIDE.md` §6.
+
+**Director of Architecture — design & operational concerns**
+
+One governed pattern, reused across eight agents: edge (CloudFront + WAF + Shield) → Cognito JWT → API Gateway → MCP gateway (deny-by-default + scoped per-call token) → Bedrock + Guardrails → human gate → append-only WORM audit. Full **IaC parity** (CloudFormation + Terraform, commercial **and** GovCloud), **per-function least-privilege roles** (Bedrock scoped to the model + guardrail ARNs, no `Resource:"*"`), and **one fully-wired golden path** (`infra/golden-path-311/`) deployable with `sam build && sam deploy`, with a smoke test and teardown. Readable Python and standard AWS services — no black box, no lock-in.
+
+**CIO — ROI & risk concerns**
+
+Build the governance once and every future agent inherits it — the way out of the **"90% piloting / 25% funded"** trap (NASCIO). Start with a low-blast-radius agent (311 or IT service desk), prove value against documented outcomes (§2), and scale on a paved road to funded, compliant production. The **honest gap assessment** (§5) and the verified remediation plan mean no surprises in security review.
+
+**What we deliberately do *not* claim:** it is not yet AWS-authorized or ATO/StateRAMP-certified, and live connectors + third-party security testing are engagement work. That candor — plus the verified, tested control plane — is what makes the rest credible to a review board.
+
+> **For assessors:** the **security package** — `SECURITY.md`, `docs/THREAT-MODEL.md` (trust boundaries + abuse cases), `docs/NIST-800-53-CONTROL-MATRIX.md` (control-by-control, with evidence/test/owner), `docs/OWASP-LLM-ATLAS-MAPPING.md`, and `docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md` — maps every claim above to a testable control or a named owner.
+
+---
+
 ## 4. How to position it
 - **Standalone first, platform when ready.** One `scripts/deploy.sh <agent>` stands up a complete isolated stack (own VPC, CloudFront+WAF edge, Cognito JWT, KMS, WORM audit, gateway, agent) with **no WoG dependency** (`docs/DEPLOYMENT-MODELS.md`). Grow agent by agent; the WoG platform is additive.
 - **Sellers & SAs start here:** `gtm/SELLER-SA-FIELD-GUIDE.md` (9-phase playbook) and the one-page `gtm/SELLER-FIRST-MEETING-CHEATSHEET.md`.
@@ -93,7 +132,7 @@ Each control is marked **Implemented** (in the platform) vs **Configurable** (th
 ## 5. Production readiness — and who owns what (read before any production decision)
 **Honest status: this is a production-shaped accelerator, not an authorized, production-ready system — and it doesn't claim to be.** That honesty is the point: it embeds the governance controls usually retrofitted, which de-risks the path to production, but real work remains and most of it is the customer's.
 
-**Why it gives confidence (verifiable today):** consequential actions withheld in code + tested · framework-enforced human gate · deny-by-default least-privilege · WORM audit + masking · complete AWS security architecture mapped to your regimes · no lock-in (readable Python, CFN + Terraform) · 179 tests passing.
+**Why it gives confidence (verifiable today):** consequential actions withheld in code + tested · framework-enforced human gate · deny-by-default least-privilege · WORM audit + masking · complete AWS security architecture mapped to your regimes · no lock-in (readable Python, CFN + Terraform) · a no-API-key test suite incl. new control-plane negative-case tests (approval binding, JWT verification, append-only audit, fail-closed masking).
 
 **What still must be built/authorized before go-live (stated plainly):**
 - **Integrations are fixtures** — there are **no live connectors** yet to 311/CRM, eligibility systems, Accela/Tyler, ECMS, ServiceNow, etc. Each must be built and validated (usually the largest line item).
@@ -112,7 +151,7 @@ Each control is marked **Implemented** (in the platform) vs **Configurable** (th
 | A governed, auditable **accelerator** with the hard controls built in | A certified, validated, ATO'd SaaS product you deploy unchanged |
 | A reference architecture + IaC you deploy into your account and **own** | A black-box dependency or a turnkey integration |
 | Decision-support — drafts, assembles, routes, flags — humans decide | Autonomous decisioning in regulated workflows |
-| Demonstrated + deployable-by-design (179 tests, no API key) | Production-ready until the go-live checklist is met |
+| Demonstrated + deployable-by-design (no-API-key tests incl. control-plane negative cases) | Production-ready until the go-live checklist is met |
 
 ## Repository map
 ```

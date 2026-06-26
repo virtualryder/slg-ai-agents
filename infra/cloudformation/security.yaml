@@ -1,11 +1,21 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: SLG Suite - Security stack (KMS CMK, Bedrock Guardrail, Cognito, least-privilege agent role).
+Description: >
+  SLG Suite - Security stack. KMS CMK; Bedrock Guardrail (prompt-attack on input AND output);
+  hardened Cognito (MFA + advanced security + immutable role claim + short tokens); and
+  SERVICE-SCOPED least-privilege roles (Step Functions vs. agent runtime) with Bedrock scoped
+  to the specific model + guardrail ARNs (no Resource:"*").
 Parameters:
   AgentId: {Type: String, Default: 01-resident-services-311}
   Environment: {Type: String, Default: dev, AllowedValues: [dev, test, prod]}
+  BedrockModelId:
+    Type: String
+    Default: anthropic.claude-3-5-sonnet-20240620-v1:0
+    Description: Scopes bedrock:InvokeModel to exactly this model (no wildcard).
 Resources:
   AgentKey:
     Type: AWS::KMS::Key
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       Description: !Sub "CMK for SLG agent ${AgentId} (${Environment})"
       EnableKeyRotation: true
@@ -26,12 +36,12 @@ Resources:
     Type: AWS::Bedrock::Guardrail
     Properties:
       Name: !Sub "slg-${AgentId}-${Environment}"
-      Description: PII masking, denied topics, and contextual grounding for resident-facing AI.
+      Description: PII masking, denied topics, prompt-attack on input AND output.
       BlockedInputMessaging: "I can't help with that request."
       BlockedOutputsMessaging: "I can't provide that information."
       ContentPolicyConfig:
         FiltersConfig:
-          - {Type: PROMPT_ATTACK, InputStrength: HIGH, OutputStrength: NONE}
+          - {Type: PROMPT_ATTACK, InputStrength: HIGH, OutputStrength: HIGH}
       SensitiveInformationPolicyConfig:
         PiiEntitiesConfig:
           - {Type: US_SOCIAL_SECURITY_NUMBER, Action: BLOCK}
@@ -43,15 +53,27 @@ Resources:
       TopicPolicyConfig:
         TopicsConfig:
           - Name: UnauthorizedLegalAdvice
-            Definition: Providing binding legal or eligibility determinations the agent is not authorized to make.
+            Definition: Binding legal or eligibility determinations the agent is not authorized to make.
             Type: DENY
   UserPool:
     Type: AWS::Cognito::UserPool
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       UserPoolName: !Sub "slg-${AgentId}-${Environment}"
       AdminCreateUserConfig: {AllowAdminCreateUserOnly: true}
+      MfaConfiguration: "ON"
+      EnabledMfas: [SOFTWARE_TOKEN_MFA]
+      UserPoolAddOns: {AdvancedSecurityMode: ENFORCED}
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 14
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
       Schema:
-        - {Name: slg_role, AttributeDataType: String, Mutable: true}
+        - {Name: slg_role, AttributeDataType: String, Mutable: false}
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
@@ -59,25 +81,56 @@ Resources:
       ClientName: !Sub "slg-${AgentId}-${Environment}-app"
       GenerateSecret: false
       ExplicitAuthFlows: [ALLOW_USER_SRP_AUTH, ALLOW_REFRESH_TOKEN_AUTH]
-  AgentRole:
+      TokenValidityUnits: {AccessToken: minutes, IdToken: minutes, RefreshToken: hours}
+      AccessTokenValidity: 15
+      IdTokenValidity: 15
+      RefreshTokenValidity: 8
+  # ---- service-scoped least-privilege roles ----
+  AgentRuntimeRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub "slg-${AgentId}-${Environment}-agent"
+      RoleName: !Sub "slg-${AgentId}-${Environment}-runtime"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
           - Effect: Allow
-            Principal: {Service: [lambda.amazonaws.com, states.amazonaws.com, ecs-tasks.amazonaws.com]}
+            Principal: {Service: [lambda.amazonaws.com, ecs-tasks.amazonaws.com]}
             Action: "sts:AssumeRole"
       Policies:
-        - PolicyName: least-privilege
+        - PolicyName: runtime-least-privilege
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
-              - {Effect: Allow, Action: [bedrock:InvokeModel, bedrock:ApplyGuardrail], Resource: "*"}
-              - {Effect: Allow, Action: [kms:Decrypt, kms:GenerateDataKey], Resource: !GetAtt AgentKey.Arn}
+              - Effect: Allow
+                Action: [bedrock:InvokeModel]
+                Resource: !Sub "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${BedrockModelId}"
+              - Effect: Allow
+                Action: [bedrock:ApplyGuardrail]
+                Resource: !GetAtt ResidentGuardrail.GuardrailArn
+              - Effect: Allow
+                Action: [kms:Decrypt, kms:GenerateDataKey]
+                Resource: !GetAtt AgentKey.Arn
+  StatesExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "slg-${AgentId}-${Environment}-states"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: {Service: states.amazonaws.com}
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: invoke-agent-lambdas-only
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: [lambda:InvokeFunction]
+                Resource: !Sub "arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:slg-${AgentId}-${Environment}-*"
 Outputs:
   KmsKeyArn: {Value: !GetAtt AgentKey.Arn, Export: {Name: !Sub "slg-${AgentId}-${Environment}-kms"}}
   GuardrailId: {Value: !Ref ResidentGuardrail}
   UserPoolId: {Value: !Ref UserPool}
-  AgentRoleArn: {Value: !GetAtt AgentRole.Arn, Export: {Name: !Sub "slg-${AgentId}-${Environment}-role"}}
+  AgentRoleArn: {Value: !GetAtt AgentRuntimeRole.Arn, Export: {Name: !Sub "slg-${AgentId}-${Environment}-role"}}
+  StatesRoleArn: {Value: !GetAtt StatesExecutionRole.Arn}

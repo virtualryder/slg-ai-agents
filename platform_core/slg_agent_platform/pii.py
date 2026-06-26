@@ -30,9 +30,12 @@ program, which are governed by the customer's privacy and security officers.
 """
 from __future__ import annotations
 
+import logging
 import os
 import re
 from typing import Optional
+
+_log = logging.getLogger("slg.pii")
 
 # ── Identifier patterns (order matters: most specific first) ──────────────────
 _SSN_RE = re.compile(r"\b\d{3}-\d{2}-\d{4}\b")
@@ -86,7 +89,7 @@ def _mask_cards(text: str) -> str:
     return _CARD_RE.sub(repl, text)
 
 
-def mask(text: Optional[str]) -> str:
+def mask(text: Optional[str], fail_closed: Optional[bool] = None) -> str:
     """
     Mask PII/CJI/FTI identifiers in free text for safe logging and audit.
 
@@ -108,15 +111,30 @@ def mask(text: Optional[str]) -> str:
     out = _LONGNUM_RE.sub("[ID-REDACTED]", out)
 
     if os.getenv("MASK_ENGINE", "").strip().lower() == "ml":
-        out = _ml_mask(out)
+        out = _ml_mask(out, fail_closed=fail_closed)
     return out
 
 
-def _ml_mask(text: str) -> str:
-    """Optional ML NER hook (Amazon Comprehend / Presidio). No-op if absent."""
-    try:  # pragma: no cover - optional dependency path
-        from slg_agent_platform._ml_ner import redact  # type: ignore
+_FAILCLOSED_PLACEHOLDER = "[REDACTED-PII-MASKING-UNAVAILABLE]"
 
+
+def _ml_mask(text: str, fail_closed: Optional[bool] = None) -> str:
+    """Optional ML NER hook (Amazon Comprehend / Presidio).
+
+    FAIL CLOSED by default: if the ML masker is missing or errors, we MUST NOT
+    return the raw text on a protected logging/audit path. Instead we redact the
+    whole field and emit a security event. Set MASK_FAIL_CLOSED=0 (or pass
+    fail_closed=False) only for non-protected paths where over-masking is worse.
+    """
+    if fail_closed is None:
+        fail_closed = os.getenv("MASK_FAIL_CLOSED", "1").strip().lower() not in ("0", "false", "no")
+    try:
+        from slg_agent_platform._ml_ner import redact  # type: ignore
         return redact(text)
-    except Exception:
+    except Exception as exc:  # noqa: BLE001
+        if fail_closed:
+            _log.error("pii_mask_failclosed: ML masking unavailable; redacting field",
+                       extra={"security_event": "pii_mask_failclosed", "error": type(exc).__name__})
+            return _FAILCLOSED_PLACEHOLDER
+        _log.warning("pii_mask_failopen: ML masking unavailable; returning regex-masked text only")
         return text

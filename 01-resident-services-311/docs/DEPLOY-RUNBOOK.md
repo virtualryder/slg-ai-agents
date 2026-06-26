@@ -1,7 +1,9 @@
 # Resident Services & 311 Navigator — AWS Deployment Runbook (step-by-step)
 *Audience: an AWS Solutions Architect or customer cloud engineer deploying Agent 01 (`01-resident-services-311`) into a real AWS account — commercial or GovCloud. This is a follow-along guide: run each numbered step, then confirm the **Verify** line before moving on. Total hands-on time once the shared foundation exists: ~45–90 min.*
 
-> **Standalone deployment — no WoG required.** This runbook deploys a *complete, self-contained* secure stack for this agent: its **own VPC + Flow Logs + Bedrock VPC endpoint**, **CloudFront + AWS WAF + Shield** edge, KMS CMK, Bedrock Guardrail, **Cognito (IdP federation → JWT)**, **append-only audit + S3 Object Lock (WORM)**, the deny-by-default gateway, and the agent — with **no dependency on the Whole-of-Government platform**. Deploy this agent on its own; adopt the WoG orchestration layer later (it's additive). See `../../docs/DEPLOYMENT-MODELS.md`.
+> **Fastest path — the wired golden path.** For a true one-command deploy of the *real* agent (the five workflow Lambdas, the actual Step Functions ASL with the `waitForTaskToken` human gate, an HTTP API with a Cognito JWT authorizer + access logging + throttling, and per-function least-privilege roles), use the SAM app at **`infra/golden-path-311/`** — `./deploy.sh` then `./smoke_test.sh`. This runbook below documents the underlying components and the standalone secure-stack model in more detail.
+
+> **Standalone deployment — no WoG required.** The standalone stack gives this agent its **own VPC + Flow Logs + Bedrock VPC endpoint**, **CloudFront + AWS WAF + Shield** edge, KMS CMK, Bedrock Guardrail, **Cognito (IdP federation → JWT)**, audit + S3 Object Lock (WORM), the deny-by-default gateway, and the agent — with **no dependency on the Whole-of-Government platform**. Adopt the WoG layer later (it's additive). See `../../docs/DEPLOYMENT-MODELS.md`. *(Append-only audit enforcement and data-class WORM retention are tracked in `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` P2.)*
 
 ---
 ## 0. Prerequisites (≈15 min) — confirm before you start

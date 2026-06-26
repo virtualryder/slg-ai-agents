@@ -64,7 +64,7 @@
 ## PHASE 3 — Position (frame per persona)
 | Persona | What they care about | Lead with | Proof to show |
 |---|---|---|---|
-| **State CIO / CTO** | Pilots → production without 50 ungoverned bots | "One governed substrate; agents are configurations of it — controls compound, audits don't multiply." | WoG deck + 179 tests |
+| **State CIO / CTO** | Pilots → production without 50 ungoverned bots | "One governed substrate; agents are configurations of it — controls compound, audits don't multiply." | WoG deck + no-API-key test suite |
 | **CISO** | Provable least privilege, audit, data isolation | "The agent can never exceed the employee, and the consequential action is withheld *in code*." | `policy.py` + withheld-action test + masked audit |
 | **CFO / budget** | ROI, predictable cost, funding path | "Serverless pay-per-use; per-transaction cost falls as agents share the baseline; pilot fundable via AWS programs." | the agent deck's results slide + TCO framing in the GTM story |
 | **Program director (HHS/Permitting/Records/Procurement)** | Throughput, backlog, constituent experience | the agent deck for *their* workflow + its grounded numbers | the per-agent deck + live demo |

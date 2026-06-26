@@ -170,7 +170,7 @@ aws stepfunctions start-execution --state-machine-arn $SAGA_ARN --input file://e
 # 5. Withheld-action test: confirm no agent can invoke issue_permit / adjudicate / release / award
 # 6. Evidence test: assemble the case-level evidence package; confirm retention = max data-class floor
 ```
-Local equivalents (run anytime, no AWS): `pytest` (179 tests) + `local_runner.py` (saga + compensation + pause).
+Local equivalents (run anytime, no AWS): `pytest` (no-API-key suite incl. control-plane negative cases) + `local_runner.py` (saga + compensation + pause).
 
 ---
 

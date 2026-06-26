@@ -1,5 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: SLG Suite - Agent service (native Step Functions+Lambda HITL gate | container ECS Fargate / AgentCore Runtime).
+Description: >
+  SLG Suite - Agent service SCAFFOLDING (native Step Functions+Lambda HITL gate | container).
+  NOTE: the state machine below is a PLACEHOLDER. For the fully wired, deployable agent (real
+  Lambdas + ASL + gateway + Cognito JWT + access logging/throttling + smoke test), use the SAM
+  golden path at infra/golden-path-311/ (`sam build && sam deploy`). The other agents follow that
+  same pattern. See docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md (P1).
 Parameters:
   AgentId: {Type: String, Default: 01-resident-services-311}
   Environment: {Type: String, Default: dev}

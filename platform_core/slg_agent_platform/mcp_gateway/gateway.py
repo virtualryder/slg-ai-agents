@@ -27,6 +27,7 @@ import os
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
+from . import approvals as _approvals
 from . import policy as _policy
 from . import tokens as _tokens
 from .audit import GatewayAuditLog
@@ -63,6 +64,7 @@ class MCPGateway:
     def __init__(self, audit: Optional[GatewayAuditLog] = None, connector_mode: Optional[str] = None) -> None:
         self.audit = audit or GatewayAuditLog()
         self._connector_mode = connector_mode  # None -> CONNECTOR_MODE env (default fixture)
+        self._approval_nonces = _approvals.NonceStore()  # single-use approval enforcement
 
     def invoke(
         self,
@@ -99,8 +101,15 @@ class MCPGateway:
                 raise PolicyDenied(decision.reason)
             return GatewayResult("DENY", tool, aid, reason=decision.reason)
 
-        # 3. Human approval gate for high-risk (write/irreversible) tools
-        if decision.requires_approval and not self._approval_ok(approval):
+        # 3. Human approval gate for high-risk (write/irreversible) tools.
+        #    A valid approval is a token BOUND to (requestor, agent, tool, args), single-use,
+        #    and issued by a DIFFERENT person (separation of duties).
+        approver: Optional[str] = None
+        if decision.requires_approval:
+            approver = self._verify_approval(
+                approval, requestor=subject, agent_id=agent_id, tool=tool, args=args
+            )
+        if decision.requires_approval and approver is None:
             aid = self.audit.record({
                 "decision": "PENDING_APPROVAL", "tool": tool, "agent_id": agent_id,
                 "user": subject, "roles": roles,
@@ -114,8 +123,10 @@ class MCPGateway:
         # 4. Mint a short-lived token scoped to exactly this tool (user context inside)
         token = _tokens.mint_scoped_token(
             subject=subject, agent_id=agent_id, tool=tool, scope=decision.effective_scope,
+            args=args, data_class=getattr(decision, "data_class", "unspecified"),
         )
-        claims = _tokens.verify_scoped_token(token, expected_tool=tool)  # prove it round-trips
+        # round-trips AND proves the token is bound to these exact args (tamper-evident)
+        claims = _tokens.verify_scoped_token(token, expected_tool=tool, expected_args=args)
 
         # 5. Invoke the tool via the connector framework
         try:
@@ -128,7 +139,7 @@ class MCPGateway:
             raise
 
         # 6. Audit the allowed call, with lineage to the system of record
-        approver = (approval or {}).get("reviewer") if decision.requires_approval else None
+        # approver captured at the approval gate above (bound, single-use, SoD-verified)
         aid = self.audit.record({
             "decision": "ALLOW", "tool": tool, "agent_id": agent_id, "user": subject,
             "roles": roles, "token_jti": claims["jti"], "scope": decision.effective_scope,
@@ -140,13 +151,25 @@ class MCPGateway:
                              requires_approval=decision.requires_approval)
 
     # ── helpers ───────────────────────────────────────────────────────────────
-    @staticmethod
-    def _approval_ok(approval: Optional[Dict[str, Any]]) -> bool:
-        """A valid approval carries a verified reviewer identity and an approve decision."""
+    def _verify_approval(self, approval, *, requestor, agent_id, tool, args):
+        """Return the approver id iff a bound, single-use, SoD-valid approval verifies; else None.
+
+        Rejects (returns None) for: missing token, bad signature, expired, wrong
+        requestor/agent/tool, tampered args, self-approval, over-limit amount, replay.
+        """
         if not approval:
-            return False
-        reviewer = approval.get("reviewer") or {}
-        return bool(approval.get("approved")) and bool(reviewer.get("sub"))
+            return None
+        token = approval.get("token")
+        if not token:
+            return None
+        try:
+            claims = _approvals.verify_approval_token(
+                token, requestor=requestor, agent_id=agent_id, tool=tool, args=args,
+                amount=(args or {}).get("amount"), nonce_store=self._approval_nonces,
+            )
+        except _approvals.ApprovalInvalid:
+            return None
+        return claims.get("approver")
 
     def _invoke_connector(self, decision: "_policy.PolicyDecision", args: Dict[str, Any]) -> Any:
         from slg_agent_platform.connectors import get_connector

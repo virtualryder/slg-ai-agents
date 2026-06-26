@@ -1,10 +1,14 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: >
-  SLG AI Agent Suite - MASTER quick-deploy for a STANDALONE agent. Nests network (own VPC +
-  Flow Logs + Bedrock VPC endpoint), security (KMS, Guardrail, Cognito, least-privilege role),
-  data (append-only audit + S3 Object Lock WORM), and the agent (native|container) into a
-  customer-isolated environment. NO dependency on the Whole-of-Government platform — deploy one
-  agent with a complete secure, governed, logged architecture. New account -> running agent.
+  SLG AI Agent Suite - MASTER stack for a STANDALONE agent. Nests network (own VPC + Flow Logs +
+  Bedrock VPC endpoint), security (KMS, Guardrail, Cognito, agent role), data (audit DynamoDB +
+  S3 Object Lock WORM), and the agent service into a customer-isolated environment. NO dependency
+  on the Whole-of-Government platform.
+  STATUS: provisions BASELINE INFRASTRUCTURE SCAFFOLDING. It does NOT yet nest a gateway stack and
+  the agent stack provisions a PLACEHOLDER state machine. The fully wired one-command golden path
+  (gateway + real Step Functions ASL + Lambdas + smoke test) is being delivered for
+  01-resident-services-311 first; see docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md (P1). Until then,
+  follow the per-agent DEPLOY-RUNBOOK to deploy the real state machine and connectors.
 Parameters:
   AgentId: {Type: String, Default: 01-resident-services-311}
   Environment: {Type: String, Default: dev, AllowedValues: [dev, test, prod]}

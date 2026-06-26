@@ -1,12 +1,32 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: SLG Suite - Data stack (append-only audit DynamoDB, WORM S3 Object Lock, HITL queue).
+Description: >
+  SLG Suite - Data stack. Audit DynamoDB (PITR + KMS) made APPEND-ONLY by an audit-writer
+  IAM policy granting PutItem ONLY and explicitly DENYING UpdateItem/DeleteItem; WORM S3
+  Object Lock with retention + mode driven by the agency's DATA CLASSIFICATION (not a fixed
+  default). Pair with the sample Organizations SCP in runbooks/ for org-wide immutability.
 Parameters:
   AgentId: {Type: String, Default: 01-resident-services-311}
   Environment: {Type: String, Default: dev}
   KmsKeyArn: {Type: String}
+  DataClass:
+    Type: String
+    Default: pii
+    AllowedValues: [public, pii, cji, fti, phi]
+    Description: Data classification of records this agent handles (drives WORM retention).
+  WormMode:
+    Type: String
+    Default: COMPLIANCE
+    AllowedValues: [GOVERNANCE, COMPLIANCE]
+    Description: COMPLIANCE = immutable even to root for the retention period.
+  AuditRetentionDays:
+    Type: Number
+    Default: 2555
+    Description: WORM retention. MUST be set from the agency's approved records schedule.
 Resources:
   AuditTable:
     Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       TableName: !Sub "slg-${AgentId}-${Environment}-audit"
       BillingMode: PAY_PER_REQUEST
@@ -18,8 +38,24 @@ Resources:
         - {AttributeName: ts, KeyType: RANGE}
       PointInTimeRecoverySpecification: {PointInTimeRecoveryEnabled: true}
       SSESpecification: {SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref KmsKeyArn}
+  # Append-only enforcement: writers may PutItem; UpdateItem/DeleteItem are DENIED.
+  AuditWriterPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Sub "slg-${AgentId}-${Environment}-audit-writer"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: [dynamodb:PutItem]
+            Resource: !GetAtt AuditTable.Arn
+          - Effect: Deny
+            Action: [dynamodb:UpdateItem, dynamodb:DeleteItem, dynamodb:BatchWriteItem]
+            Resource: !GetAtt AuditTable.Arn
   HitlTable:
     Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       TableName: !Sub "slg-${AgentId}-${Environment}-hitl"
       BillingMode: PAY_PER_REQUEST
@@ -28,20 +64,37 @@ Resources:
       SSESpecification: {SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref KmsKeyArn}
   WormBucket:
     Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       BucketName: !Sub "slg-${AgentId}-${Environment}-worm-${AWS::AccountId}"
       ObjectLockEnabled: true
       ObjectLockConfiguration:
         ObjectLockEnabled: Enabled
-        Rule: {DefaultRetention: {Mode: COMPLIANCE, Days: 2555}}   # 7-year retention (tune to schedule)
+        Rule: {DefaultRetention: {Mode: !Ref WormMode, Days: !Ref AuditRetentionDays}}
       VersioningConfiguration: {Status: Enabled}
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - {ServerSideEncryptionByDefault: {SSEAlgorithm: aws:kms, KMSMasterKeyID: !Ref KmsKeyArn}}
       PublicAccessBlockConfiguration:
         {BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true}
+  WormBucketTlsPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WormBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: "*"
+            Action: "s3:*"
+            Resource:
+              - !GetAtt WormBucket.Arn
+              - !Sub "${WormBucket.Arn}/*"
+            Condition: {Bool: {"aws:SecureTransport": "false"}}
 Outputs:
   AuditTableName: {Value: !Ref AuditTable}
+  AuditWriterPolicyArn: {Value: !Ref AuditWriterPolicy}
   WormBucketName: {Value: !Ref WormBucket}
-  # NOTE: an SCP / resource policy denying dynamodb:UpdateItem & DeleteItem on the
-  # audit table partition is applied at the account/Org level (see runbooks/).
+  DataClass: {Value: !Ref DataClass}

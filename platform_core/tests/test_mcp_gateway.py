@@ -1,7 +1,7 @@
 """Tests for the deny-by-default MCP authorization gateway (least-privilege intersection)."""
 import pytest
 
-from slg_agent_platform.mcp_gateway import MCPGateway, policy
+from slg_agent_platform.mcp_gateway import MCPGateway, policy, approvals
 from slg_agent_platform.mcp_gateway.errors import ApprovalRequired, PolicyDenied
 
 AGENT = "01-resident-services-311"
@@ -49,11 +49,17 @@ def test_high_risk_requires_human_approval():
     assert r.decision == "PENDING_APPROVAL" and r.requires_approval
 
 
-def test_high_risk_proceeds_with_valid_approval():
-    approval = {"approved": True, "reviewer": {"sub": "supervisor-1"}}
+def _bound_token(args, *, requestor="user-rep-1", approver="supervisor-1",
+                 tool="crm311.create_service_request", agent_id=AGENT, ttl_seconds=900):
+    return approvals.mint_approval_token(requestor=requestor, agent_id=agent_id, tool=tool,
+                                         args=args, approver=approver, ttl_seconds=ttl_seconds)
+
+
+def test_high_risk_proceeds_with_valid_bound_approval():
+    args = {"type": "Pothole"}
     r = gw().invoke(user_claims=RS_AGENT_CLAIMS, agent_id=AGENT,
-                    tool="crm311.create_service_request", args={"type": "Pothole"},
-                    approval=approval)
+                    tool="crm311.create_service_request", args=args,
+                    approval={"token": _bound_token(args)})
     assert r.decision == "ALLOW" and r.allowed
     assert r.result["request_id"]
 
@@ -90,3 +96,51 @@ def test_audit_trail_records_every_attempt():
     decisions = [r["decision"] for r in g.audit.records]
     assert "ALLOW" in decisions and "DENY" in decisions
     assert all("audit_id" in r and "ts" in r for r in g.audit.records)
+
+
+def test_unbound_reviewer_dict_is_rejected():
+    # legacy {approved, reviewer.sub} with NO bound token -> still blocked
+    bad = {"approved": True, "reviewer": {"sub": "supervisor-1"}}
+    r = gw().invoke(user_claims=RS_AGENT_CLAIMS, agent_id=AGENT,
+                    tool="crm311.create_service_request", args={"type": "Pothole"}, approval=bad)
+    assert r.decision == "PENDING_APPROVAL"
+
+
+def test_self_approval_rejected_at_mint():
+    with pytest.raises(approvals.ApprovalInvalid):
+        approvals.mint_approval_token(requestor="user-rep-1", agent_id=AGENT,
+                                      tool="crm311.create_service_request",
+                                      args={"type": "Pothole"}, approver="user-rep-1")
+
+
+def test_approval_is_single_use():
+    args = {"type": "Pothole"}
+    tok = {"token": _bound_token(args)}
+    g = gw()
+    r1 = g.invoke(user_claims=RS_AGENT_CLAIMS, agent_id=AGENT,
+                  tool="crm311.create_service_request", args=args, approval=tok)
+    r2 = g.invoke(user_claims=RS_AGENT_CLAIMS, agent_id=AGENT,
+                  tool="crm311.create_service_request", args=args, approval=tok)
+    assert r1.decision == "ALLOW"
+    assert r2.decision == "PENDING_APPROVAL"  # replay rejected
+
+
+def test_approval_args_tamper_rejected():
+    approved = {"token": _bound_token({"type": "Pothole"})}
+    r = gw().invoke(user_claims=RS_AGENT_CLAIMS, agent_id=AGENT,
+                    tool="crm311.create_service_request", args={"type": "Graffiti"}, approval=approved)
+    assert r.decision == "PENDING_APPROVAL"  # arguments changed after approval
+
+
+def test_approval_wrong_tool_rejected():
+    approved = {"token": _bound_token({"type": "Pothole"}, tool="crm311.update_service_request")}
+    r = gw().invoke(user_claims=RS_AGENT_CLAIMS, agent_id=AGENT,
+                    tool="crm311.create_service_request", args={"type": "Pothole"}, approval=approved)
+    assert r.decision == "PENDING_APPROVAL"  # not bound to this tool
+
+
+def test_expired_approval_rejected():
+    approved = {"token": _bound_token({"type": "Pothole"}, ttl_seconds=-1)}
+    r = gw().invoke(user_claims=RS_AGENT_CLAIMS, agent_id=AGENT,
+                    tool="crm311.create_service_request", args={"type": "Pothole"}, approval=approved)
+    assert r.decision == "PENDING_APPROVAL"  # stale approval
