@@ -40,7 +40,7 @@ jobs:
       # E3006 = "resource type not in region": false-positive for global (CloudFront)
       # and newer (BedrockAgentCore) types; scoped out here, not a real defect.
       - name: cfn-lint
-        run: cfn-lint --ignore-checks E3006 infra/cloudformation/*.yaml infra/golden-path-311/template.yaml
+        run: cfn-lint --ignore-checks E3006 infra/cloudformation/*.yaml infra/golden-path-*/template.yaml
 
   python-security:
     name: Python SAST + deps (bandit, pip-audit)

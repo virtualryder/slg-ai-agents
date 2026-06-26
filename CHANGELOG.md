@@ -4,6 +4,7 @@ All notable changes to this accelerator. Format loosely follows Keep a Changelog
 
 ## [Unreleased] — 2026-06-26 — Production-readiness remediation (P0–P3)
 ### Added
+- **Golden paths (all 8 agents):** `infra/golden-path-*/` — every agent is now one-command deployable (SAM), generated from the 311 reference; index in `infra/GOLDEN-PATHS.md`. cfn-lint clean on all 8.
 - **Golden path (P1):** `infra/golden-path-311/` — a fully wired SAM app for Agent 01 (real Lambdas + Step Functions ASL with `waitForTaskToken` human gate, HTTP API + Cognito JWT authorizer + access logging + throttling, per-function least-privilege roles). `deploy.sh` / `smoke_test.sh` / `destroy.sh`.
 - **Bound approvals (P2):** `mcp_gateway/approvals.py` — single-use, separation-of-duties, args-bound approval tokens. Wired into the gateway; negative-case tests added.
 - **JWT verification (P2):** `jwt_verify.py` — RS256/JWKS with issuer/audience/expiry and alg-confusion guard.

@@ -9,6 +9,7 @@
 | Agent 01 — Resident Services & 311 | Flagship (LangGraph + tools + 4 docs + app + container) | 7 ✓ / 1 skip |
 | Agent 01 AWS-native (Strands + Step Functions) | Deployable reference | 5 ✓ |
 | Agents 02–08 (forms-idp · permitting · benefits · records-foia · procurement · govops · public-safety) | Flagship — **per-intent action mapping**, withheld consequential actions, 4 docs + **deploy runbook** + **customer deck** each, AWS-native rebuilds | 63 ✓ |
+| **Golden paths (SAM) — all 8 agents** | `infra/golden-path-*/` one-command deploy (real Lambdas + ASL + gateway + Cognito JWT + per-fn least-priv + smoke/destroy); index `infra/GOLDEN-PATHS.md` | 8 ✓ cfn-lint |
 | IaC — CloudFormation (6 templates) | Valid, deployable | parsed ✓ |
 | IaC — Terraform + GovCloud overlay (6 files) | Valid HCL | parsed ✓ |
 | Decks (`decks/`) | 8 per-agent + WoG + suite exec overview — **rebuilt on the AWS template** (squid-ink/orange/teal), 6-slide narrative, **true AWS architecture diagrams** (boxes + Cognito-JWT traffic flow + control cards), **grounded results from named deployments** (State of California permitting, Anne Arundel, Denver "Sunny", DOJ FOIA, Nevada DETR, CDC TowerScout, IBM/ServiceNow), **evidence-tier labeled on-slide** ([GOV]/[PEER-REVIEWED]/[VENDOR-REPORTED]/[ANALYST]); counter-evidence + caveats in **speaker notes**; Honolulu removed (`decks/DECK-SOURCES.md`) | 10 ✓ |

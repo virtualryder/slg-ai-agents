@@ -1,0 +1,19 @@
+# Golden Path — 07 GovOps IT Service Desk (one command)
+
+Same wired pattern as the 311 reference (`infra/golden-path-311/`), applied to **GovOps IT Service Desk**.
+Deploys the real agent: shared layer (platform_core + governance + this agent's `core.py`), the
+five workflow Lambdas (classify → draft → check → **human gate** (`waitForTaskToken`) → finalize),
+the governed connector, the real Step Functions ASL
+(`aws-native-reference/07-govops-service-desk/stepfunctions/07_govops_service_desk.asl.json`), an HTTP API with a Cognito JWT authorizer +
+access logging + throttling, per-function least-privilege roles, a Bedrock Guardrail
+(prompt-attack in+out), hardened Cognito, and an audit table.
+
+```bash
+cd infra/golden-path-07-govops-service-desk
+./deploy.sh slg-07-dev          # sam build && sam deploy
+./smoke_test.sh slg-07-dev      # start execution → approve human gate → assert outcome
+./destroy.sh slg-07-dev         # sam delete
+```
+Prereqs: AWS SAM CLI, account credentials, Bedrock model access. See the 311 guide
+(`infra/golden-path-311/DEPLOY-GOLDEN-PATH.md`) for the full control walk-through, and
+`docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` for verification status.

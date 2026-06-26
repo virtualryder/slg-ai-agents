@@ -1,0 +1,16 @@
+# Golden Paths — one-command deploy per agent
+
+Every agent ships a **SAM golden path** that deploys the *real* agent end to end: a shared layer (platform_core + governance + the agent's `core.py`), the five workflow Lambdas (classify -> draft -> check -> **human gate** via `waitForTaskToken` -> finalize), the governed connector, the real Step Functions ASL, an HTTP API with a **Cognito JWT authorizer + access logging + throttling**, **per-function least-privilege roles** (Bedrock scoped to model+guardrail ARNs), hardened Cognito (MFA + immutable role + short tokens), a Bedrock Guardrail (prompt-attack in+out), and an audit table. All cfn-lint clean.
+
+| Agent | Folder | Deploy |
+|---|---|---|
+| 01 Resident Services / 311 | `infra/golden-path-311/` | `cd infra/golden-path-311 && ./deploy.sh && ./smoke_test.sh && ./destroy.sh` |
+| 02 Forms & IDP | `infra/golden-path-02-forms-idp/` | `cd infra/golden-path-02-forms-idp && ./deploy.sh && ./smoke_test.sh && ./destroy.sh` |
+| 03 Permitting & Licensing | `infra/golden-path-03-permitting-licensing/` | `cd infra/golden-path-03-permitting-licensing && ./deploy.sh && ./smoke_test.sh && ./destroy.sh` |
+| 04 Benefits & HHS Caseworker | `infra/golden-path-04-benefits-caseworker/` | `cd infra/golden-path-04-benefits-caseworker && ./deploy.sh && ./smoke_test.sh && ./destroy.sh` |
+| 05 Public Records & FOIA | `infra/golden-path-05-public-records-foia/` | `cd infra/golden-path-05-public-records-foia && ./deploy.sh && ./smoke_test.sh && ./destroy.sh` |
+| 06 Procurement & Grants | `infra/golden-path-06-procurement-grants/` | `cd infra/golden-path-06-procurement-grants && ./deploy.sh && ./smoke_test.sh && ./destroy.sh` |
+| 07 GovOps IT Service Desk | `infra/golden-path-07-govops-service-desk/` | `cd infra/golden-path-07-govops-service-desk && ./deploy.sh && ./smoke_test.sh && ./destroy.sh` |
+| 08 Public Safety & Public Health | `infra/golden-path-08-public-safety-health/` | `cd infra/golden-path-08-public-safety-health && ./deploy.sh && ./smoke_test.sh && ./destroy.sh` |
+
+Prereqs: AWS SAM CLI, account credentials, Bedrock model access (per region). Full control walk-through + smoke-test explanation: `infra/golden-path-311/DEPLOY-GOLDEN-PATH.md`. Verification status: `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md`.

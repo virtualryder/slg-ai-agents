@@ -5,16 +5,16 @@
 
 A **reference accelerator** of **8 governed SLG AI agents** — each with a **standalone reference architecture** (own VPC, identity, data, and audit stack) — plus an **optional Whole-of-Government orchestration platform** that coordinates them across agencies. A no-API-key automated test suite — including new negative-case tests for bound approvals, cryptographic JWT verification, append-only audit, and fail-closed masking — exercises the governance and control-plane logic. Grounded in current AWS and SLG sources (`SOURCES.md`, `decks/DECK-SOURCES.md`).
 
-> **Status & maturity (read first).** This is a **reference accelerator for discovery, architecture workshops, and scoped pilots — not an AWS-authorized, production-ready system.** Resident Services / 311 is the **deployable golden-path reference**; the other seven are **patterns** that inherit the same foundation. Live connectors, production identity, security testing, and an authorization (ATO / StateRAMP / FedRAMP) are customer-engagement work. See `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` (gap assessment + RACI) and `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` (independent review, verified findings, and the gap-closure plan currently in progress).
+> **Status & maturity (read first).** This is a **reference accelerator for discovery, architecture workshops, and scoped pilots — not an AWS-authorized, production-ready system.** **All 8 agents are now one-command deployable golden paths** (SAM) under `infra/golden-path-*/`; Resident Services / 311 is the fully-documented reference the others mirror. Live connectors, production identity, security testing, and an authorization (ATO / StateRAMP / FedRAMP) are customer-engagement work. See `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` (gap assessment + RACI) and `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` (independent review, verified findings, and the gap-closure plan currently in progress).
 
 ---
 
 ## ▶ Start here — what to read first
 **New to this repo, read in this order:**
 1. **This README** — the need, the solution, the regulations, and who owns what.
-2. **`docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md`** — an independent review with **verified findings** and the gap-closure status. **P0–P2 are closed:** claims aligned to reality, one **golden-path agent wired end-to-end**, and the **control plane hardened** (bound/single-use approvals, cryptographic JWT verification, append-only audit, scoped IAM, fail-closed masking) — all unit-tested and `cfn-lint`-clean.
+2. **`docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md`** — an independent review with **verified findings** and the gap-closure status. **P0–P4 are closed:** claims aligned to reality, **all 8 agents wired as one-command golden paths**, the **control plane hardened** (bound/single-use approvals, JWT verification, append-only audit, scoped IAM, fail-closed masking — all unit-tested), a full **security package**, and a **CI security pipeline**.
 3. **`docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`** — honest gap assessment + RACI (read before any production decision).
-4. **`infra/golden-path-311/DEPLOY-GOLDEN-PATH.md`** — deploy the one fully-wired agent: `sam build && sam deploy` → `./smoke_test.sh`.
+4. **`infra/GOLDEN-PATHS.md`** — deploy any agent in one command (`sam build && sam deploy` → `./smoke_test.sh`); 311 walk-through in `infra/golden-path-311/DEPLOY-GOLDEN-PATH.md`.
 
 **I want to…**
 - **See it / pitch it** → `decks/` (10 narrative decks) + `decks/leave-behinds/` (one-pagers) + `gtm/SELLER-SA-FIELD-GUIDE.md`.

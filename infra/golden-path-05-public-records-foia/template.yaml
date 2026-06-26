@@ -1,0 +1,284 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SLG Golden Path - 05 Public Records & FOIA, fully wired end to end.
+  Deploys the REAL agent: a shared layer (platform_core + governance + core), the five
+  workflow Lambdas (classify -> draft -> check -> human gate -> finalize), the governed
+  connector Lambda, the real Step Functions state machine (human gate = waitForTaskToken),
+  an HTTP API gateway with a Cognito JWT authorizer + access logging + throttling, and an
+  audit table. Per-function least-privilege roles; Bedrock scoped to the model + guardrail.
+  Deploy: `sam build && sam deploy --guided`.  Tear down: `sam delete`.
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, test, prod]
+  ConnectorMode:
+    Type: String
+    Default: fixture
+    AllowedValues: [fixture, live]
+    Description: fixture = safe demo connectors; live = real agency adapters (provide secrets).
+  BedrockModelId:
+    Type: String
+    Default: anthropic.claude-3-5-sonnet-20240620-v1:0
+  ApiThrottleBurst:
+    Type: Number
+    Default: 20
+  ApiThrottleRate:
+    Type: Number
+    Default: 10
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 30
+    MemorySize: 256
+    Architectures: [arm64]
+    Layers: [!Ref SharedLayer]
+    Environment:
+      Variables:
+        CONNECTOR_MODE: !Ref ConnectorMode
+        AUDIT_TABLE: !Ref AuditTable
+        POWERTOOLS_SERVICE_NAME: slg-05
+
+Resources:
+
+  # ---- shared dependency layer (platform_core + governance + core) ----
+  SharedLayer:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      LayerName: !Sub "slg-05-${Environment}-shared"
+      Description: platform_core, governance, and agent core for the public-records-foia golden path.
+      ContentUri: layer/
+      CompatibleRuntimes: [python3.12]
+      RetentionPolicy: Delete
+
+  # ---- audit table (PITR + KMS); append-only enforced in app + deny policy (see P2) ----
+  AuditTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub "slg-05-${Environment}-audit"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: audit_id, AttributeType: S}
+        - {AttributeName: ts, AttributeType: S}
+      KeySchema:
+        - {AttributeName: audit_id, KeyType: HASH}
+        - {AttributeName: ts, KeyType: RANGE}
+      PointInTimeRecoverySpecification: {PointInTimeRecoveryEnabled: true}
+      SSESpecification: {SSEEnabled: true}
+
+  # ---- workflow Lambdas (one scoped role each via Policies) ----
+  ClassifyFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-05-${Environment}-classify"
+      Handler: classify.handler
+      CodeUri: ../../aws-native-reference/05-public-records-foia/lambdas/
+      Policies: [AWSLambdaBasicExecutionRole]
+
+  DraftFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-05-${Environment}-draft"
+      Handler: draft.handler
+      CodeUri: ../../aws-native-reference/05-public-records-foia/lambdas/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:InvokeModel]
+              Resource: !Sub "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${BedrockModelId}"
+
+  CheckFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-05-${Environment}-check"
+      Handler: check.handler
+      CodeUri: ../../aws-native-reference/05-public-records-foia/lambdas/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:ApplyGuardrail]
+              Resource: !GetAtt AgentGuardrail.GuardrailArn
+
+  FinalizeFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-05-${Environment}-finalize"
+      Handler: finalize.handler
+      CodeUri: ../../aws-native-reference/05-public-records-foia/lambdas/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+
+  HitlNotifyFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-05-${Environment}-hitl-notify"
+      Handler: hitl_notify.handler
+      CodeUri: ../../aws-native-reference/05-public-records-foia/lambdas/
+      Policies: [AWSLambdaBasicExecutionRole]
+
+  # ---- governed connector Lambda (the single backend a gateway target invokes) ----
+  ConnectorFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-05-${Environment}-connector"
+      Handler: handler.handler
+      CodeUri: ../../aws-native-reference/_shared/connector/
+      Policies: [AWSLambdaBasicExecutionRole]
+      Events:
+        Tool:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref GatewayApi
+            Method: POST
+            Path: /tool/{kind}/{method}
+
+  # ---- Bedrock Guardrail (input + OUTPUT prompt-attack; PII; denied topic) ----
+  AgentGuardrail:
+    Type: AWS::Bedrock::Guardrail
+    Properties:
+      Name: !Sub "slg-05-${Environment}"
+      Description: PII masking, denied topics, prompt-attack (input+output) for the agent.
+      BlockedInputMessaging: "I can't help with that request."
+      BlockedOutputsMessaging: "I can't provide that information."
+      ContentPolicyConfig:
+        FiltersConfig:
+          - {Type: PROMPT_ATTACK, InputStrength: HIGH, OutputStrength: HIGH}
+      SensitiveInformationPolicyConfig:
+        PiiEntitiesConfig:
+          - {Type: US_SOCIAL_SECURITY_NUMBER, Action: BLOCK}
+          - {Type: US_BANK_ACCOUNT_NUMBER, Action: BLOCK}
+          - {Type: CREDIT_DEBIT_CARD_NUMBER, Action: BLOCK}
+          - {Type: DRIVER_ID, Action: ANONYMIZE}
+          - {Type: EMAIL, Action: ANONYMIZE}
+          - {Type: PHONE, Action: ANONYMIZE}
+      TopicPolicyConfig:
+        TopicsConfig:
+          - Name: UnauthorizedLegalAdvice
+            Definition: Binding legal or eligibility determinations the agent is not authorized to make.
+            Type: DENY
+
+  # ---- Cognito (golden-path baseline; MFA/federation hardening tracked in P2) ----
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      UserPoolName: !Sub "slg-05-${Environment}"
+      AdminCreateUserConfig: {AllowAdminCreateUserOnly: true}
+      MfaConfiguration: "ON"
+      EnabledMfas: [SOFTWARE_TOKEN_MFA]
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 14
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+      UserPoolAddOns: {AdvancedSecurityMode: ENFORCED}
+      Schema:
+        - {Name: slg_role, AttributeDataType: String, Mutable: false}
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: !Sub "slg-05-${Environment}-app"
+      GenerateSecret: false
+      ExplicitAuthFlows: [ALLOW_USER_SRP_AUTH, ALLOW_REFRESH_TOKEN_AUTH]
+      TokenValidityUnits: {AccessToken: minutes, IdToken: minutes, RefreshToken: hours}
+      AccessTokenValidity: 15
+      IdTokenValidity: 15
+      RefreshTokenValidity: 8
+
+  # ---- HTTP API gateway: Cognito JWT authorizer + access logs + throttling ----
+  GatewayApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: !Ref Environment
+      Auth:
+        DefaultAuthorizer: CognitoJwt
+        Authorizers:
+          CognitoJwt:
+            IdentitySource: "$request.header.Authorization"
+            JwtConfiguration:
+              audience: [!Ref UserPoolClient]
+              issuer: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}"
+      AccessLogSettings:
+        DestinationArn: !GetAtt GatewayAccessLogs.Arn
+        Format: '{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","route":"$context.routeKey","status":"$context.status","sub":"$context.authorizer.claims.sub","integrationError":"$context.integrationErrorMessage"}'
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: !Ref ApiThrottleBurst
+        ThrottlingRateLimit: !Ref ApiThrottleRate
+
+  GatewayAccessLogs:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/slg/05/${Environment}/gateway-access"
+      RetentionInDays: 365
+
+  # ---- the real agent: Step Functions state machine from the ASL ----
+  AgentStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Name: !Sub "slg-05-${Environment}"
+      DefinitionUri: ../../aws-native-reference/05-public-records-foia/stepfunctions/05_public_records_foia.asl.json
+      DefinitionSubstitutions:
+        ClassifyFn: !GetAtt ClassifyFn.Arn
+        DraftFn: !GetAtt DraftFn.Arn
+        CheckFn: !GetAtt CheckFn.Arn
+        HitlNotifyFn: !GetAtt HitlNotifyFn.Arn
+        FinalizeFn: !GetAtt FinalizeFn.Arn
+      Logging:
+        Level: ALL
+        IncludeExecutionData: false
+        Destinations:
+          - CloudWatchLogsLogGroup: {LogGroupArn: !GetAtt StateMachineLogs.Arn}
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [lambda:InvokeFunction]
+              Resource:
+                - !GetAtt ClassifyFn.Arn
+                - !GetAtt DraftFn.Arn
+                - !GetAtt CheckFn.Arn
+                - !GetAtt HitlNotifyFn.Arn
+                - !GetAtt FinalizeFn.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [logs:CreateLogDelivery, logs:GetLogDelivery, logs:UpdateLogDelivery, logs:DeleteLogDelivery, logs:ListLogDeliveries, logs:PutResourcePolicy, logs:DescribeResourcePolicies, logs:DescribeLogGroups]
+              Resource: "*"
+
+  StateMachineLogs:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/slg/05/${Environment}/statemachine"
+      RetentionInDays: 365
+
+Outputs:
+  StateMachineArn:
+    Description: Start an execution with aws-native-reference/05-public-records-foia/sample_input.json
+    Value: !Ref AgentStateMachine
+  GatewayUrl:
+    Value: !Sub "https://${GatewayApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}"
+  AuditTableName:
+    Value: !Ref AuditTable
+  UserPoolId:
+    Value: !Ref UserPool
+  GuardrailId:
+    Value: !Ref AgentGuardrail
