@@ -14,7 +14,6 @@
 | Decks (`decks/`) | 8 per-agent + WoG + suite exec overview — **rebuilt on the AWS template** (squid-ink/orange/teal), 6-slide narrative, **true AWS architecture diagrams** (boxes + Cognito-JWT traffic flow + control cards), **grounded results from named deployments** (State of California permitting, Anne Arundel, Denver "Sunny", DOJ FOIA, Nevada DETR, CDC TowerScout, IBM/ServiceNow), **evidence-tier labeled on-slide** ([GOV]/[PEER-REVIEWED]/[VENDOR-REPORTED]/[ANALYST]); counter-evidence + caveats in **speaker notes**; Honolulu removed (`decks/DECK-SOURCES.md`) | 10 ✓ |
 | Seller / SA enablement | `gtm/SELLER-SA-FIELD-GUIDE.md` (9-phase playbook) + `gtm/SELLER-FIRST-MEETING-CHEATSHEET.md` (one-pager) | — |
 | Per-agent deploy runbooks | `<agent>/docs/DEPLOY-RUNBOOK.md` (real-AWS, step-by-step) for all 8 | — |
-| Production-readiness & RACI | `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` — gap assessment + shared-responsibility matrix + go-live checklist | — |
-| Sources | `SOURCES.md` verified Jun 2026 | — |
-
-**Totals: 179 automated tests passing with no API key + 2 eval cases.** See `IMPROVEMENTS-OVER-EDU-HCLS.md` for the backlog.
+| **Security package (P3)** | `SECURITY.md` · `CONTRIBUTING.md` · `CHANGELOG.md` · `docs/THREAT-MODEL.md` (trust boundaries + abuse cases) · `docs/OWASP-LLM-ATLAS-MAPPING.md` · `docs/NIST-800-53-CONTROL-MATRIX.md` (evidence/test/owner) · `docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md` | 7 ✓ |
+| **Remediation program** | `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` — verified findings; **P0–P3 CLOSED** (claims aligned, golden path wired, control plane hardened + tested, security package); P4 (CI + evidence) remains | — |
+| Production-readiness & RACI | `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` — gap assessment + shared-responsibility matrix
