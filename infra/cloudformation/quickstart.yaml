@@ -17,7 +17,6 @@ Parameters:
   TemplateBaseUrl: {Type: String, Description: "S3 base URL where nested templates are staged"}
   OriginDomain: {Type: String, Default: "", Description: "API Gateway/ALB domain CloudFront fronts (from the gateway stack output)"}
 Conditions:
-  UsePortable: !Equals [!Ref GatewayMode, portable]
   HasOrigin: !Not [!Equals [!Ref OriginDomain, ""]]
 Resources:
   Network:

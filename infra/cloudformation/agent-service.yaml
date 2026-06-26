@@ -20,7 +20,7 @@ Resources:
       StateMachineName: !Sub "slg-${AgentId}-${Environment}"
       RoleArn: !Ref AgentRoleArn
       DefinitionString: |
-        {"Comment":"placeholder; deploy from aws-native-reference/<agent>/stepfunctions/*.asl.json",
+        {"Comment":"PLACEHOLDER - deploy the real agent via infra/golden-path-311 (SAM). See P1.",
          "StartAt":"Done","States":{"Done":{"Type":"Pass","End":true}}}
 Outputs:
   Mode: {Value: !Ref DeployMode}
