@@ -105,13 +105,40 @@ LIFE_EVENT_TEMPLATES: Dict[str, List[StepSpec]] = {
 
 def _forward(govgw, spec: StepSpec, approval: Dict[str, Any]):
     def fn(claims: Dict[str, Any], payload: Dict[str, Any]):
+        from slg_agent_platform.mcp_gateway import approvals as _approvals
+        bound_approval = _mint_bound_approval(
+            approval, requestor=claims.get("sub", ""),
+            agent_id=spec.agent_id, tool=spec.tool, args=spec.args,
+        )
         res = govgw.invoke(user_claims=claims, agent_id=spec.agent_id, tool=spec.tool,
-                           purpose=spec.purpose, args=spec.args, approval=approval,
+                           purpose=spec.purpose, args=spec.args, approval=bound_approval,
                            idempotency_key=spec.idempotency_key)
         if not res.allowed:
             raise RuntimeError(f"governed write denied: {res.reason}")
         return res.result
     return fn
+
+
+def _mint_bound_approval(
+    approval: Dict[str, Any], *, requestor: str, agent_id: str,
+    tool: str, args: Dict[str, Any],
+) -> Optional[Dict[str, Any]]:
+    """Convert an approval intent (with approver identity) into a bound token."""
+    if not approval:
+        return None
+    # Already a bound token
+    if "token" in approval:
+        return approval
+    # Legacy dict: extract the approver and mint a bound token
+    from slg_agent_platform.mcp_gateway import approvals as _approvals
+    approver = (approval.get("reviewer") or {}).get("sub") or approval.get("approver", "")
+    if not approver or not approval.get("approved", False):
+        return None
+    token = _approvals.mint_approval_token(
+        requestor=requestor, agent_id=agent_id, tool=tool,
+        args=args, approver=approver,
+    )
+    return {"token": token}
 
 
 def _compensate(spec: StepSpec):

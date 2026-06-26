@@ -7,7 +7,7 @@ from agent.core import run_until_gate, resume
 from agent.state import RecommendedAction
 
 CLAIMS = {"sub": "rep-1", "custom:slg_role": "RESIDENT_SERVICES_AGENT"}
-APPROVAL = {"approved": True, "reviewer": {"sub": "sup-1"}}
+APPROVAL = {"approved": True, "reviewer": {"sub": "sup-1"}}  # auto-minted to a bound token in nodes.finalize
 
 def test_policy_question_is_grounded_and_answered():
     s = run_until_gate({"raw_request": "What is my trash pickup day?", "acting_user_claims": CLAIMS})

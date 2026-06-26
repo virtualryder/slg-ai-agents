@@ -144,8 +144,12 @@ class GovernedToolGateway:
                                 result=prior.result, governance=gov, idempotency_key=idempotency_key)
 
         # 5. Delegate to the deny-by-default MCP gateway (authz + approval + token + audit)
+        bound_approval = self._bind_approval(
+            approval, requestor=user_claims.get("sub", ""),
+            agent_id=agent_id, tool=tool, args=args,
+        )
         res = self.gateway.invoke(user_claims=user_claims, agent_id=agent_id, tool=tool,
-                                  args=args, approval=approval)
+                                  args=args, approval=bound_approval)
         out = GovernResult(res.allowed, res.decision, tool, reason=res.reason, result=res.result,
                            governance=gov, audit_id=res.audit_id, idempotency_key=idempotency_key)
 
@@ -156,6 +160,26 @@ class GovernedToolGateway:
         if idempotency_key and res.allowed:
             self._idem_seen[idempotency_key] = out
         return out
+
+    @staticmethod
+    def _bind_approval(
+        approval: Optional[Dict[str, Any]], *, requestor: str, agent_id: str,
+        tool: str, args: Dict[str, Any],
+    ) -> Optional[Dict[str, Any]]:
+        """Convert a legacy approval dict into a bound approval token."""
+        if not approval:
+            return None
+        if "token" in approval:
+            return approval
+        from slg_agent_platform.mcp_gateway import approvals as _approvals
+        approver = (approval.get("reviewer") or {}).get("sub") or approval.get("approver", "")
+        if not approver or not approval.get("approved", False):
+            return None
+        token = _approvals.mint_approval_token(
+            requestor=requestor, agent_id=agent_id, tool=tool,
+            args=args, approver=approver,
+        )
+        return {"token": token}
 
     @property
     def rollbacks(self) -> List[Dict[str, Any]]:

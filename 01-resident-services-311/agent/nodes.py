@@ -20,6 +20,7 @@ from slg_agent_platform.pii import mask
 
 from tools import gateway_tools as gw
 from agent.state import RecommendedAction
+from slg_agent_platform.mcp_gateway import approvals as _approvals
 
 # Intents that require an authenticated, consented resident before any disclosure.
 _PERSONAL_INTENTS = {"status_lookup"}
@@ -29,6 +30,23 @@ _INTENT_KEYWORDS = {
     "service_request": ["pothole", "report", "broken", "missed", "graffiti", "streetlight"],
     "escalate": ["lawsuit", "discrimination", "emergency", "urgent complaint"],
 }
+
+
+AGENT_ID = "01-resident-services-311"
+
+
+def _bind_approval(approval, claims, tool, args):
+    """Convert a legacy approval dict into a bound approval token."""
+    if not approval or "token" in approval:
+        return approval
+    approver = (approval.get("reviewer") or {}).get("sub") or approval.get("approver", "")
+    if not approver or not approval.get("approved", False):
+        return None
+    token = _approvals.mint_approval_token(
+        requestor=claims.get("sub", ""), agent_id=AGENT_ID,
+        tool=tool, args=args, approver=approver,
+    )
+    return {"token": token}
 
 
 def _demo() -> bool:
@@ -162,11 +180,15 @@ def finalize(state: Dict[str, Any]) -> Dict[str, Any]:
     out: Dict[str, Any] = {"current_step": "finalize",
                            "completed_steps": state.get("completed_steps", []) + ["finalize"]}
     if action == RecommendedAction.CREATE_REQUEST and approval:
-        res = gw.create_service_request(claims, {"type": state.get("intent", "General")}, approval=approval)
+        args = {"type": state.get("intent", "General")}
+        bound = _bind_approval(approval, claims, "crm311.create_service_request", args)
+        res = gw.create_service_request(claims, args, approval=bound)
         out["service_request_id"] = getattr(res, "result", {}).get("request_id") if res.allowed else None
         out["case_status"] = "REQUEST_CREATED"
     elif action == RecommendedAction.BOOK_APPOINTMENT and approval:
-        res = gw.book_appointment(claims, {"service": "counter", "slot": state.get("slot", "")}, approval=approval)
+        args = {"service": "counter", "slot": state.get("slot", "")}
+        bound = _bind_approval(approval, claims, "scheduling.book_appointment", args)
+        res = gw.book_appointment(claims, args, approval=bound)
         out["appointment_id"] = getattr(res, "result", {}).get("appointment_id") if res.allowed else None
         out["case_status"] = "REQUEST_CREATED"
     elif action == RecommendedAction.ESCALATE:
