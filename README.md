@@ -57,7 +57,7 @@ The pain is specific, documented, and expensive:
 > Numbers are documented results from named deployments and published benchmarks; every figure is labeled by evidence tier on-slide (**[GOV] / [PEER-REVIEWED] / [VENDOR-REPORTED] / [ANALYST]**). Counter-evidence and caveats — e.g. the peer-reviewed **null-result RCT** on AI police-report writing — live in the **speaker notes** for presenters to volunteer. The unvalidated Honolulu permitting figure was removed and replaced with the [GOV] State-of-California source. Full citations: `decks/DECK-SOURCES.md`.
 
 **The five controls that make it deployable** (this is the product):
-1. **Deny-by-default gateway, least-privilege intersection** — `permitted ⇔ agent grant ∩ user entitlement`; the agent can never exceed the employee it acts for.
+1. **Deny-by-default gateway, least-privilege intersection** — `permitted ⇔ agent grant ∩ user entitlement`; the agent can never exceed the employee it acts for. **The deployed HTTP tool route runs *through* this gateway inside the connector Lambda** (policy → bound approval → scoped token → append-only audit, identity from the JWT authorizer only) — not a bypass.
 2. **Consequential actions withheld in code** — issue-permit / adjudicate / release-records / award are *absent from the agent's grants*, enforced by a passing test. A human owns them.
 3. **Framework-enforced human gate** — `interrupt_before` / Step Functions `waitForTaskToken`; no code path commits without approval.
 4. **Tamper-evident audit + WORM** — append-only DynamoDB + S3 Object Lock; PII/CJI/FTI masked at every boundary.

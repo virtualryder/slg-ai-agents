@@ -35,9 +35,12 @@ def _mask_args(args: Any) -> Any:
 
 
 class GatewayAuditLog:
-    def __init__(self, jsonl_path: Optional[str] = None) -> None:
+    def __init__(self, jsonl_path: Optional[str] = None, sink: Any = None) -> None:
         self.records: List[Dict[str, Any]] = []
         self._path = jsonl_path or os.getenv("GATEWAY_AUDIT_JSONL")
+        # Optional append-only sink (e.g. DynamoDBAppendOnlySink) — every record is also
+        # written there. In the deployed connector Lambda this is the WORM-grade audit table.
+        self._sink = sink
 
     def record(self, entry: Dict[str, Any]) -> str:
         audit_id = str(uuid.uuid4())
@@ -54,4 +57,6 @@ class GatewayAuditLog:
         if self._path:  # pragma: no cover - file IO
             with open(self._path, "a", encoding="utf-8") as fh:
                 fh.write(json.dumps(full) + "\n")
+        if self._sink is not None:  # append-only persistence (e.g. DynamoDB conditional PutItem)
+            self._sink.put(full)
         return audit_id

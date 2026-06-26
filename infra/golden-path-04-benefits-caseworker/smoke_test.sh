@@ -28,7 +28,7 @@ done
 if [ -n "$TOKEN" ]; then
   echo "==> reviewer APPROVES (SendTaskSuccess)"
   aws stepfunctions send-task-success --task-token "$TOKEN" --region "$REGION" \
-    --task-output '{"approval":{"approved":true,"reviewer":{"sub":"reviewer-1"}}}'
+    --task-output '{"approval":{"approved":true,"reviewer":{"sub":"eligibility-supervisor-1","role":"BENEFITS_SUPERVISOR"}}}'
 fi
 
 echo "==> final status"

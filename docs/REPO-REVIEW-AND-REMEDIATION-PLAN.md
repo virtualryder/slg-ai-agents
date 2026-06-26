@@ -1,6 +1,6 @@
 # Repository Review — Verified Assessment & Remediation Plan
 
-*Date: 2026-06-26 · Owner: David Ryder · Status: **P0–P4 CLOSED**; final closure report below*
+*Date: 2026-06-26 · Owner: David Ryder · Status: **P0–P4 CLOSED** + post-review fix (deployed gateway enforcement); closure report below*
 
 An external reviewer assessed this repository as **"a strong architecture, governance, and pilot accelerator — but not yet a complete, customer-deployable AWS solution."** We independently **verified every specific technical finding against the actual source files**. This document records (1) what we confirmed, (2) the prioritized plan to close each gap, and (3) how each closure is verified.
 
@@ -104,6 +104,8 @@ Acceptance criteria are written so each item is **objectively checkable**. Verif
 | 13 | Compliance mapping high-level | NIST SP 800-53 control matrix w/ evidence/owner (P3) | `docs/NIST-800-53-CONTROL-MATRIX.md` |
 | 14 | No CI / SECURITY.md | `SECURITY.md` + `CONTRIBUTING.md` + `CHANGELOG.md` (P3) + `ci.yml` 7-job pipeline (P4) | files present; `ci.yml` valid; gates pass locally |
 | 15 | DR aspirational | Current vs. overlay made explicit; PITR + WORM present; multi-Region = additive overlay | `data.yaml` notes, `COST-AND-LIMITATIONS.md` — **closed as documented overlay** |
+
+| 16 (post-review) | **Deployed HTTP tool route bypassed the gateway** — `POST /tool/{kind}/{method}` pointed straight at the connector Lambda, so policy/approval/token/audit were not enforced on the deployed path | The connector Lambda now runs `MCPGateway.invoke()` **in-process** (deny-by-default policy + bound approval + scoped token + **append-only DynamoDB audit**); identity is taken only from the API Gateway JWT-authorizer claims; all 8 golden paths grant the connector `dynamodb:PutItem` + `AGENT_ID` | `aws-native-reference/_shared/connector/handler.py`; `platform_core/tests/test_connector_gateway.py` (5 tests: allow/deny/pending/forged-identity/unknown-tool); cfn-lint clean |
 
 **Net:** 13 of 15 findings fully closed with code/IaC + tests/lint; **#11 (egress) and #15 (multi-Region DR)** are closed as **explicitly documented optional overlays** (honest scoping, not silent gaps). The headline "broader than deep" critique is addressed: there is now one **indisputably real, hardened, evidenced** golden path, and the controls behind it are tested.
 

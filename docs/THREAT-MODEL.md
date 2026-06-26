@@ -54,7 +54,7 @@
 |---|---|---|---|
 | B1 edge | DoS / volumetric (D); injection probing (T) | WAF managed rules + rate-limit; Shield; API throttling | `edge.yaml`, golden-path `DefaultRouteSettings` |
 | B2 identity | Spoofed identity / forged token (S/T); priv-esc via role claim (E) | Cognito JWT authorizer; RS256/JWKS verify; **roles only from verified token**; MFA; immutable `slg_role` | `jwt_verify.py`, `test_jwt_verify.py`, `security.yaml` |
-| B3a gateway | Confused-deputy / over-reach (E); replay (T); approval forgery (T/R) | Deny-by-default intersection; **bound single-use SoD approvals**; scoped single-use tokens | `policy.py`, `approvals.py`, `tokens.py`, `test_mcp_gateway.py` |
+| B3a gateway | Confused-deputy / over-reach (E); replay (T); approval forgery (T/R) | Deny-by-default intersection; **bound single-use SoD approvals**; scoped single-use tokens. **Enforced on the deployed HTTP route by the connector Lambda** (`handler.py` runs `MCPGateway.invoke` in-process). | `policy.py`, `approvals.py`, `tokens.py`, `test_mcp_gateway.py`, `test_connector_gateway.py` |
 | B3b model | Prompt injection (T); sensitive disclosure (I); excessive agency (E) | Guardrails in+out; consequential actions withheld in code; human gate | `security.yaml` Guardrail, `policy.py`, `test_hitl_enforced.py` |
 | B3c connector | SSRF / tool retargeting (T/E) | Deny-by-default `TOOL_REGISTRY` allowlist; scoped token bound to tool+args | `policy.py`, connector handler |
 | B4 audit | Tamper / repudiation (T/R); data at rest (I) | Append-only (conditional write + Update/Delete deny); WORM; KMS; PII masked | `audit_sinks.py`, `data.yaml`, `test_audit_append_only.py` |

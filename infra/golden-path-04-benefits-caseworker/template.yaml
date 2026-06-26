@@ -40,6 +40,7 @@ Globals:
       Variables:
         CONNECTOR_MODE: !Ref ConnectorMode
         AUDIT_TABLE: !Ref AuditTable
+        AGENT_ID: 04-benefits-caseworker
         POWERTOOLS_SERVICE_NAME: slg-04
 
 Resources:
@@ -129,14 +130,21 @@ Resources:
       CodeUri: ../../aws-native-reference/04-benefits-caseworker/lambdas/
       Policies: [AWSLambdaBasicExecutionRole]
 
-  # ---- governed connector Lambda (the single backend a gateway target invokes) ----
+  # ---- governed connector Lambda — the DEPLOYED gateway enforcement point
+  #      (runs MCPGateway.invoke in-process: deny-by-default policy + bound approval + scoped
+  #       token + append-only audit; identity from the JWT authorizer only) ----
   ConnectorFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub "slg-04-${Environment}-connector"
       Handler: handler.handler
       CodeUri: ../../aws-native-reference/_shared/connector/
-      Policies: [AWSLambdaBasicExecutionRole]
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
       Events:
         Tool:
           Type: HttpApi
@@ -145,12 +153,12 @@ Resources:
             Method: POST
             Path: /tool/{kind}/{method}
 
-  # ---- Bedrock Guardrail (input + OUTPUT prompt-attack; PII; denied topic) ----
+  # ---- Bedrock Guardrail (input + OUTPUT prompt-attack; data-class-tuned PII; denied topics) ----
   AgentGuardrail:
     Type: AWS::Bedrock::Guardrail
     Properties:
       Name: !Sub "slg-04-${Environment}"
-      Description: PII masking, denied topics, prompt-attack (input+output) for the agent.
+      Description: Data-class-tuned PII + prompt-attack (in+out) for this agent (FTI / PHI).
       BlockedInputMessaging: "I can't help with that request."
       BlockedOutputsMessaging: "I can't provide that information."
       ContentPolicyConfig:
@@ -159,15 +167,22 @@ Resources:
       SensitiveInformationPolicyConfig:
         PiiEntitiesConfig:
           - {Type: US_SOCIAL_SECURITY_NUMBER, Action: BLOCK}
+          - {Type: US_INDIVIDUAL_TAX_IDENTIFICATION_NUMBER, Action: BLOCK}
           - {Type: US_BANK_ACCOUNT_NUMBER, Action: BLOCK}
-          - {Type: CREDIT_DEBIT_CARD_NUMBER, Action: BLOCK}
+          - {Type: US_BANK_ROUTING_NUMBER, Action: BLOCK}
+          - {Type: NAME, Action: ANONYMIZE}
+          - {Type: ADDRESS, Action: ANONYMIZE}
+          - {Type: AGE, Action: ANONYMIZE}
           - {Type: DRIVER_ID, Action: ANONYMIZE}
           - {Type: EMAIL, Action: ANONYMIZE}
           - {Type: PHONE, Action: ANONYMIZE}
       TopicPolicyConfig:
         TopicsConfig:
-          - Name: UnauthorizedLegalAdvice
-            Definition: Binding legal or eligibility determinations the agent is not authorized to make.
+          - Name: UnauthorizedEligibilityDetermination
+            Definition: Adjudicating eligibility or a benefit amount; a caseworker decides — the agent only prescreens and drafts.
+            Type: DENY
+          - Name: DisclosureOfHealthInformation
+            Definition: Disclosing an individual's health condition, diagnosis, or treatment outside an authorized purpose (HIPAA/PHI).
             Type: DENY
 
   # ---- Cognito (golden-path baseline; MFA/federation hardening tracked in P2) ----

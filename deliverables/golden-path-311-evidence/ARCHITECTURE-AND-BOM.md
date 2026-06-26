@@ -19,7 +19,7 @@ Logs: CloudWatch (gateway access + state-machine execution)
 |---|---|---|---|
 | `SharedLayer` | Lambda LayerVersion | platform_core + governance + agent core | makefile build |
 | `ClassifyFn / DraftFn / CheckFn / FinalizeFn / HitlNotifyFn` | Lambda | the 5 workflow steps | per-function role |
-| `ConnectorFn` | Lambda | governed connector (gateway target) | fixture or live |
+| `ConnectorFn` | Lambda | **deployed gateway enforcement point** — runs MCPGateway.invoke (policy+approval+token+append-only audit) then the connector | fixture or live; `dynamodb:PutItem` for audit |
 | `ResidentStateMachine` | Step Functions | the agent; human gate = `waitForTaskToken` | exec logging ALL |
 | `GatewayApi` | API Gateway HTTP API | front door | JWT authorizer + throttling |
 | `ResidentGuardrail` | Bedrock Guardrail | PII + prompt-attack (in/out) | denied topics |
