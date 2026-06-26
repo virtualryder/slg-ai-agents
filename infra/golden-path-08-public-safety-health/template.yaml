@@ -2,7 +2,8 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   SLG Golden Path - 08 Public Safety & Public Health, fully wired end to end.
-  Deploys the REAL agent: a shared layer (platform_core + governance + core), the five
+  Deploys the deployable agent workflow (deterministic reference core; Bedrock + live-connector
+  wiring is the next delivery step — see docs/REVIEW-2-IMPROVEMENTS-BACKLOG.md): a shared layer (platform_core + governance + core), the five
   workflow Lambdas (classify -> draft -> check -> human gate -> finalize), the governed
   connector Lambda, the real Step Functions state machine (human gate = waitForTaskToken),
   an HTTP API gateway with a Cognito JWT authorizer + access logging + throttling, and an

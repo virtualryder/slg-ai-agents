@@ -1,0 +1,54 @@
+# Second Independent Review — Findings & Improvement Backlog
+
+*Date logged: 2026-06-26. Source: a second external (ChatGPT) review after P0–P4 + the post-review gateway fix. This review is **more favorable** and **more precise** than the first; it correctly identifies that the repo's strongest controls live in library code/tests and that the **deployed execution path must route through them**. We log every point here with an honest status so the gap between "control available" and "control integrated" stays visible.*
+
+> **Timing note:** two of this review's headline items — the **deployed gateway bypass** and the **connector not parsing the API Gateway event** — were **fixed in the commit immediately before this review was written** (see `aws-native-reference/_shared/connector/handler.py` and `platform_core/tests/test_connector_gateway.py`). They are marked **DONE (post-review)** below; the reviewer was looking at the prior state.
+
+## Updated scorecard (reviewer)
+| Area | Earlier | Current |
+|---|---|---|
+| SLG use-case strategy | 9 | 9 |
+| Executive / seller materials | 8 | 9 |
+| Security architecture design | 7 | 8.5 |
+| Security control library | 5 | 7.5 |
+| Documentation & evidence package | 6 | 8.5 |
+| Pilot accelerator readiness | 6 | 7 |
+| Integrated deployment completeness | 3 | 4.5 |
+| Production security readiness | 3–4 | 4 |
+| Turnkey production readiness | 2–3 | 3–4 |
+
+**Reviewer's core thesis:** *"The code that demonstrates strong security and the code that is actually deployed are not yet the same execution path."* The right next step is **one fully integrated, AWS-tested request** — not another doc, deck, agent, or matrix.
+
+---
+
+## Remaining weaknesses → backlog (with honest status)
+Status key: **DONE** · **PARTIAL** · **OPEN**.
+
+| # | Finding | Status | What's done / what remains |
+|---|---|---|---|
+| R2-1 | Deployed HTTP route bypassed the policy/approval/token/audit gateway | **DONE (post-review)** | `handler.py` now runs `MCPGateway.invoke()` in-process; deny-by-default + bound approval + scoped token + append-only audit; identity from the JWT authorizer only. Proof: `test_connector_gateway.py` (5 tests). |
+| R2-2 | Connector didn't parse the API Gateway event (`event["kind"]` → KeyError) | **DONE (post-review)** | `handler.py` reads `pathParameters`, `requestContext.authorizer.jwt.claims`, and the JSON `body`; falls back to flat shape for local tests. |
+| R2-3 | The "real agent" Lambdas don't call Bedrock (classify = keywords, draft = first snippet, check = local grounding) | **OPEN** | The Step Functions Lambdas are **deterministic reference stubs**. Wire `DraftFn`→Bedrock InvokeModel (+ apply the deployed Guardrail in `CheckFn`); keep the deterministic core as a fallback/test mode. |
+| R2-4 | The Step Functions workflow never calls the connector/gateway (so no tool calls, no system-of-record touch) | **OPEN** | Add a tool-call step that invokes the **governed connector** (now the enforcement point) for a fixture Open311 create; the workflow then exercises policy+approval+audit end to end. |
+| R2-5 | The deployed workflow doesn't write the advertised case audit record (`FinalizeFn` has PutItem but doesn't write) | **PARTIAL** | The **HTTP tool path now writes append-only audit** (R2-1). The **Step Functions path** still doesn't — wire `FinalizeFn` to write the case-level audit record via `audit_sinks.DynamoDBAppendOnlySink`. |
+| R2-6 | Smoke test bypasses Cognito/API/gateway and uses a simple approval object | **OPEN** | Add an **API-level integration test**: authenticate via Cognito → call `POST /tool/...` → assert DENY for unentitled, PENDING for write-without-approval, replay-fails, and an audit item exists. Make the script **exit non-zero on failure**. |
+| R2-7 | Secure infra (VPC/KMS/WORM/edge) and the working app are in two separate stacks | **OPEN** | Nest `network.yaml`/`security.yaml`/`data.yaml`/`edge.yaml` into the SAM golden path (or vice-versa) so **one command deploys the architecture the diagrams show** (private subnets, Bedrock VPC endpoint, CMK, Object Lock, WAF). |
+| R2-8 | The 8 golden paths are cloned skeletons; high-sensitivity classes need materially different controls | **PARTIAL** | **Guardrails are now data-class-tuned** (CJI/FTI/PHI/secrets) and approver roles differ. Still to differentiate per class: account/VPC boundaries, KMS key policy, retention, identity assurance (AAL), session controls, IR procedures. |
+| R2-9 | CI runs only `platform_core`+`governance` tests; several gates advisory; no dependency lockfile or cloud integration | **PARTIAL** | CI exists (tests, cfn-lint, bandit hard; semgrep/pip-audit/checkov advisory; TruffleHog; SBOM). Add: all-agent + WoG suites, a `sam build` per golden path, a lockfile, an **ephemeral-AWS integration job**, blocking severity thresholds, branch protection, signed/versioned releases. **No public GitHub Actions run has been demonstrated yet.** |
+| R2-10 | Some architecture wording still overstates ("in-account inference," "data never leaves the VPC," "real agents," "complete architecture") | **DONE** | Narrowed in `README.md` (see below): Bedrock via **PrivateLink** (private connectivity to the regional service, not in-VPC hosting); golden-path workflow described as a **deployable deterministic skeleton**; "deny-by-default" framed as enforced at the connector enforcement point. |
+
+---
+
+## Recommended delivery phase (reviewer Priorities 1–5 → our P5–P9)
+This is a **delivery-engineering phase**, not documentation. It is what moves the repo from "unit-tested reference" to "integration-tested pilot kit."
+
+- **P5 — Integrate the control plane into the workflow** (R2-4, R2-5): the Step Functions agent calls tools only through the governed connector; `FinalizeFn` writes the case audit record.
+- **P6 — Make one agent functionally real** (R2-3): 311 calls Bedrock (+ deployed Guardrail) and a fixture Open311 connector that actually creates a service request and returns its id.
+- **P7 — Real reviewer service** (R2-6 approval): a small service that authenticates the reviewer, checks entitlement + separation of duties, shows the exact action/args, mints the **bound** approval token, and audits the decision (no execution-history scraping).
+- **P8 — Combine secure infra + app into one deploy** (R2-7): one `sam deploy` (or nested stacks) stands up VPC + endpoint + CMK + WORM + edge + gateway + agent + alarms.
+- **P9 — Publish verified cloud evidence** (R2-6, R2-9): an ephemeral-AWS pipeline that deploys, runs authenticated API negative-tests (unauthorized tool denied, write needs approval, replay fails, audit exists, fixture request created), then tears down — and a first tagged release.
+
+When **P5–P9** land and an AWS integration test is green, the package changes category. Until then, position it exactly as the reviewer recommends: *a strong governed SLG agent reference architecture and implementation accelerator with deployable workflow scaffolds* — **not** eight complete, secure, end-to-end production agents.
+
+## Seller / deck guardrail (apply verbatim)
+> **Customer-use classification:** Open-source **reference accelerator** for discovery, architecture workshops, and **synthetic-data pilots**. It is **not** an AWS service, not AWS-supported software, not a compliance certification, and **not ready for live government data** without customer-specific engineering, integration, testing, and authorization.

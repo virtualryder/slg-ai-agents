@@ -16,5 +16,6 @@
 | Seller / SA enablement | `gtm/SELLER-SA-FIELD-GUIDE.md` (9-phase playbook) + `gtm/SELLER-FIRST-MEETING-CHEATSHEET.md` (one-pager) | — |
 | Per-agent deploy runbooks | `<agent>/docs/DEPLOY-RUNBOOK.md` (real-AWS, step-by-step) for all 8 | — |
 | **Security package (P3)** | `SECURITY.md` · `CONTRIBUTING.md` · `CHANGELOG.md` · `docs/THREAT-MODEL.md` (trust boundaries + abuse cases) · `docs/OWASP-LLM-ATLAS-MAPPING.md` · `docs/NIST-800-53-CONTROL-MATRIX.md` (evidence/test/owner) · `docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md` | 7 ✓ |
+| **Improvement backlog (2nd review)** | `docs/REVIEW-2-IMPROVEMENTS-BACKLOG.md` — updated scorecard; deployed-gateway + event-parsing **DONE post-review**; integration backlog (Bedrock wiring, workflow-through-gateway, case-audit write, real reviewer service, combined infra, AWS integration CI) tracked as P5–P9 | — |
 | **Remediation program** | `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` — verified findings; **P0–P3 CLOSED** (claims aligned, golden path wired, control plane hardened + tested, security package); P4 (CI + evidence) remains | — |
 | Production-readiness & RACI | `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` — gap assessment + shared-responsibility matrix
