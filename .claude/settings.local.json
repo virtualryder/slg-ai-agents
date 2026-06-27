@@ -31,7 +31,8 @@
       "Bash(python -m pytest -q)",
       "Bash(python -m pytest)",
       "Bash(python -m pytest --tb=short -q 01-resident-services-311/tests/test_tools.py::test_create_request_with_approval_allows gov_platform/wog_orchestration/tests/test_govern.py::test_allowed_purpose_delegates_to_gateway_with_approval)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(ls:*)"
     ]
   }
 }
