@@ -1,12 +1,18 @@
 {
-  "Comment": "Permitting & Licensing \u2014 native agent. Human gate = waitForTaskToken. (P5: OutputPath:$.body chains case context; ResultPath:$.approval carries the bound approval into Finalize; Finalize runs the write through the governed gateway.)",
+  "Comment": "Permitting & Licensing \u2014 native agent. Human gate = waitForTaskToken. (P5: OutputPath:$.body chains case context; ResultPath:$.approval carries the bound approval into Finalize; Finalize runs the write through the governed gateway.) Retrieve runs a governed kb.search_policy read (RAG) before Draft.",
   "StartAt": "Classify",
   "States": {
     "Classify": {
       "Type": "Task",
       "Resource": "${ClassifyFn}",
-      "Next": "Draft",
+      "Next": "Retrieve",
       "OutputPath": "$.body"
+    },
+    "Retrieve": {
+      "Type": "Task",
+      "Resource": "${RetrieveFn}",
+      "OutputPath": "$.body",
+      "Next": "Draft"
     },
     "Draft": {
       "Type": "Task",
