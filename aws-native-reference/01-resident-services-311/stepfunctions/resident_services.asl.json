@@ -1,16 +1,17 @@
 {
-  "Comment": "Resident Services & 311 — native agent. Human gate = waitForTaskToken.",
+  "Comment": "Resident Services & 311 — native agent. Human gate = waitForTaskToken; the consequential write in Finalize runs through the governed MCP gateway. OutputPath:$.body unwraps each Lambda's {statusCode,body} envelope so case context chains; ResultPath:$.approval carries the reviewer's bound approval token into Finalize.",
   "StartAt": "Classify",
   "States": {
-    "Classify": {"Type": "Task", "Resource": "${ClassifyFn}", "Next": "Draft"},
-    "Draft": {"Type": "Task", "Resource": "${DraftFn}", "Next": "Check"},
-    "Check": {"Type": "Task", "Resource": "${CheckFn}", "Next": "HumanGate"},
+    "Classify": {"Type": "Task", "Resource": "${ClassifyFn}", "OutputPath": "$.body", "Next": "Draft"},
+    "Draft": {"Type": "Task", "Resource": "${DraftFn}", "OutputPath": "$.body", "Next": "Check"},
+    "Check": {"Type": "Task", "Resource": "${CheckFn}", "OutputPath": "$.body", "Next": "HumanGate"},
     "HumanGate": {
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
       "Parameters": {"FunctionName": "${HitlNotifyFn}", "Payload": {"input.$": "$", "token.$": "$$.Task.Token"}},
+      "ResultPath": "$.approval",
       "Next": "Finalize"
     },
-    "Finalize": {"Type": "Task", "Resource": "${FinalizeFn}", "End": true}
+    "Finalize": {"Type": "Task", "Resource": "${FinalizeFn}", "OutputPath": "$.body", "End": true}
   }
 }

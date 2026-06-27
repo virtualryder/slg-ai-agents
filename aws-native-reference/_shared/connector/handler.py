@@ -25,22 +25,14 @@ import os
 
 # platform_core + governance are provided by the Lambda layer (or PYTHONPATH).
 from slg_agent_platform.mcp_gateway import MCPGateway
-from slg_agent_platform.mcp_gateway.audit import GatewayAuditLog
+from slg_agent_platform.mcp_gateway.runtime import build_gateway
 
 _STATUS = {"ALLOW": 200, "DENY": 403, "PENDING_APPROVAL": 202}
 
 
 def _build_gateway() -> MCPGateway:
     """Gateway whose audit writes to the append-only DynamoDB table when configured."""
-    table = os.getenv("AUDIT_TABLE")
-    sink = None
-    if table:
-        try:  # boto3 is present in the Lambda runtime; absent in local/unit tests
-            from slg_agent_platform.mcp_gateway.audit_sinks import DynamoDBAppendOnlySink
-            sink = DynamoDBAppendOnlySink(table)
-        except Exception:  # pragma: no cover - fall back to in-memory audit
-            sink = None
-    return MCPGateway(audit=GatewayAuditLog(sink=sink))
+    return build_gateway()
 
 
 def _claims(event):

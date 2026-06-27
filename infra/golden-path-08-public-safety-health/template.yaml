@@ -23,6 +23,11 @@ Parameters:
   BedrockModelId:
     Type: String
     Default: anthropic.claude-3-5-sonnet-20240620-v1:0
+  TokenSecret:
+    Type: String
+    NoEcho: true
+    Default: dev-only-not-for-production
+    Description: "HMAC secret shared by gateway/approval tokens so a reviewer-minted bound approval verifies in finalize. PRODUCTION - replace with an asymmetric KMS / AgentCore Identity key via Secrets Manager (docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md)."
   ApiThrottleBurst:
     Type: Number
     Default: 20
@@ -42,6 +47,8 @@ Globals:
         CONNECTOR_MODE: !Ref ConnectorMode
         AUDIT_TABLE: !Ref AuditTable
         AGENT_ID: 08-public-safety-health
+        GATEWAY_TOKEN_SECRET: !Ref TokenSecret
+        APPROVAL_TOKEN_SECRET: !Ref TokenSecret
         POWERTOOLS_SERVICE_NAME: slg-08
 
 Resources:
