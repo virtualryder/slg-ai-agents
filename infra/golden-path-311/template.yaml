@@ -50,6 +50,7 @@ Globals:
       Variables:
         CONNECTOR_MODE: !Ref ConnectorMode
         AUDIT_TABLE: !Ref AuditTable
+        PENDING_TABLE: !Ref PendingApprovalsTable
         AGENT_ID: 01-resident-services-311
         GATEWAY_TOKEN_SECRET: !Ref TokenSecret
         APPROVAL_TOKEN_SECRET: !Ref TokenSecret
@@ -167,7 +168,12 @@ Resources:
       FunctionName: !Sub "slg-311-${Environment}-hitl-notify"
       Handler: hitl_notify.handler
       CodeUri: ../../aws-native-reference/01-resident-services-311/lambdas/
-      Policies: [AWSLambdaBasicExecutionRole]
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt PendingApprovalsTable.Arn
 
   # ---- governed connector Lambda — the DEPLOYED gateway enforcement point
   #      (runs MCPGateway.invoke in-process: deny-by-default policy + bound approval + scoped
@@ -321,7 +327,65 @@ Resources:
       LogGroupName: !Sub "/slg/311/${Environment}/statemachine"
       RetentionInDays: 365
 
+  # ---- pending human-approval queue (the reviewer service acts on this; TTL-expiring) ----
+  PendingApprovalsTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub "slg-311-${Environment}-pending-approvals"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: approval_id, AttributeType: S}
+      KeySchema:
+        - {AttributeName: approval_id, KeyType: HASH}
+      TimeToLiveSpecification: {AttributeName: ttl, Enabled: true}
+      PointInTimeRecoverySpecification: {PointInTimeRecoveryEnabled: true}
+      SSESpecification: {SSEEnabled: true}
+
+  # ---- reviewer Lambda — the DEPLOYED human-approval service (P7): authenticated reviewer
+  #      approves/rejects a pending request; mints the bound token SERVER-SIDE; resumes the
+  #      paused execution (SendTaskSuccess/Failure); audits the decision. Replaces mint_approval.py ----
+  ReviewerFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-311-${Environment}-reviewer"
+      Handler: handler.handler
+      CodeUri: ../../aws-native-reference/_shared/reviewer/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:Scan]
+              Resource: !GetAtt PendingApprovalsTable.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [states:SendTaskSuccess, states:SendTaskFailure]
+              Resource: "*"
+      Events:
+        ListApprovals:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref GatewayApi
+            Method: GET
+            Path: /approvals
+        DecideApproval:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref GatewayApi
+            Method: POST
+            Path: /approvals/{approval_id}/decision
+
 Outputs:
+  ReviewerApprovalsUrl:
+    Description: Reviewer service — GET lists the queue; POST /approvals/{id}/decision approves or rejects.
+    Value: !Sub "https://${GatewayApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/approvals"
+  PendingApprovalsTableName:
+    Value: !Ref PendingApprovalsTable
   StateMachineArn:
     Description: Start an execution with aws-native-reference/01-resident-services-311/sample_input.json
     Value: !Ref ResidentStateMachine
