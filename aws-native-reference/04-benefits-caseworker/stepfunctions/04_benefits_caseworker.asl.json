@@ -1,21 +1,24 @@
 {
-  "Comment": "Benefits / HHS Caseworker Assist \u2014 native agent. Human gate = waitForTaskToken.",
+  "Comment": "Benefits / HHS Caseworker Assist \u2014 native agent. Human gate = waitForTaskToken. (P5: OutputPath:$.body chains case context; ResultPath:$.approval carries the bound approval into Finalize; Finalize runs the write through the governed gateway.)",
   "StartAt": "Classify",
   "States": {
     "Classify": {
       "Type": "Task",
       "Resource": "${ClassifyFn}",
-      "Next": "Draft"
+      "Next": "Draft",
+      "OutputPath": "$.body"
     },
     "Draft": {
       "Type": "Task",
       "Resource": "${DraftFn}",
-      "Next": "Check"
+      "Next": "Check",
+      "OutputPath": "$.body"
     },
     "Check": {
       "Type": "Task",
       "Resource": "${CheckFn}",
-      "Next": "HumanGate"
+      "Next": "HumanGate",
+      "OutputPath": "$.body"
     },
     "HumanGate": {
       "Type": "Task",
@@ -27,12 +30,14 @@
           "token.$": "$$.Task.Token"
         }
       },
-      "Next": "Finalize"
+      "Next": "Finalize",
+      "ResultPath": "$.approval"
     },
     "Finalize": {
       "Type": "Task",
       "Resource": "${FinalizeFn}",
-      "End": true
+      "End": true,
+      "OutputPath": "$.body"
     }
   }
 }
