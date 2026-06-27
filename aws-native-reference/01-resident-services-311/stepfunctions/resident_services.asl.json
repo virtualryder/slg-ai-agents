@@ -1,17 +1,49 @@
 {
-  "Comment": "Resident Services & 311 — native agent. Human gate = waitForTaskToken; the consequential write in Finalize runs through the governed MCP gateway. OutputPath:$.body unwraps each Lambda's {statusCode,body} envelope so case context chains; ResultPath:$.approval carries the reviewer's bound approval token into Finalize.",
+  "Comment": "Resident Services & 311 \u2014 native agent. Human gate = waitForTaskToken; the consequential write in Finalize runs through the governed MCP gateway. OutputPath:$.body unwraps each Lambda's {statusCode,body} envelope so case context chains; ResultPath:$.approval carries the reviewer's bound approval token into Finalize. Retrieve runs a governed kb.search_policy read (RAG) before Draft.",
   "StartAt": "Classify",
   "States": {
-    "Classify": {"Type": "Task", "Resource": "${ClassifyFn}", "OutputPath": "$.body", "Next": "Draft"},
-    "Draft": {"Type": "Task", "Resource": "${DraftFn}", "OutputPath": "$.body", "Next": "Check"},
-    "Check": {"Type": "Task", "Resource": "${CheckFn}", "OutputPath": "$.body", "Next": "HumanGate"},
+    "Classify": {
+      "Type": "Task",
+      "Resource": "${ClassifyFn}",
+      "OutputPath": "$.body",
+      "Next": "Retrieve"
+    },
+    "Retrieve": {
+      "Type": "Task",
+      "Resource": "${RetrieveFn}",
+      "OutputPath": "$.body",
+      "Next": "Draft"
+    },
+    "Draft": {
+      "Type": "Task",
+      "Resource": "${DraftFn}",
+      "OutputPath": "$.body",
+      "Next": "Check"
+    },
+    "Check": {
+      "Type": "Task",
+      "Resource": "${CheckFn}",
+      "OutputPath": "$.body",
+      "Next": "HumanGate"
+    },
     "HumanGate": {
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
-      "Parameters": {"FunctionName": "${HitlNotifyFn}", "Payload": {"input.$": "$", "token.$": "$$.Task.Token"}},
+      "Parameters": {
+        "FunctionName": "${HitlNotifyFn}",
+        "Payload": {
+          "input.$": "$",
+          "token.$": "$$.Task.Token"
+        }
+      },
       "ResultPath": "$.approval",
       "Next": "Finalize"
     },
-    "Finalize": {"Type": "Task", "Resource": "${FinalizeFn}", "OutputPath": "$.body", "End": true}
+    "Finalize": {
+      "Type": "Task",
+      "Resource": "${FinalizeFn}",
+      "OutputPath": "$.body",
+      "End": true
+    }
   }
 }

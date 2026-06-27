@@ -28,6 +28,10 @@ Parameters:
     NoEcho: true
     Default: dev-only-not-for-production
     Description: "HMAC secret shared by gateway/approval tokens so a reviewer-minted bound approval verifies in finalize. PRODUCTION - replace with an asymmetric KMS / AgentCore Identity key via Secrets Manager (docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md)."
+  KnowledgeBaseId:
+    Type: String
+    Default: PLACEHOLDER
+    Description: "Amazon Bedrock Knowledge Base id for governed RAG retrieval (kb.search_policy live mode). Leave PLACEHOLDER for fixture mode."
   ApiThrottleBurst:
     Type: Number
     Default: 20
@@ -54,6 +58,7 @@ Globals:
         BEDROCK_GUARDRAIL_VERSION: DRAFT
         BEDROCK_NARRATIVE_MODEL_ID: !Ref BedrockModelId
         BEDROCK_REGION: !Ref AWS::Region
+        KB_KNOWLEDGE_BASE_ID: !Ref KnowledgeBaseId
         POWERTOOLS_SERVICE_NAME: slg-311
 
 Resources:
@@ -95,6 +100,23 @@ Resources:
       Handler: classify.handler
       CodeUri: ../../aws-native-reference/01-resident-services-311/lambdas/
       Policies: [AWSLambdaBasicExecutionRole]
+
+  RetrieveFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-311-${Environment}-retrieve"
+      Handler: retrieve.handler
+      CodeUri: ../../aws-native-reference/01-resident-services-311/lambdas/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:Retrieve]
+              Resource: !Sub "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:knowledge-base/${KnowledgeBaseId}"
 
   DraftFn:
     Type: AWS::Serverless::Function
@@ -265,6 +287,7 @@ Resources:
       DefinitionUri: ../../aws-native-reference/01-resident-services-311/stepfunctions/resident_services.asl.json
       DefinitionSubstitutions:
         ClassifyFn: !GetAtt ClassifyFn.Arn
+        RetrieveFn: !GetAtt RetrieveFn.Arn
         DraftFn: !GetAtt DraftFn.Arn
         CheckFn: !GetAtt CheckFn.Arn
         HitlNotifyFn: !GetAtt HitlNotifyFn.Arn
@@ -280,6 +303,7 @@ Resources:
               Action: [lambda:InvokeFunction]
               Resource:
                 - !GetAtt ClassifyFn.Arn
+                - !GetAtt RetrieveFn.Arn
                 - !GetAtt DraftFn.Arn
                 - !GetAtt CheckFn.Arn
                 - !GetAtt HitlNotifyFn.Arn

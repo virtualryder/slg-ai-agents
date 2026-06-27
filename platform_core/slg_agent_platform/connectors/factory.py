@@ -19,7 +19,7 @@ from typing import Optional
 
 from .base import Connector
 from .fixtures import build_fixture
-from .live import LiveConnector, LiveHttpConnector
+from .live import LiveConnector, LiveHttpConnector, LiveKbConnector
 
 _KINDS = {"crm311", "kb", "identity", "consent", "scheduling", "gis", "idp",
           "permitting", "eligibility", "records", "procurement", "itsm",
@@ -32,6 +32,10 @@ def get_connector(kind: str, mode: Optional[str] = None) -> Connector:
     mode = (mode or os.getenv("CONNECTOR_MODE", "fixture")).strip().lower()
 
     if mode == "live":
+        if kind == "kb":
+            kb_id = os.getenv("KB_KNOWLEDGE_BASE_ID", "")
+            if kb_id:
+                return LiveKbConnector(kb_id)  # Amazon Bedrock Knowledge Base (RAG)
         base_url = os.getenv(f"{kind.upper()}_BASE_URL", "")
         if base_url:
             return LiveHttpConnector(kind, base_url=base_url)

@@ -33,6 +33,7 @@ sys.path.insert(0, str(_AGENT))
 _saved_shared = sys.modules.pop("_shared", None)
 _shared_311 = importlib.import_module("_shared")
 classify = _load_311("classify")
+retrieve = _load_311("retrieve")
 draft = _load_311("draft")
 check = _load_311("check")
 finalize = _load_311("finalize")
@@ -53,6 +54,7 @@ TOOL = "crm311.create_service_request"
 
 def _through_check(event):
     e = classify.handler(event)["body"]
+    e = retrieve.handler(e)["body"]      # governed kb.search_policy read (RAG)
     e = draft.handler(e)["body"]
     e = check.handler(e)["body"]
     return e
