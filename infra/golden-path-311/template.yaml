@@ -49,6 +49,11 @@ Globals:
         AGENT_ID: 01-resident-services-311
         GATEWAY_TOKEN_SECRET: !Ref TokenSecret
         APPROVAL_TOKEN_SECRET: !Ref TokenSecret
+        LLM_MODE: bedrock
+        BEDROCK_GUARDRAIL_ID: !Ref ResidentGuardrail
+        BEDROCK_GUARDRAIL_VERSION: DRAFT
+        BEDROCK_NARRATIVE_MODEL_ID: !Ref BedrockModelId
+        BEDROCK_REGION: !Ref AWS::Region
         POWERTOOLS_SERVICE_NAME: slg-311
 
 Resources:
@@ -103,6 +108,10 @@ Resources:
             - Effect: Allow
               Action: [bedrock:InvokeModel]
               Resource: !Sub "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${BedrockModelId}"
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:ApplyGuardrail]
+              Resource: !GetAtt ResidentGuardrail.GuardrailArn
 
   CheckFn:
     Type: AWS::Serverless::Function
