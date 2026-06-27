@@ -1,0 +1,731 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SLG Golden Path (SECURE COMBINED DEPLOY) - 03-permitting-licensing. ONE `sam deploy` provisions the secure
+  baseline (isolated VPC + private subnets + PrivateLink endpoints for Bedrock/DynamoDB/STS/
+  Logs/States/Secrets/KMS, a customer-managed KMS CMK, an S3 Object-Lock WORM evidence bucket,
+  VPC Flow Logs) AND the full agent app wired into it: Lambdas run in-VPC, audit+pending tables
+  and all log groups are CMK-encrypted, and the HTTP API is fronted by CloudFront + AWS WAF.
+  Production-shaped counterpart to the base golden-path-03 skeleton. Deploy in us-east-1
+  (CloudFront-scoped WAF). Tear down: `sam delete`.
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, test, prod]
+  ConnectorMode:
+    Type: String
+    Default: fixture
+    AllowedValues: [fixture, live]
+    Description: fixture = safe demo connectors; live = real agency adapters (provide secrets).
+  BedrockModelId:
+    Type: String
+    Default: anthropic.claude-3-5-sonnet-20240620-v1:0
+  TokenSecret:
+    Type: String
+    NoEcho: true
+    Default: dev-only-not-for-production
+    Description: "HMAC secret shared by gateway/approval tokens so a reviewer-minted bound approval verifies in finalize. PRODUCTION - replace with an asymmetric KMS / AgentCore Identity key via Secrets Manager (docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md)."
+  KnowledgeBaseId:
+    Type: String
+    Default: PLACEHOLDER
+    Description: "Amazon Bedrock Knowledge Base id for governed RAG retrieval (kb.search_policy live mode). Leave PLACEHOLDER for fixture mode."
+  ApiThrottleBurst:
+    Type: Number
+    Default: 20
+  ApiThrottleRate:
+    Type: Number
+    Default: 10
+  VpcCidr:
+    Type: String
+    Default: 10.42.0.0/16
+  AuditRetentionDays:
+    Type: Number
+    Default: 2555
+    Description: "WORM retention (days). Set from the agency's approved records schedule (default ~7yr)."
+  WormMode:
+    Type: String
+    Default: COMPLIANCE
+    AllowedValues: [COMPLIANCE, GOVERNANCE]
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 30
+    MemorySize: 256
+    Architectures: [arm64]
+    Layers: [!Ref SharedLayer]
+    VpcConfig:
+      SecurityGroupIds: [!Ref LambdaSg]
+      SubnetIds: [!Ref PrivateSubnetA, !Ref PrivateSubnetB]
+    Environment:
+      Variables:
+        CONNECTOR_MODE: !Ref ConnectorMode
+        AUDIT_TABLE: !Ref AuditTable
+        PENDING_TABLE: !Ref PendingApprovalsTable
+        AGENT_ID: 03-permitting-licensing
+        GATEWAY_TOKEN_SECRET: !Ref TokenSecret
+        APPROVAL_TOKEN_SECRET: !Ref TokenSecret
+        LLM_MODE: bedrock
+        BEDROCK_GUARDRAIL_ID: !Ref AgentGuardrail
+        BEDROCK_GUARDRAIL_VERSION: DRAFT
+        BEDROCK_NARRATIVE_MODEL_ID: !Ref BedrockModelId
+        BEDROCK_REGION: !Ref AWS::Region
+        KB_KNOWLEDGE_BASE_ID: !Ref KnowledgeBaseId
+        AUDIT_WORM_BUCKET: !Ref WormBucket
+        POWERTOOLS_SERVICE_NAME: slg-03
+
+Resources:
+
+  # ---- shared dependency layer (platform_core + governance + core) ----
+  SharedLayer:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      LayerName: !Sub "slg-03-${Environment}-shared"
+      Description: platform_core, governance, and agent core for the permitting-licensing golden path.
+      ContentUri: layer/
+      CompatibleRuntimes: [python3.12]
+      RetentionPolicy: Delete
+
+  # ---- audit table (PITR + KMS); append-only enforced in app + deny policy (see P2) ----
+  AuditTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub "slg-03-${Environment}-audit"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: audit_id, AttributeType: S}
+        - {AttributeName: ts, AttributeType: S}
+      KeySchema:
+        - {AttributeName: audit_id, KeyType: HASH}
+        - {AttributeName: ts, KeyType: RANGE}
+      PointInTimeRecoverySpecification: {PointInTimeRecoveryEnabled: true}
+      SSESpecification: {SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref Kms}
+
+  # ---- workflow Lambdas (one scoped role each via Policies) ----
+  ClassifyFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-03-${Environment}-classify"
+      Handler: classify.handler
+      CodeUri: ../../aws-native-reference/03-permitting-licensing/lambdas/
+      Policies: [AWSLambdaBasicExecutionRole]
+
+  RetrieveFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-03-${Environment}-retrieve"
+      Handler: retrieve.handler
+      CodeUri: ../../aws-native-reference/03-permitting-licensing/lambdas/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [kms:Decrypt, kms:GenerateDataKey]
+              Resource: !GetAtt Kms.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:Retrieve]
+              Resource: !Sub "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:knowledge-base/${KnowledgeBaseId}"
+
+  DraftFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-03-${Environment}-draft"
+      Handler: draft.handler
+      CodeUri: ../../aws-native-reference/03-permitting-licensing/lambdas/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:InvokeModel]
+              Resource: !Sub "arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${BedrockModelId}"
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:ApplyGuardrail]
+              Resource: !GetAtt AgentGuardrail.GuardrailArn
+
+  CheckFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-03-${Environment}-check"
+      Handler: check.handler
+      CodeUri: ../../aws-native-reference/03-permitting-licensing/lambdas/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [bedrock:ApplyGuardrail]
+              Resource: !GetAtt AgentGuardrail.GuardrailArn
+
+  FinalizeFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-03-${Environment}-finalize"
+      Handler: finalize.handler
+      CodeUri: ../../aws-native-reference/03-permitting-licensing/lambdas/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [s3:PutObject]
+              Resource: !Sub "${WormBucket.Arn}/*"
+        - Statement:
+            - Effect: Allow
+              Action: [kms:Decrypt, kms:GenerateDataKey]
+              Resource: !GetAtt Kms.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+
+  HitlNotifyFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-03-${Environment}-hitl-notify"
+      Handler: hitl_notify.handler
+      CodeUri: ../../aws-native-reference/03-permitting-licensing/lambdas/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [kms:Decrypt, kms:GenerateDataKey]
+              Resource: !GetAtt Kms.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt PendingApprovalsTable.Arn
+
+  # ---- governed connector Lambda — the DEPLOYED gateway enforcement point
+  #      (runs MCPGateway.invoke in-process: deny-by-default policy + bound approval + scoped
+  #       token + append-only audit; identity from the JWT authorizer only) ----
+  ConnectorFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-03-${Environment}-connector"
+      Handler: handler.handler
+      CodeUri: ../../aws-native-reference/_shared/connector/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [kms:Decrypt, kms:GenerateDataKey]
+              Resource: !GetAtt Kms.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+      Events:
+        Tool:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref GatewayApi
+            Method: POST
+            Path: /tool/{kind}/{method}
+
+  # ---- Bedrock Guardrail (input + OUTPUT prompt-attack; data-class-tuned PII; denied topics) ----
+  AgentGuardrail:
+    Type: AWS::Bedrock::Guardrail
+    Properties:
+      Name: !Sub "slg-03-${Environment}"
+      Description: Data-class-tuned PII + prompt-attack (in+out) for this agent (PII + property).
+      BlockedInputMessaging: "I can't help with that request."
+      BlockedOutputsMessaging: "I can't provide that information."
+      ContentPolicyConfig:
+        FiltersConfig:
+          - {Type: PROMPT_ATTACK, InputStrength: HIGH, OutputStrength: HIGH}
+      SensitiveInformationPolicyConfig:
+        PiiEntitiesConfig:
+          - {Type: US_SOCIAL_SECURITY_NUMBER, Action: BLOCK}
+          - {Type: CREDIT_DEBIT_CARD_NUMBER, Action: BLOCK}
+          - {Type: DRIVER_ID, Action: ANONYMIZE}
+          - {Type: NAME, Action: ANONYMIZE}
+          - {Type: ADDRESS, Action: ANONYMIZE}
+          - {Type: EMAIL, Action: ANONYMIZE}
+          - {Type: PHONE, Action: ANONYMIZE}
+      TopicPolicyConfig:
+        TopicsConfig:
+          - Name: UnauthorizedPermitIssuance
+            Definition: Issuing or approving a permit/license; a licensed reviewer issues — the agent only pre-checks and flags.
+            Type: DENY
+
+  # ---- Cognito (golden-path baseline; MFA/federation hardening tracked in P2) ----
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      UserPoolName: !Sub "slg-03-${Environment}"
+      AdminCreateUserConfig: {AllowAdminCreateUserOnly: true}
+      MfaConfiguration: "ON"
+      EnabledMfas: [SOFTWARE_TOKEN_MFA]
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 14
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+      UserPoolAddOns: {AdvancedSecurityMode: ENFORCED}
+      Schema:
+        - {Name: slg_role, AttributeDataType: String, Mutable: false}
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: !Sub "slg-03-${Environment}-app"
+      GenerateSecret: false
+      ExplicitAuthFlows: [ALLOW_USER_SRP_AUTH, ALLOW_REFRESH_TOKEN_AUTH]
+      TokenValidityUnits: {AccessToken: minutes, IdToken: minutes, RefreshToken: hours}
+      AccessTokenValidity: 15
+      IdTokenValidity: 15
+      RefreshTokenValidity: 8
+
+  # ---- HTTP API gateway: Cognito JWT authorizer + access logs + throttling ----
+  GatewayApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: !Ref Environment
+      Auth:
+        DefaultAuthorizer: CognitoJwt
+        Authorizers:
+          CognitoJwt:
+            IdentitySource: "$request.header.Authorization"
+            JwtConfiguration:
+              audience: [!Ref UserPoolClient]
+              issuer: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}"
+      AccessLogSettings:
+        DestinationArn: !GetAtt GatewayAccessLogs.Arn
+        Format: '{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","route":"$context.routeKey","status":"$context.status","sub":"$context.authorizer.claims.sub","integrationError":"$context.integrationErrorMessage"}'
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: !Ref ApiThrottleBurst
+        ThrottlingRateLimit: !Ref ApiThrottleRate
+
+  GatewayAccessLogs:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/slg/03/${Environment}/gateway-access"
+      RetentionInDays: 365
+      KmsKeyId: !GetAtt Kms.Arn
+
+  # ---- the real agent: Step Functions state machine from the ASL ----
+  AgentStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Name: !Sub "slg-03-${Environment}"
+      DefinitionUri: ../../aws-native-reference/03-permitting-licensing/stepfunctions/03_permitting_licensing.asl.json
+      DefinitionSubstitutions:
+        ClassifyFn: !GetAtt ClassifyFn.Arn
+        RetrieveFn: !GetAtt RetrieveFn.Arn
+        DraftFn: !GetAtt DraftFn.Arn
+        CheckFn: !GetAtt CheckFn.Arn
+        HitlNotifyFn: !GetAtt HitlNotifyFn.Arn
+        FinalizeFn: !GetAtt FinalizeFn.Arn
+      Logging:
+        Level: ALL
+        IncludeExecutionData: false
+        Destinations:
+          - CloudWatchLogsLogGroup: {LogGroupArn: !GetAtt StateMachineLogs.Arn}
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action: [lambda:InvokeFunction]
+              Resource:
+                - !GetAtt ClassifyFn.Arn
+                - !GetAtt RetrieveFn.Arn
+                - !GetAtt DraftFn.Arn
+                - !GetAtt CheckFn.Arn
+                - !GetAtt HitlNotifyFn.Arn
+                - !GetAtt FinalizeFn.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [logs:CreateLogDelivery, logs:GetLogDelivery, logs:UpdateLogDelivery, logs:DeleteLogDelivery, logs:ListLogDeliveries, logs:PutResourcePolicy, logs:DescribeResourcePolicies, logs:DescribeLogGroups]
+              Resource: "*"
+
+  StateMachineLogs:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/slg/03/${Environment}/statemachine"
+      RetentionInDays: 365
+      KmsKeyId: !GetAtt Kms.Arn
+
+  # ---- pending human-approval queue (the reviewer service acts on this; TTL-expiring) ----
+  PendingApprovalsTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub "slg-03-${Environment}-pending-approvals"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - {AttributeName: approval_id, AttributeType: S}
+      KeySchema:
+        - {AttributeName: approval_id, KeyType: HASH}
+      TimeToLiveSpecification: {AttributeName: ttl, Enabled: true}
+      PointInTimeRecoverySpecification: {PointInTimeRecoveryEnabled: true}
+      SSESpecification: {SSEEnabled: true, SSEType: KMS, KMSMasterKeyId: !Ref Kms}
+
+  # ---- reviewer Lambda — the DEPLOYED human-approval service (P7): authenticated reviewer
+  #      approves/rejects a pending request; mints the bound token SERVER-SIDE; resumes the
+  #      paused execution (SendTaskSuccess/Failure); audits the decision. Replaces mint_approval.py ----
+  ReviewerFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-03-${Environment}-reviewer"
+      Handler: handler.handler
+      CodeUri: ../../aws-native-reference/_shared/reviewer/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            - Effect: Allow
+              Action: [kms:Decrypt, kms:GenerateDataKey]
+              Resource: !GetAtt Kms.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:Scan]
+              Resource: !GetAtt PendingApprovalsTable.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+        - Statement:
+            - Effect: Allow
+              Action: [states:SendTaskSuccess, states:SendTaskFailure]
+              Resource: "*"
+      Events:
+        ListApprovals:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref GatewayApi
+            Method: GET
+            Path: /approvals
+        DecideApproval:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref GatewayApi
+            Method: POST
+            Path: /approvals/{approval_id}/decision
+
+  # ================= SECURE BASELINE (combined into this one deploy) =================
+  # ---- customer-managed KMS CMK: encrypts the audit + pending tables, all log groups, WORM ----
+  Kms:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub "slg-03-${Environment} CMK (audit/pending tables, logs, WORM evidence)"
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: Root
+            Effect: Allow
+            Principal: {AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"}
+            Action: "kms:*"
+            Resource: "*"
+          - Sid: CloudWatchLogs
+            Effect: Allow
+            Principal: {Service: !Sub "logs.${AWS::Region}.amazonaws.com"}
+            Action: [kms:Encrypt, kms:Decrypt, "kms:ReEncrypt*", "kms:GenerateDataKey*", kms:DescribeKey]
+            Resource: "*"
+            Condition:
+              ArnLike:
+                "kms:EncryptionContext:aws:logs:arn": !Sub "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/slg/03/${Environment}/*"
+  KmsAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: !Sub "alias/slg-03-${Environment}"
+      TargetKeyId: !Ref Kms
+
+  # ---- isolated VPC: private subnets for the Lambdas; NAT for general egress; flow logs ----
+  Vpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags: [{Key: Name, Value: !Sub "slg-03-${Environment}"}]
+  PrivateSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: !Select [0, !Cidr [!Ref VpcCidr, 4, 8]]
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      Tags: [{Key: Name, Value: "slg-03-private-a"}]
+  PrivateSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: !Select [1, !Cidr [!Ref VpcCidr, 4, 8]]
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      Tags: [{Key: Name, Value: "slg-03-private-b"}]
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: !Select [2, !Cidr [!Ref VpcCidr, 4, 8]]
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      Tags: [{Key: Name, Value: "slg-03-public"}]
+  Igw:
+    Type: AWS::EC2::InternetGateway
+  IgwAttach:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties: {VpcId: !Ref Vpc, InternetGatewayId: !Ref Igw}
+  NatEip:
+    Type: AWS::EC2::EIP
+    Properties: {Domain: vpc}
+  Nat:
+    Type: AWS::EC2::NatGateway
+    Properties: {AllocationId: !GetAtt NatEip.AllocationId, SubnetId: !Ref PublicSubnet}
+  PublicRt:
+    Type: AWS::EC2::RouteTable
+    Properties: {VpcId: !Ref Vpc}
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: IgwAttach
+    Properties: {RouteTableId: !Ref PublicRt, DestinationCidrBlock: 0.0.0.0/0, GatewayId: !Ref Igw}
+  PublicAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: {RouteTableId: !Ref PublicRt, SubnetId: !Ref PublicSubnet}
+  PrivateRt:
+    Type: AWS::EC2::RouteTable
+    Properties: {VpcId: !Ref Vpc}
+  PrivateRoute:
+    Type: AWS::EC2::Route
+    Properties: {RouteTableId: !Ref PrivateRt, DestinationCidrBlock: 0.0.0.0/0, NatGatewayId: !Ref Nat}
+  PrivateAssocA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: {RouteTableId: !Ref PrivateRt, SubnetId: !Ref PrivateSubnetA}
+  PrivateAssocB:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: {RouteTableId: !Ref PrivateRt, SubnetId: !Ref PrivateSubnetB}
+
+  # ---- VPC endpoints (PrivateLink): the Lambdas reach AWS services without the internet ----
+  EndpointSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub "slg-03-${Environment} VPC endpoint SG"
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+        - {IpProtocol: tcp, FromPort: 443, ToPort: 443, CidrIp: !Ref VpcCidr}
+  LambdaSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub "slg-03-${Environment} Lambda SG"
+      VpcId: !Ref Vpc
+      SecurityGroupEgress:
+        - {IpProtocol: "-1", CidrIp: 0.0.0.0/0, Description: egress to endpoints + NAT}
+  BedrockRuntimeEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.bedrock-runtime"
+      VpcEndpointType: Interface
+      VpcId: !Ref Vpc
+      PrivateDnsEnabled: true
+      SubnetIds: [!Ref PrivateSubnetA, !Ref PrivateSubnetB]
+      SecurityGroupIds: [!Ref EndpointSg]
+  BedrockAgentRuntimeEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.bedrock-agent-runtime"
+      VpcEndpointType: Interface
+      VpcId: !Ref Vpc
+      PrivateDnsEnabled: true
+      SubnetIds: [!Ref PrivateSubnetA, !Ref PrivateSubnetB]
+      SecurityGroupIds: [!Ref EndpointSg]
+  StsEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.sts"
+      VpcEndpointType: Interface
+      VpcId: !Ref Vpc
+      PrivateDnsEnabled: true
+      SubnetIds: [!Ref PrivateSubnetA, !Ref PrivateSubnetB]
+      SecurityGroupIds: [!Ref EndpointSg]
+  LogsEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.logs"
+      VpcEndpointType: Interface
+      VpcId: !Ref Vpc
+      PrivateDnsEnabled: true
+      SubnetIds: [!Ref PrivateSubnetA, !Ref PrivateSubnetB]
+      SecurityGroupIds: [!Ref EndpointSg]
+  StatesEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.states"
+      VpcEndpointType: Interface
+      VpcId: !Ref Vpc
+      PrivateDnsEnabled: true
+      SubnetIds: [!Ref PrivateSubnetA, !Ref PrivateSubnetB]
+      SecurityGroupIds: [!Ref EndpointSg]
+  SecretsEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.secretsmanager"
+      VpcEndpointType: Interface
+      VpcId: !Ref Vpc
+      PrivateDnsEnabled: true
+      SubnetIds: [!Ref PrivateSubnetA, !Ref PrivateSubnetB]
+      SecurityGroupIds: [!Ref EndpointSg]
+  KmsEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.kms"
+      VpcEndpointType: Interface
+      VpcId: !Ref Vpc
+      PrivateDnsEnabled: true
+      SubnetIds: [!Ref PrivateSubnetA, !Ref PrivateSubnetB]
+      SecurityGroupIds: [!Ref EndpointSg]
+  S3Endpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.s3"
+      VpcEndpointType: Gateway
+      VpcId: !Ref Vpc
+      RouteTableIds: [!Ref PrivateRt]
+  DynamoDbEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: !Sub "com.amazonaws.${AWS::Region}.dynamodb"
+      VpcEndpointType: Gateway
+      VpcId: !Ref Vpc
+      RouteTableIds: [!Ref PrivateRt]
+  FlowLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/slg/03/${Environment}/vpc-flow"
+      RetentionInDays: 400
+      KmsKeyId: !GetAtt Kms.Arn
+  FlowLogRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement: [{Effect: Allow, Principal: {Service: vpc-flow-logs.amazonaws.com}, Action: "sts:AssumeRole"}]
+      Policies:
+        - PolicyName: flowlogs
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement: [{Effect: Allow, Action: [logs:CreateLogStream, logs:PutLogEvents, logs:DescribeLogStreams], Resource: !GetAtt FlowLogGroup.Arn}]
+  FlowLog:
+    Type: AWS::EC2::FlowLog
+    Properties:
+      ResourceId: !Ref Vpc
+      ResourceType: VPC
+      TrafficType: ALL
+      LogDestinationType: cloud-watch-logs
+      LogGroupName: !Ref FlowLogGroup
+      DeliverLogsPermissionArn: !GetAtt FlowLogRole.Arn
+
+  # ---- WORM evidence store: S3 Object Lock (COMPLIANCE), CMK-encrypted, TLS-only, private ----
+  WormBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub "slg-03-${Environment}-worm-${AWS::AccountId}"
+      ObjectLockEnabled: true
+      ObjectLockConfiguration:
+        ObjectLockEnabled: Enabled
+        Rule: {DefaultRetention: {Mode: !Ref WormMode, Days: !Ref AuditRetentionDays}}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - {ServerSideEncryptionByDefault: {SSEAlgorithm: aws:kms, KMSMasterKeyID: !GetAtt Kms.Arn}}
+      PublicAccessBlockConfiguration:
+        {BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true}
+  WormBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WormBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: "*"
+            Action: "s3:*"
+            Resource: [!GetAtt WormBucket.Arn, !Sub "${WormBucket.Arn}/*"]
+            Condition: {Bool: {"aws:SecureTransport": "false"}}
+
+  # ---- edge: CloudFront (TLS1.2+) + AWS WAF (managed rules + rate limit) fronting the API ----
+  WebAcl:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: !Sub "slg-03-${Environment}-waf"
+      Scope: CLOUDFRONT
+      DefaultAction: {Allow: {}}
+      VisibilityConfig: {SampledRequestsEnabled: true, CloudWatchMetricsEnabled: true, MetricName: !Sub "slg-03-${Environment}-waf"}
+      Rules:
+        - Name: AWSCommon
+          Priority: 0
+          OverrideAction: {None: {}}
+          Statement: {ManagedRuleGroupStatement: {VendorName: AWS, Name: AWSManagedRulesCommonRuleSet}}
+          VisibilityConfig: {SampledRequestsEnabled: true, CloudWatchMetricsEnabled: true, MetricName: common}
+        - Name: AWSKnownBadInputs
+          Priority: 1
+          OverrideAction: {None: {}}
+          Statement: {ManagedRuleGroupStatement: {VendorName: AWS, Name: AWSManagedRulesKnownBadInputsRuleSet}}
+          VisibilityConfig: {SampledRequestsEnabled: true, CloudWatchMetricsEnabled: true, MetricName: knownbad}
+        - Name: RateLimit
+          Priority: 2
+          Action: {Block: {}}
+          Statement: {RateBasedStatement: {Limit: 2000, AggregateKeyType: IP}}
+          VisibilityConfig: {SampledRequestsEnabled: true, CloudWatchMetricsEnabled: true, MetricName: ratelimit}
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub "slg-03-${Environment}"
+        WebACLId: !GetAtt WebAcl.Arn
+        DefaultCacheBehavior:
+          TargetOriginId: agent-origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+          OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac
+        ViewerCertificate: {CloudFrontDefaultCertificate: true, MinimumProtocolVersion: TLSv1.2_2021}
+        Origins:
+          - Id: agent-origin
+            DomainName: !Sub "${GatewayApi}.execute-api.${AWS::Region}.amazonaws.com"
+            OriginPath: !Sub "/${Environment}"
+            CustomOriginConfig: {OriginProtocolPolicy: https-only, OriginSSLProtocols: [TLSv1.2]}
+
+Outputs:
+  CloudFrontDomain:
+    Description: Public edge — CloudFront + WAF in front of the API.
+    Value: !GetAtt Distribution.DomainName
+  KmsKeyArn:
+    Value: !GetAtt Kms.Arn
+  WormBucketName:
+    Value: !Ref WormBucket
+  VpcId:
+    Value: !Ref Vpc
+  ReviewerApprovalsUrl:
+    Description: Reviewer service — GET lists the queue; POST /approvals/{id}/decision approves or rejects.
+    Value: !Sub "https://${GatewayApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/approvals"
+  PendingApprovalsTableName:
+    Value: !Ref PendingApprovalsTable
+  StateMachineArn:
+    Description: Start an execution with aws-native-reference/03-permitting-licensing/sample_input.json
+    Value: !Ref AgentStateMachine
+  GatewayUrl:
+    Value: !Sub "https://${GatewayApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}"
+  AuditTableName:
+    Value: !Ref AuditTable
+  UserPoolId:
+    Value: !Ref UserPool
+  GuardrailId:
+    Value: !Ref AgentGuardrail
