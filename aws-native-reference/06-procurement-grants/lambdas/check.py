@@ -7,7 +7,9 @@ is False so the human reviewer sees it. (Bedrock+RAG propagation)
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "platform_core"))
+_pp = Path(__file__).resolve().parents
+if len(_pp) > 3:  # local/test layout only; in AWS Lambda these come from the shared layer
+    sys.path.insert(0, str(_pp[3] / "platform_core"))
 from _shared import core, ok
 from governance.grounding import verify_grounding  # noqa: E402
 from slg_agent_platform.reasoning import guardrail_check  # noqa: E402
