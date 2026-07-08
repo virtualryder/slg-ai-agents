@@ -68,7 +68,9 @@ Live-AWS cells reflect the 2026-06-30 validation-account run (all 8 golden paths
 | DR / backup | ✅ | ◻ | ◻ | ◻ | ◻ | Customer |
 | Compliance evidence | ✅ | ✅ | ◻ | ◻ | ◻ | Repo (NIST 800-53 matrix, security package) / Customer (ATO/StateRAMP evidence) |
 
-Nothing in this repository is production-certified; see [`docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`](docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md) for the full RACI.
+Nothing in this repository is production-certified; see [`docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`](docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md)  for the full RACI.
+
+*Governance once, agents as add-ons: `platform_core` (`slg-agent-platform` 0.1.0) **implements the Aegis Governance Pattern (AGP) v1.0** — the shared governance contract defined in the Aegis platform repo (`docs/14-GOVERNANCE-PATTERN-VERSIONING.md`). Conformance is declared in `platform_core/slg_agent_platform/__init__.py` (`AEGIS_GOVERNANCE_PATTERN_VERSION`) and asserted by `platform_core/tests/test_agp_conformance.py`.*
 
 > **Validation update (2026-07-07).** The 2026-06-30 eight-golden-path deployment was independently re-verified against the validation account (CloudTrail `ExecuteChangeSet`/`DeleteStack` events, deleted-stack history; actual stack names used the `-deploytest` suffix). `TokenSecret` no longer has a development default in any template. Sanitized proof pack: [`evidence/CLEAN-ACCOUNT-ACCEPTANCE.md`](evidence/CLEAN-ACCOUNT-ACCEPTANCE.md).
 

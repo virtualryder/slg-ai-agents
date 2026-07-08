@@ -8,3 +8,4 @@ factory with Bedrock Guardrails, the connector framework, and the A2A supervisor
 government environment.
 """
 __version__ = "0.1.0"
+AEGIS_GOVERNANCE_PATTERN_VERSION = "1.0"  # implements AGP 1.0 — see Aegis docs/14-GOVERNANCE-PATTERN-VERSIONING.md
