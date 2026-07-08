@@ -32,6 +32,15 @@ def get_connector(kind: str, mode: Optional[str] = None) -> Connector:
     mode = (mode or os.getenv("CONNECTOR_MODE", "fixture")).strip().lower()
 
     if mode == "live":
+        if kind == "crm311":
+            # CRM311_SOURCE=nyc311 -> real, public NYC 311 Service Requests
+            # (read-only; create/update writes stay human-gated against the
+            # customer's own 311 platform). This is the "one real connector"
+            # reference for the hero pilot. Guarded + additive: without the
+            # switch, the existing base-url / stub live paths are unchanged.
+            if os.getenv("CRM311_SOURCE", "").strip().lower() == "nyc311":
+                from .nyc311 import NYC311Connector
+                return NYC311Connector()
         if kind == "kb":
             kb_id = os.getenv("KB_KNOWLEDGE_BASE_ID", "")
             if kb_id:

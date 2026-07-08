@@ -1,0 +1,16 @@
+[
+  {
+    "unique_key": "56789012",
+    "created_date": "2024-03-15T08:24:00.000",
+    "closed_date": "2024-03-18T14:10:00.000",
+    "agency": "NYPD",
+    "agency_name": "New York City Police Department",
+    "complaint_type": "Illegal Parking",
+    "descriptor": "Blocked Hydrant",
+    "status": "Closed",
+    "incident_address": "350 5 Avenue",
+    "borough": "MANHATTAN",
+    "latitude": "40.7484",
+    "longitude": "-73.9857"
+  }
+]

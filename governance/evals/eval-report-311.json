@@ -1,0 +1,195 @@
+{
+  "passed": true,
+  "metrics": {
+    "complaint_type_accuracy": 1.0,
+    "entity_f1": 1.0,
+    "duplicate_accuracy": 1.0,
+    "grounding_rate": 1.0,
+    "pii_leak_rate": 0.0,
+    "field_completeness": 1.0
+  },
+  "n_cases": 22,
+  "detail": [
+    {
+      "id": "31100001",
+      "category_gold": "Parking/Vehicle",
+      "category_pred": "Parking/Vehicle",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100002",
+      "category_gold": "Noise",
+      "category_pred": "Noise",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100003",
+      "category_gold": "Housing",
+      "category_pred": "Housing",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100004",
+      "category_gold": "Street/Sidewalk",
+      "category_pred": "Street/Sidewalk",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100005",
+      "category_gold": "Sanitation",
+      "category_pred": "Sanitation",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100006",
+      "category_gold": "Water/Sewer",
+      "category_pred": "Water/Sewer",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100007",
+      "category_gold": "Parks/Trees",
+      "category_pred": "Parks/Trees",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100008",
+      "category_gold": "Parking/Vehicle",
+      "category_pred": "Parking/Vehicle",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100009",
+      "category_gold": "Parking/Vehicle",
+      "category_pred": "Parking/Vehicle",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100010",
+      "category_gold": "Noise",
+      "category_pred": "Noise",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100011",
+      "category_gold": "Sanitation",
+      "category_pred": "Sanitation",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100012",
+      "category_gold": "Water/Sewer",
+      "category_pred": "Water/Sewer",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100013",
+      "category_gold": "Street/Sidewalk",
+      "category_pred": "Street/Sidewalk",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100014",
+      "category_gold": "Housing",
+      "category_pred": "Housing",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100015",
+      "category_gold": "Housing",
+      "category_pred": "Housing",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100016",
+      "category_gold": "Consumer/Business",
+      "category_pred": "Consumer/Business",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100017",
+      "category_gold": "Street/Sidewalk",
+      "category_pred": "Street/Sidewalk",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100018",
+      "category_gold": "Parking/Vehicle",
+      "category_pred": "Parking/Vehicle",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100019",
+      "category_gold": "Parks/Trees",
+      "category_pred": "Parks/Trees",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100020",
+      "category_gold": "Street/Sidewalk",
+      "category_pred": "Street/Sidewalk",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100021",
+      "category_gold": "Noise",
+      "category_pred": "Noise",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    },
+    {
+      "id": "31100022",
+      "category_gold": "Noise",
+      "category_pred": "Noise",
+      "correct": true,
+      "grounded": true,
+      "pii_leak": false
+    }
+  ],
+  "classification": {
+    "correct": 22,
+    "total": 22
+  },
+  "failures": []
+}

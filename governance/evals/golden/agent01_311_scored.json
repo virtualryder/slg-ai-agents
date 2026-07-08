@@ -1,0 +1,453 @@
+{
+  "cases": [
+    {
+      "id": "31100001",
+      "record": {
+        "unique_key": "31100001",
+        "complaint_type": "Illegal Parking",
+        "descriptor": "Blocked Hydrant",
+        "agency": "NYPD",
+        "agency_name": "New York City Police Department",
+        "borough": "MANHATTAN",
+        "incident_address": "350 5 Avenue",
+        "status": "Closed",
+        "created_date": "2024-03-15",
+        "closed_date": "2024-03-18"
+      },
+      "gold": {
+        "category": "Parking/Vehicle",
+        "complaint_type": "Illegal Parking",
+        "agency": "NYPD",
+        "borough": "MANHATTAN"
+      }
+    },
+    {
+      "id": "31100002",
+      "record": {
+        "unique_key": "31100002",
+        "complaint_type": "Noise - Residential",
+        "descriptor": "Loud Music/Party",
+        "agency": "NYPD",
+        "agency_name": "New York City Police Department",
+        "borough": "BROOKLYN",
+        "incident_address": "45 Prospect Park West",
+        "status": "Open",
+        "created_date": "2024-05-01"
+      },
+      "gold": {
+        "category": "Noise",
+        "complaint_type": "Noise - Residential",
+        "agency": "NYPD",
+        "borough": "BROOKLYN"
+      }
+    },
+    {
+      "id": "31100003",
+      "record": {
+        "unique_key": "31100003",
+        "complaint_type": "HEAT/HOT WATER",
+        "descriptor": "Entire Building",
+        "agency": "HPD",
+        "agency_name": "Department of Housing Preservation and Development",
+        "borough": "BRONX",
+        "incident_address": "1290 Grand Concourse",
+        "status": "Open",
+        "created_date": "2024-01-08"
+      },
+      "gold": {
+        "category": "Housing",
+        "complaint_type": "HEAT/HOT WATER",
+        "agency": "HPD",
+        "borough": "BRONX"
+      }
+    },
+    {
+      "id": "31100004",
+      "record": {
+        "unique_key": "31100004",
+        "complaint_type": "Street Condition",
+        "descriptor": "Pothole",
+        "agency": "DOT",
+        "agency_name": "Department of Transportation",
+        "borough": "QUEENS",
+        "incident_address": "88 Northern Boulevard",
+        "status": "In Progress",
+        "created_date": "2024-02-20"
+      },
+      "gold": {
+        "category": "Street/Sidewalk",
+        "complaint_type": "Street Condition",
+        "agency": "DOT",
+        "borough": "QUEENS"
+      }
+    },
+    {
+      "id": "31100005",
+      "record": {
+        "unique_key": "31100005",
+        "complaint_type": "Sanitation Condition",
+        "descriptor": "Dirty Conditions",
+        "agency": "DSNY",
+        "agency_name": "Department of Sanitation",
+        "borough": "BROOKLYN",
+        "incident_address": "620 Atlantic Avenue",
+        "status": "Closed",
+        "created_date": "2024-04-02",
+        "closed_date": "2024-04-05"
+      },
+      "gold": {
+        "category": "Sanitation",
+        "complaint_type": "Sanitation Condition",
+        "agency": "DSNY",
+        "borough": "BROOKLYN"
+      }
+    },
+    {
+      "id": "31100006",
+      "record": {
+        "unique_key": "31100006",
+        "complaint_type": "Water System",
+        "descriptor": "Hydrant Running",
+        "agency": "DEP",
+        "agency_name": "Department of Environmental Protection",
+        "borough": "MANHATTAN",
+        "incident_address": "410 East 74 Street",
+        "status": "Open",
+        "created_date": "2024-06-11"
+      },
+      "gold": {
+        "category": "Water/Sewer",
+        "complaint_type": "Water System",
+        "agency": "DEP",
+        "borough": "MANHATTAN"
+      }
+    },
+    {
+      "id": "31100007",
+      "record": {
+        "unique_key": "31100007",
+        "complaint_type": "Damaged Tree",
+        "descriptor": "Broken Branch",
+        "agency": "DPR",
+        "agency_name": "Department of Parks and Recreation",
+        "borough": "STATEN ISLAND",
+        "incident_address": "77 Victory Boulevard",
+        "status": "Open",
+        "created_date": "2024-06-01"
+      },
+      "gold": {
+        "category": "Parks/Trees",
+        "complaint_type": "Damaged Tree",
+        "agency": "DPR",
+        "borough": "STATEN ISLAND"
+      }
+    },
+    {
+      "id": "31100008",
+      "record": {
+        "unique_key": "31100008",
+        "complaint_type": "Abandoned Vehicle",
+        "descriptor": "With License Plate",
+        "agency": "NYPD",
+        "agency_name": "New York City Police Department",
+        "borough": "QUEENS",
+        "incident_address": "104 Roosevelt Avenue",
+        "status": "Open",
+        "created_date": "2024-05-19"
+      },
+      "gold": {
+        "category": "Parking/Vehicle",
+        "complaint_type": "Abandoned Vehicle",
+        "agency": "NYPD",
+        "borough": "QUEENS"
+      }
+    },
+    {
+      "id": "31100009",
+      "record": {
+        "unique_key": "31100009",
+        "complaint_type": "Blocked Driveway",
+        "descriptor": "No Access",
+        "agency": "NYPD",
+        "agency_name": "New York City Police Department",
+        "borough": "BROOKLYN",
+        "incident_address": "300 Ocean Avenue",
+        "status": "Closed",
+        "created_date": "2024-03-30",
+        "closed_date": "2024-04-01"
+      },
+      "gold": {
+        "category": "Parking/Vehicle",
+        "complaint_type": "Blocked Driveway",
+        "agency": "NYPD",
+        "borough": "BROOKLYN"
+      }
+    },
+    {
+      "id": "31100010",
+      "record": {
+        "unique_key": "31100010",
+        "complaint_type": "Noise - Commercial",
+        "descriptor": "Loud Talking",
+        "agency": "NYPD",
+        "agency_name": "New York City Police Department",
+        "borough": "MANHATTAN",
+        "incident_address": "555 Broadway",
+        "status": "Open",
+        "created_date": "2024-06-22"
+      },
+      "gold": {
+        "category": "Noise",
+        "complaint_type": "Noise - Commercial",
+        "agency": "NYPD",
+        "borough": "MANHATTAN"
+      }
+    },
+    {
+      "id": "31100011",
+      "record": {
+        "unique_key": "31100011",
+        "complaint_type": "Missed Collection",
+        "descriptor": "Recycling",
+        "agency": "DSNY",
+        "agency_name": "Department of Sanitation",
+        "borough": "BRONX",
+        "incident_address": "2400 Webster Avenue",
+        "status": "Closed",
+        "created_date": "2024-02-14",
+        "closed_date": "2024-02-16"
+      },
+      "gold": {
+        "category": "Sanitation",
+        "complaint_type": "Missed Collection",
+        "agency": "DSNY",
+        "borough": "BRONX"
+      }
+    },
+    {
+      "id": "31100012",
+      "record": {
+        "unique_key": "31100012",
+        "complaint_type": "Sewer",
+        "descriptor": "Catch Basin Clogged",
+        "agency": "DEP",
+        "agency_name": "Department of Environmental Protection",
+        "borough": "QUEENS",
+        "incident_address": "150 Jamaica Avenue",
+        "status": "Open",
+        "created_date": "2024-05-06"
+      },
+      "gold": {
+        "category": "Water/Sewer",
+        "complaint_type": "Sewer",
+        "agency": "DEP",
+        "borough": "QUEENS"
+      }
+    },
+    {
+      "id": "31100013",
+      "record": {
+        "unique_key": "31100013",
+        "complaint_type": "Street Light Condition",
+        "descriptor": "Street Light Out",
+        "agency": "DOT",
+        "agency_name": "Department of Transportation",
+        "borough": "BROOKLYN",
+        "incident_address": "900 Flatbush Avenue",
+        "status": "In Progress",
+        "created_date": "2024-04-18"
+      },
+      "gold": {
+        "category": "Street/Sidewalk",
+        "complaint_type": "Street Light Condition",
+        "agency": "DOT",
+        "borough": "BROOKLYN"
+      }
+    },
+    {
+      "id": "31100014",
+      "record": {
+        "unique_key": "31100014",
+        "complaint_type": "UNSANITARY CONDITION",
+        "descriptor": "Pests",
+        "agency": "HPD",
+        "agency_name": "Department of Housing Preservation and Development",
+        "borough": "MANHATTAN",
+        "incident_address": "120 West 116 Street",
+        "status": "Open",
+        "created_date": "2024-01-27"
+      },
+      "gold": {
+        "category": "Housing",
+        "complaint_type": "UNSANITARY CONDITION",
+        "agency": "HPD",
+        "borough": "MANHATTAN"
+      }
+    },
+    {
+      "id": "31100015",
+      "record": {
+        "unique_key": "31100015",
+        "complaint_type": "PLUMBING",
+        "descriptor": "Leaking Pipe",
+        "agency": "HPD",
+        "agency_name": "Department of Housing Preservation and Development",
+        "borough": "BRONX",
+        "incident_address": "740 Grand Concourse",
+        "status": "Open",
+        "created_date": "2024-03-03"
+      },
+      "gold": {
+        "category": "Housing",
+        "complaint_type": "PLUMBING",
+        "agency": "HPD",
+        "borough": "BRONX"
+      }
+    },
+    {
+      "id": "31100016",
+      "record": {
+        "unique_key": "31100016",
+        "complaint_type": "Consumer Complaint",
+        "descriptor": "Overcharge",
+        "agency": "DCA",
+        "agency_name": "Department of Consumer and Worker Protection",
+        "borough": "MANHATTAN",
+        "incident_address": "230 Canal Street",
+        "status": "Closed",
+        "created_date": "2024-02-09",
+        "closed_date": "2024-03-01"
+      },
+      "gold": {
+        "category": "Consumer/Business",
+        "complaint_type": "Consumer Complaint",
+        "agency": "DCA",
+        "borough": "MANHATTAN"
+      }
+    },
+    {
+      "id": "31100017",
+      "record": {
+        "unique_key": "31100017",
+        "complaint_type": "Sidewalk Condition",
+        "descriptor": "Cracked",
+        "agency": "DOT",
+        "agency_name": "Department of Transportation",
+        "borough": "QUEENS",
+        "incident_address": "62 Queens Boulevard",
+        "status": "Open",
+        "created_date": "2024-06-05"
+      },
+      "gold": {
+        "category": "Street/Sidewalk",
+        "complaint_type": "Sidewalk Condition",
+        "agency": "DOT",
+        "borough": "QUEENS"
+      }
+    },
+    {
+      "id": "31100018",
+      "record": {
+        "unique_key": "31100018",
+        "complaint_type": "Derelict Vehicles",
+        "descriptor": "Parked",
+        "agency": "NYPD",
+        "agency_name": "New York City Police Department",
+        "borough": "STATEN ISLAND",
+        "incident_address": "18 Richmond Terrace",
+        "status": "Open",
+        "created_date": "2024-05-25"
+      },
+      "gold": {
+        "category": "Parking/Vehicle",
+        "complaint_type": "Derelict Vehicles",
+        "agency": "NYPD",
+        "borough": "STATEN ISLAND"
+      }
+    },
+    {
+      "id": "31100019",
+      "record": {
+        "unique_key": "31100019",
+        "complaint_type": "Dead/Dying Tree",
+        "descriptor": "Leaning",
+        "agency": "DPR",
+        "agency_name": "Department of Parks and Recreation",
+        "borough": "BROOKLYN",
+        "incident_address": "500 Eastern Parkway",
+        "status": "Open",
+        "created_date": "2024-06-14"
+      },
+      "gold": {
+        "category": "Parks/Trees",
+        "complaint_type": "Dead/Dying Tree",
+        "agency": "DPR",
+        "borough": "BROOKLYN"
+      }
+    },
+    {
+      "id": "31100020",
+      "record": {
+        "unique_key": "31100020",
+        "complaint_type": "Traffic Signal Condition",
+        "descriptor": "Signal Not Working",
+        "agency": "DOT",
+        "agency_name": "Department of Transportation",
+        "borough": "MANHATTAN",
+        "incident_address": "700 8 Avenue",
+        "status": "In Progress",
+        "created_date": "2024-04-29"
+      },
+      "gold": {
+        "category": "Street/Sidewalk",
+        "complaint_type": "Traffic Signal Condition",
+        "agency": "DOT",
+        "borough": "MANHATTAN"
+      }
+    },
+    {
+      "id": "31100021",
+      "record": {
+        "unique_key": "31100021",
+        "complaint_type": "Noise - Residential",
+        "descriptor": "Loud Music/Party",
+        "agency": "NYPD",
+        "agency_name": "New York City Police Department",
+        "borough": "BROOKLYN",
+        "incident_address": "45 Prospect Park West",
+        "status": "Open",
+        "created_date": "2024-05-01"
+      },
+      "gold": {
+        "category": "Noise",
+        "complaint_type": "Noise - Residential",
+        "agency": "NYPD",
+        "borough": "BROOKLYN",
+        "is_duplicate": true,
+        "dup_of": "31100002"
+      }
+    },
+    {
+      "id": "31100022",
+      "record": {
+        "unique_key": "31100022",
+        "complaint_type": "Noise - Residential",
+        "descriptor": "Banging/Pounding",
+        "agency": "NYPD",
+        "agency_name": "New York City Police Department",
+        "borough": "BROOKLYN",
+        "incident_address": "12 Ocean Parkway",
+        "status": "Open",
+        "created_date": "2024-05-02"
+      },
+      "gold": {
+        "category": "Noise",
+        "complaint_type": "Noise - Residential",
+        "agency": "NYPD",
+        "borough": "BROOKLYN",
+        "is_duplicate": false,
+        "dup_of": "31100002"
+      }
+    }
+  ]
+}

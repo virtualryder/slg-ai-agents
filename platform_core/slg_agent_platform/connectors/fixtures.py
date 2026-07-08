@@ -22,6 +22,10 @@ _CRM311 = {
         {"request_id": "SR-100245", "type": "Pothole", "status": "In Progress"},
         {"request_id": "SR-100871", "type": "Missed Trash Pickup", "status": "Closed"},
     ],
+    "search_duplicates": lambda a: [
+        {"request_id": "SR-100246", "match_score": 1.0,
+         "fields": ["complaint_type:Pothole", "address:100 Main St"]},
+    ],
     "create_service_request": lambda a: {
         "request_id": "SR-100999", "type": a.get("type", "General"),
         "status": "Open", "department": a.get("department", "311"),

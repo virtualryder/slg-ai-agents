@@ -76,6 +76,18 @@ Nothing in this repository is production-certified; see [`docs/PRODUCTION-READIN
 
 ---
 
+### Hero pilot — Resident Services / 311 (real connector + scored quality benchmark)
+
+**Resident Services / 311 is the lead, low-blast-radius pilot** (read-mostly, public data, no irreversible action), and it now goes beyond fixtures with a **REAL read-only connector to live public data**:
+
+- **Real connector** — `platform_core/slg_agent_platform/connectors/nyc311.py` reads the **NYC 311 Service Requests** dataset on NYC Open Data (Socrata, public, no auth). It is **stdlib-only, timeout-bounded, fail-closed, and READ-ONLY**: `get_service_request` / `search_requests` / `search_duplicates` read real requests through the **deny-by-default MCP gateway** (role `RESIDENT_SERVICES_AGENT`), every call is **PII-masked and audited**, and both write methods (`create_service_request` / `update_service_request`) raise — opening or mutating a real 311 case stays **human-gated to the city's own system**. Enable with `CONNECTOR_MODE=live CRM311_SOURCE=nyc311`; the default fixture path is unchanged.
+- **Offline + live demo** — `01-resident-services-311/demo/demo_nyc311.py` runs the whole governance story against real data (governed read → fail-closed PII masking → governed duplicate search → human-authority boundary: create is **gated**, update is **withheld**). Live by default, or `NYC311_OFFLINE=1` for a cassette-backed run with graceful fallback.
+- **Scored quality benchmark, gated in CI** — `governance/evals/score_311.py` measures the real connector pipeline against a labeled 311 benchmark (`golden/agent01_311_scored.json`, reproducible via `gen_golden_311.py`) with regulatory-weighted thresholds: complaint-type classification accuracy (≥ 0.90), entity F1 (≥ 0.85), duplicate accuracy (≥ 0.90), grounding rate (≥ 0.90, reusing `governance/grounding.py`), field completeness (≥ 0.95), and a **PII-leak hard gate (= 0)** using the platform masker. Negative-control tests prove the gate has teeth. `make eval-311` runs it locally; a CI **`evals`** job runs it deterministically (no API key) and publishes `eval-report-311.md`.
+
+Honest framing: NYC 311 Open Data is a genuine public **read** source used as a reference. The production write path into the agency's own 311/CRM (authenticated, transactional) and a production-hardened connector remain **customer-engagement work**.
+
+---
+
 ## 1. The need — what state & local government actually faces
 AI is **NASCIO's #1 state-CIO priority for 2026**, yet **90% of states are stuck in pilots and only 25% have dedicated GenAI funding** (NASCIO). Residents experience government as fragmentation; agencies experience AI as ungoverned sprawl — a chatbot per agency, each a separate integration, security review, and audit. **The blocker is not the model.** It is identity, authorization, audit, data-class isolation, accessibility, and *which agency has the authority to act*.
 

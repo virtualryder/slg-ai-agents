@@ -36,6 +36,7 @@ TOOL_REGISTRY: Dict[str, Tuple[str, str, bool]] = {
     # Resident services / 311 / CRM
     "crm311.get_service_request":    ("crm311", "get_service_request", False),
     "crm311.search_requests":        ("crm311", "search_requests", False),
+    "crm311.search_duplicates":      ("crm311", "search_duplicates", False),        # read (duplicate detection)
     "crm311.create_service_request": ("crm311", "create_service_request", True),   # write
     "crm311.update_service_request": ("crm311", "update_service_request", True),    # write
     # Grounded knowledge (approved public content / policy manuals)
@@ -96,11 +97,12 @@ HIGH_RISK_TOOLS: FrozenSet[str] = frozenset(t for t, (_, _, hr) in TOOL_REGISTRY
 # agent cannot adjudicate. Those grants live only with human-held roles.
 AGENT_TOOL_GRANTS: Dict[str, FrozenSet[str]] = {
     "01-resident-services-311": frozenset({
-        "crm311.get_service_request", "crm311.search_requests", "crm311.create_service_request",
+        "crm311.get_service_request", "crm311.search_requests", "crm311.search_duplicates",
+        "crm311.create_service_request",
         "kb.search_policy", "kb.get_article",
         "identity.verify_resident", "consent.check",
         "scheduling.get_availability", "scheduling.book_appointment", "gis.get_parcel",
-    }),
+    }),  # NOTE: no crm311.update_service_request — mutating a request is a human/city-system action
     "02-forms-idp": frozenset({
         "idp.extract_document", "idp.validate_form", "idp.assemble_form",
         "kb.search_policy", "identity.verify_resident", "consent.check", "consent.record",
@@ -135,7 +137,8 @@ AGENT_TOOL_GRANTS: Dict[str, FrozenSet[str]] = {
 # ── What each USER ROLE is entitled to (the public servant's real permissions) ─
 ROLE_ENTITLEMENTS: Dict[str, FrozenSet[str]] = {
     "RESIDENT_SERVICES_AGENT": frozenset({
-        "crm311.get_service_request", "crm311.search_requests", "crm311.create_service_request",
+        "crm311.get_service_request", "crm311.search_requests", "crm311.search_duplicates",
+        "crm311.create_service_request",
         "kb.search_policy", "kb.get_article", "identity.verify_resident", "consent.check",
         "scheduling.get_availability", "scheduling.book_appointment", "gis.get_parcel",
     }),

@@ -28,6 +28,36 @@ jobs:
       - name: Run control-plane + governance tests
         run: PYTHONPATH=platform_core:. python -m pytest platform_core/tests governance/tests -q
 
+  evals:
+    # Scored output-quality gate for the hero pilot — Agent 01 (Resident Services / 311).
+    # Runs the labeled NYC-311 benchmark against thresholds (complaint-type accuracy,
+    # entity F1, duplicate accuracy, grounding, PII-leak = 0 hard gate, field
+    # completeness). Deterministic, no API key. Fails the build on regression;
+    # publishes eval-report-311.md as an artifact for the assurance packet.
+    name: Scored eval — Agent 01 / 311 (no API key)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          python -m pip install -U pip
+          pip install -e platform_core
+          pip install pytest
+      - name: Scored eval — gate on thresholds
+        run: PYTHONPATH=platform_core:. python -m governance.evals.score_311
+      - name: Scored eval tests (gate + negative controls)
+        run: PYTHONPATH=platform_core:. python -m pytest governance/evals -q -p no:cacheprovider
+      - name: Publish eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent01-311-eval-report
+          path: governance/evals/eval-report-311.md
+          if-no-files-found: warn
+
   iac-lint:
     name: IaC lint (cfn-lint)
     runs-on: ubuntu-latest
