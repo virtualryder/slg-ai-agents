@@ -9,6 +9,10 @@ A **reference accelerator** of **8 governed SLG AI agents** — each with a **st
 
 ---
 
+### Canonical deployment path
+
+**The one supported deploy path is the 8 per-agent SAM golden paths under [`infra/golden-path-*/`](infra/GOLDEN-PATHS.md)** (`sam build && sam deploy` + smoke test + teardown per agent) — all 8 were deployed to a live AWS account, runtime-verified, and torn down. The `infra/golden-path-*-secure/` variants are the **hardened option** (secure baseline + app in one deploy; not yet live-validated as a combined stack), and [`infra/terraform/`](infra/terraform/) and the shared [`infra/cloudformation/`](infra/cloudformation/) stack set are **reference material**, not supported deploy paths. Validation evidence for the canonical path: [`evidence/CLEAN-ACCOUNT-ACCEPTANCE.md`](evidence/CLEAN-ACCOUNT-ACCEPTANCE.md).
+
 ## ▶ Start here — what to read first
 **New to this repo, read in this order:**
 1. **This README** — the need, the solution, the regulations, and who owns what.
@@ -170,6 +174,8 @@ One governed pattern, reused across eight agents: edge (CloudFront + WAF + Shiel
 
 Build the governance once and every future agent inherits it — the way out of the **"90% piloting / 25% funded"** trap (NASCIO). Start with a low-blast-radius agent (311 or IT service desk), prove value against documented outcomes (§2), and scale on a paved road to funded, compliant production. The **honest gap assessment** (§5) and the verified remediation plan mean no surprises in security review.
 
+Monthly run-cost model (pilot vs production): [`offerings/TCO-MODEL.md`](offerings/TCO-MODEL.md)
+
 **What we deliberately do *not* claim:** it is not yet AWS-authorized or ATO/StateRAMP-certified, and live connectors + third-party security testing are engagement work. That candor — plus the verified, tested control plane — is what makes the rest credible to a review board.
 
 > **For assessors:** the **security package** — `SECURITY.md`, `docs/THREAT-MODEL.md` (trust boundaries + abuse cases), `docs/NIST-800-53-CONTROL-MATRIX.md` (control-by-control, with evidence/test/owner), `docs/OWASP-LLM-ATLAS-MAPPING.md`, and `docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md` — maps every claim above to a testable control or a named owner.
@@ -177,7 +183,7 @@ Build the governance once and every future agent inherits it — the way out of 
 ---
 
 ## 4. How to position it
-- **Standalone first, platform when ready.** One `scripts/deploy.sh <agent>` stands up a complete isolated stack (own VPC, CloudFront+WAF edge, Cognito JWT, KMS, WORM audit, gateway, agent) with **no WoG dependency** (`docs/DEPLOYMENT-MODELS.md`). Grow agent by agent; the WoG platform is additive.
+- **Standalone first, platform when ready.** Each agent deploys standalone via its canonical golden path (`infra/golden-path-*/`, SAM) with **no WoG dependency**; the per-agent CloudFormation stack set (`scripts/deploy.sh <agent>` — own VPC, CloudFront+WAF edge, Cognito JWT, KMS, WORM audit, gateway, agent) is the scale-out reference (`docs/DEPLOYMENT-MODELS.md`). Grow agent by agent; the WoG platform is additive.
 - **Sellers & SAs start here:** `gtm/SELLER-SA-FIELD-GUIDE.md` (9-phase playbook) and the one-page `gtm/SELLER-FIRST-MEETING-CHEATSHEET.md`.
 - **Decks (one location, `decks/`):** 8 per-agent narrative decks + the WoG platform deck + a suite executive overview — each a 6-slide arc (hook → problem → governed solution pipeline → **true AWS architecture & traffic-flow diagram** → tradeoffs/results) with a full **TIMING + talk-track in the speaker notes** and grounded, cited figures.
 - **Pitch narrative & objection handling:** `gtm/WOG-PLATFORM-GTM-STORY.md`.
@@ -230,4 +236,24 @@ Each agent ships: a runnable workflow (per-intent action mapping), gateway-backe
 MCP authorization gateway (deny-by-default, least-privilege intersection, HITL gate, scoped tokens, PII/CJI/FTI-masked append-only audit) · the masker · LLM factory (in-account Bedrock + Guardrails) · connector framework (fixture/live) · A2A supervisor.
 
 ## Governance & evaluation (`governance/`)
-Grounding verification · prompt registry (hash-pinned, drift-failing CI) · eval harness · red team · fairness (four-fifths) · **accessibility (WCAG/ADA Title II)** · compliance control mappings · HITL-enforced tests. All r
+Grounding verification · prompt registry (hash-pinned, drift-failing CI) · eval harness · red team · fairness (four-fifths) · **accessibility (WCAG/ADA Title II)** · compliance control mappings · HITL-enforced tests. All run with no API key.
+
+## Whole-of-Government Orchestration (`gov_platform/wog_orchestration/`)
+Govern-tool-access contract · canonical data + adapters · AAL-gated consent ledger · durable **saga with compensation** · compliance event bus + evidence · **5 life-events live** (moving, job_loss, new_business, disaster, bereavement). Runnable: `aws-native-reference/wog-platform/local_runner.py`. The platform story: `ENTERPRISE-PLATFORM.md`.
+
+## Deployment models — standalone first, platform when ready
+Every agent deploys **standalone** with **no WoG dependency** — canonically via its SAM golden path (`infra/golden-path-*/`); the shared stack set (`edge.yaml` CloudFront + WAF + Shield · `network.yaml` own VPC + Flow Logs + Bedrock endpoint · `security.yaml` KMS + Guardrail + Cognito · `data.yaml` append-only audit + S3 Object Lock WORM · gateway · agent) is the scale-out reference. Adopt the WoG orchestration layer later, agent by agent; the same agents become saga steps unchanged. CloudFormation + Terraform, commercial **and** GovCloud. See `docs/DEPLOYMENT-MODELS.md`.
+
+## Go-to-market & deploy assets
+`gtm/SELLER-SA-FIELD-GUIDE.md` (seller/SA playbook) · `gtm/SELLER-FIRST-MEETING-CHEATSHEET.md` (one-pager) · `gtm/WOG-PLATFORM-GTM-STORY.md` (pitch, personas, objection Q&A) · `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` (gap assessment + RACI) · `runbooks/WOG-PLATFORM-DEPLOYMENT-RUNBOOK.md` (16-stage architect deploy) · per-agent `docs/DEPLOY-RUNBOOK.md` · ops runbooks · decks (`decks/`).
+
+## Quick start
+```bash
+pip install -e platform_core
+PYTHONPATH=platform_core:. python -m pytest platform_core/tests governance gov_platform/wog_orchestration/tests -q   # green, no API key
+cd 01-resident-services-311 && EXTRACT_MODE=demo python demo/demo_run.py
+PYTHONPATH=platform_core:. python aws-native-reference/wog-platform/local_runner.py   # 5 life-events + a rollback
+```
+
+## Compliance disclaimer
+A **decision-support accelerator** for qualified government staff — not a certified system, an ATO, or an approved adjudication tool. AI-generated content requires human review before any consequential action; the AI never takes irreversible action autonomously. Customers own ATO/GovRAMP, IdP integration, connector validation, Guardrail configuration, retention schedule, and CSV for the intended use. See `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`.

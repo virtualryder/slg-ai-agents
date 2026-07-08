@@ -5,7 +5,7 @@
 ---
 
 ## Model A — Standalone Agent (the default starting point)
-Deploy a single agent into a customer-isolated environment with **no WoG dependency**. One command (`scripts/deploy.sh <agent> <env> <gateway> <mode>`) deploys `infra/cloudformation/quickstart.yaml`, which nests a **complete standalone stack**:
+Deploy a single agent into a customer-isolated environment with **no WoG dependency**. The **canonical one-command deploy is the agent's SAM golden path** (`infra/golden-path-*/` — see `infra/GOLDEN-PATHS.md`; all 8 live-validated). The stack set below (`scripts/deploy.sh <agent> <env> <gateway> <mode>` → `infra/cloudformation/quickstart.yaml`) is the **scale-out reference** that nests a **complete standalone stack**:
 
 | Layer | Stack | What you get |
 |---|---|---|
