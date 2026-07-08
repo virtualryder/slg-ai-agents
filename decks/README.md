@@ -25,7 +25,7 @@ All 10 decks are rebuilt on the **AWS interview-deck template** (squid-ink navy 
 These decks are built to resonate with three buyers. The talk-track in each slide's notes calls out where to lean in:
 
 - **CIO / Director** — lead with slide 2 (the hook) and slide 6 (ROI / executive case). The story is escaping the "pilot trap": build governance once, every future agent inherits it.
-- **CISO** — slow down on slide 5. Walk the Cognito→JWT→API Gateway→MCP-gateway exchange, the deny-by-default least-privilege model (effective scope = *agent grant ∩ user entitlement*), PII masking, **S3 Object Lock (WORM)** audit, and **Bedrock FedRAMP High + DoD IL-4/5 in GovCloud**. The "consequential action withheld in code" line on slide 4 is the trust anchor.
+- **CISO** — slow down on slide 5. Walk the Cognito→JWT→API Gateway→MCP-gateway exchange, the deny-by-default least-privilege model (effective scope = *agent grant ∩ user entitlement*), PII masking, **S3 Object Lock (WORM)** audit, and **Bedrock FedRAMP High + DoD IL-4/5 in GovCloud**. (Say it precisely: those **Bedrock services** carry that authorization in GovCloud; the **accelerator is not itself FedRAMP-authorized**.) The "consequential action withheld in code" line on slide 4 is the trust anchor.
 - **Director of Architecture** — slides 4 and 5 are the substance: the governed pipeline and the reference architecture map directly to the IaC (CloudFormation + Terraform, commercial + GovCloud) and container code in each agent folder.
 
 **Sequencing tip (in the suite-overview notes):** lead with the agent that fits the room — **311** for citizen value, **benefits** for mission, **public safety** for credibility — then sell the **platform** underneath.
