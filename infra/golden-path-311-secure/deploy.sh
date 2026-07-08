@@ -13,11 +13,18 @@ if [ -z "$TOKEN_SECRET" ]; then
   echo "NOTICE: TOKEN_SECRET was not set - generated a random secret for this deployment (value not shown)."
   echo "        Export TOKEN_SECRET before deploying if you need it later (e.g. for smoke_test.sh)."
 fi
+# OriginVerifySecret has no template default: CloudFront injects it toward the origin as the
+# X-Origin-Verify header and the API rejects requests without it (origin cloaking).
+ORIGIN_VERIFY_SECRET="${ORIGIN_VERIFY_SECRET:-}"
+if [ -z "$ORIGIN_VERIFY_SECRET" ]; then
+  ORIGIN_VERIFY_SECRET="$(openssl rand -hex 32)"
+  echo "NOTICE: ORIGIN_VERIFY_SECRET was not set - generated a random origin-cloaking secret (value not shown)."
+fi
 sam build
 sam deploy --stack-name "$STACK" --region "$REGION" \
   --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND \
   --resolve-s3 --no-confirm-changeset \
-  --parameter-overrides "TokenSecret=$TOKEN_SECRET"
+  --parameter-overrides "TokenSecret=$TOKEN_SECRET" "OriginVerifySecret=$ORIGIN_VERIFY_SECRET"
 echo "Outputs:"
 aws cloudformation describe-stacks --stack-name "$STACK" --region "$REGION" \
   --query "Stacks[0].Outputs" --output table

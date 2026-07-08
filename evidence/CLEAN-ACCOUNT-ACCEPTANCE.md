@@ -37,9 +37,26 @@ shared SAM artifact bucket (`aws-sam-cli-managed-default-*`) persists, as expect
 
 - `TokenSecret` no longer has a development default in any of the 16 templates (required NoEcho
   parameter, MinLength 32; deploy scripts generate one via `openssl rand -hex 32` if unset).
-- The audit-sink append-only property for this suite is enforced at the application layer and
-  negative-tested offline (`test_audit_append_only.py`); the IAM-layer Update/Delete explicit deny
-  was proven live in the Aegis platform repo (Runs 1 and 10) on the same control pattern.
+- The audit-sink append-only property is now enforced at the IAM layer in every golden-path
+  template (explicit `Deny` on `dynamodb:UpdateItem`/`DeleteItem` for the audit table) — proven
+  live in the secure-variant deploy below, and independently in the Aegis platform repo (Runs 1, 10).
+
+## 4a. Secure-variant live validation (2026-07-08)
+
+The hardened `golden-path-311-secure` stack (adds a private VPC, CloudFront + WAF edge, Cognito JWT
+authorizer, and CloudFront origin cloaking) was deployed to the validation account
+(`slg-311-secure-dev`, us-east-1, CREATE_COMPLETE), exercised over HTTPS, and torn down:
+
+| Test | Result | Proves |
+|---|---|---|
+| `GET` via CloudFront edge (`d13x…cloudfront.net/edge-health`) | **HTTP 200** | Legitimate edge path works (CloudFront injects the `X-Origin-Verify` header) |
+| `GET` direct execute-api URL, **no origin header** | **HTTP 403** | **Origin cloaking holds** — the API GW URL cannot be called around CloudFront/WAF |
+| `POST` protected `/tool` route, **no JWT** | **HTTP 401** | Cognito JWT authorizer rejects unauthenticated calls |
+| IAM simulation, `FinalizeFnRole` vs `slg-311-dev-audit` | `PutItem=allowed`, `UpdateItem/DeleteItem=explicitDeny` | Audit table is append-only at the IAM layer |
+
+Teardown: stack deleted after the run (CloudFront distribution disable + delete). The secure variant
+now ships `smoke_test.sh` (which automates the three HTTP assertions above) and `destroy.sh` (which
+also cleans the retained audit/approvals tables, Cognito pool, and WORM bucket).
 
 ## 5. Method
 

@@ -26,6 +26,11 @@ Parameters:
     NoEcho: true
     MinLength: 32
     Description: "Required. Strong random secret (>=32 chars) used to sign gateway/approval tokens so a reviewer-minted bound approval verifies in finalize. Generate with: openssl rand -hex 32. For production use AWS Secrets Manager / an asymmetric KMS / AgentCore Identity key (docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md)."
+  OriginVerifySecret:
+    Type: String
+    NoEcho: true
+    MinLength: 32
+    Description: "Required. Strong random secret (>=32 chars) that CloudFront injects toward the origin as the X-Origin-Verify header; the API handlers reject requests that arrive without it, so the execute-api URL cannot be called around CloudFront/WAF (origin cloaking). Generate with: openssl rand -hex 32 (deploy.sh does this automatically)."
   KnowledgeBaseId:
     Type: String
     Default: PLACEHOLDER
@@ -66,6 +71,7 @@ Globals:
         AGENT_ID: 04-benefits-caseworker
         GATEWAY_TOKEN_SECRET: !Ref TokenSecret
         APPROVAL_TOKEN_SECRET: !Ref TokenSecret
+        ORIGIN_VERIFY_SECRET: !Ref OriginVerifySecret
         LLM_MODE: bedrock
         BEDROCK_GUARDRAIL_ID: !Ref AgentGuardrail
         BEDROCK_GUARDRAIL_VERSION: DRAFT
@@ -128,8 +134,15 @@ Resources:
               Action: [kms:Decrypt, kms:GenerateDataKey]
               Resource: !GetAtt Kms.Arn
         - Statement:
-            - Effect: Allow
+            # audit append-only (CISO review): this role may ADD audit records but is
+            # explicitly DENIED mutating them (Aegis mcp-gateway 'audit-append-only' pattern).
+            - Sid: AuditAllowAppend
+              Effect: Allow
               Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+            - Sid: AuditDenyMutation
+              Effect: Deny
+              Action: [dynamodb:UpdateItem, dynamodb:DeleteItem]
               Resource: !GetAtt AuditTable.Arn
         - Statement:
             - Effect: Allow
@@ -183,8 +196,15 @@ Resources:
               Action: [kms:Decrypt, kms:GenerateDataKey]
               Resource: !GetAtt Kms.Arn
         - Statement:
-            - Effect: Allow
+            # audit append-only (CISO review): this role may ADD audit records but is
+            # explicitly DENIED mutating them (Aegis mcp-gateway 'audit-append-only' pattern).
+            - Sid: AuditAllowAppend
+              Effect: Allow
               Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+            - Sid: AuditDenyMutation
+              Effect: Deny
+              Action: [dynamodb:UpdateItem, dynamodb:DeleteItem]
               Resource: !GetAtt AuditTable.Arn
 
   HitlNotifyFn:
@@ -220,8 +240,15 @@ Resources:
               Action: [kms:Decrypt, kms:GenerateDataKey]
               Resource: !GetAtt Kms.Arn
         - Statement:
-            - Effect: Allow
+            # audit append-only (CISO review): this role may ADD audit records but is
+            # explicitly DENIED mutating them (Aegis mcp-gateway 'audit-append-only' pattern).
+            - Sid: AuditAllowAppend
+              Effect: Allow
               Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+            - Sid: AuditDenyMutation
+              Effect: Deny
+              Action: [dynamodb:UpdateItem, dynamodb:DeleteItem]
               Resource: !GetAtt AuditTable.Arn
       Events:
         Tool:
@@ -230,6 +257,43 @@ Resources:
             ApiId: !Ref GatewayApi
             Method: POST
             Path: /tool/{kind}/{method}
+
+  # ---- ORIGIN CLOAKING (the CloudFront+WAF edge is the only door) --------------------
+  #  Problem: an HTTP API's execute-api URL is directly callable, bypassing CloudFront/WAF.
+  #  HTTP APIs (API Gateway v2) do not support resource policies, so enforcement is in-app:
+  #    1. CloudFront injects a secret X-Origin-Verify header toward the origin
+  #       (OriginCustomHeaders on the Distribution; value = OriginVerifySecret, NoEcho).
+  #    2. The shared connector + reviewer handlers (which already sit behind the Cognito JWT
+  #       authorizer) and the unauthenticated edge-health probe below reject any request that
+  #       arrives without the correct header (constant-time compare via the
+  #       ORIGIN_VERIFY_SECRET env var; the check is a no-op in the base variant, where the
+  #       variable is unset).
+  #  GET /edge-health is intentionally unauthenticated and static ('{"ok": true}'): it lets
+  #  smoke_test.sh prove end to end that calls through CloudFront reach the API (200) while
+  #  the direct execute-api URL is rejected (403) - see smoke_test.sh steps 1-2.
+  EdgeHealthFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "slg-04-${Environment}-edge-health"
+      Handler: index.handler
+      InlineCode: |
+        import hmac, json, os
+        def handler(event, _ctx=None):
+            secret = os.environ.get("ORIGIN_VERIFY_SECRET", "")
+            headers = {str(k).lower(): str(v) for k, v in (event.get("headers") or {}).items()}
+            if secret and hmac.compare_digest(headers.get("x-origin-verify", ""), secret):
+                return {"statusCode": 200, "headers": {"content-type": "application/json"},
+                        "body": json.dumps({"ok": True})}
+            return {"statusCode": 403, "headers": {"content-type": "application/json"},
+                    "body": json.dumps({"ok": False, "error": "origin verification failed"})}
+      Events:
+        Health:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref GatewayApi
+            Method: GET
+            Path: /edge-health
+            Auth: {Authorizer: NONE}
 
   # ---- Bedrock Guardrail (input + OUTPUT prompt-attack; data-class-tuned PII; denied topics) ----
   AgentGuardrail:
@@ -403,8 +467,15 @@ Resources:
               Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:Scan]
               Resource: !GetAtt PendingApprovalsTable.Arn
         - Statement:
-            - Effect: Allow
+            # audit append-only (CISO review): this role may ADD audit records but is
+            # explicitly DENIED mutating them (Aegis mcp-gateway 'audit-append-only' pattern).
+            - Sid: AuditAllowAppend
+              Effect: Allow
               Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+            - Sid: AuditDenyMutation
+              Effect: Deny
+              Action: [dynamodb:UpdateItem, dynamodb:DeleteItem]
               Resource: !GetAtt AuditTable.Arn
         - Statement:
             - Effect: Allow
@@ -708,6 +779,9 @@ Resources:
             DomainName: !Sub "${GatewayApi}.execute-api.${AWS::Region}.amazonaws.com"
             OriginPath: !Sub "/${Environment}"
             CustomOriginConfig: {OriginProtocolPolicy: https-only, OriginSSLProtocols: [TLSv1.2]}
+            # origin cloaking: only CloudFront knows this header; the API rejects its absence
+            OriginCustomHeaders:
+              - {HeaderName: X-Origin-Verify, HeaderValue: !Ref OriginVerifySecret}
 
 Outputs:
   CloudFrontDomain:

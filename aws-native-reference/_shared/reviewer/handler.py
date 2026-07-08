@@ -14,6 +14,7 @@ This replaces the mint_approval.py stand-in, which required the raw token secret
 """
 from __future__ import annotations
 
+import hmac
 import json
 import os
 
@@ -21,6 +22,17 @@ from slg_agent_platform.mcp_gateway.audit import GatewayAuditLog
 from slg_agent_platform.reviewer import ReviewerService, ReviewerError
 from slg_agent_platform.reviewer.service import _Boto3StepFunctions
 from slg_agent_platform.reviewer.store import DynamoDBPendingStore, ClaimConflict
+
+
+def _origin_verified(event) -> bool:
+    """Origin cloaking (secure variants): when ORIGIN_VERIFY_SECRET is set, require the
+    X-Origin-Verify header CloudFront injects toward the origin, so the raw execute-api
+    URL cannot be called around CloudFront/WAF. No-op when unset (base variants)."""
+    secret = os.getenv("ORIGIN_VERIFY_SECRET", "")
+    if not secret:
+        return True
+    headers = {str(k).lower(): str(v) for k, v in (event.get("headers") or {}).items()}
+    return hmac.compare_digest(headers.get("x-origin-verify", ""), secret)
 
 
 def _claims(event):
@@ -60,6 +72,8 @@ def _service():
 
 def handler(event, _ctx=None):
     try:
+        if not _origin_verified(event):
+            return _resp(403, {"error": "origin verification failed"})
         claims = _claims(event)
         if not claims.get("sub"):
             return _resp(401, {"error": "unauthenticated"})

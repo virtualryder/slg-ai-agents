@@ -119,6 +119,10 @@ Plus the **Whole-of-Government Orchestration Platform** (`gov_platform/wog_orche
 
 ## 3. How it satisfies the regulations & security architecture
 
+> **Auditors / GRC reviewers:** the [`assurance/`](assurance/README.md) packet is a single
+> curated cover sheet indexing every threat-model, NIST/CJIS/IRS-1075 control-mapping, evidence,
+> and shared-responsibility artifact under standard assurance headings.
+
 ![SLG governed data flow — constituent PII, CJI, and FTI](docs/diagrams/slg-data-flow.png)
 
 The shared Aegis control-plane pattern — how every tool call is authenticated, authorized, human-approved, and audited, including the deny paths:

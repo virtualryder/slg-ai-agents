@@ -20,6 +20,7 @@ body. The route therefore cannot reach a system of record without passing the ga
 """
 from __future__ import annotations
 
+import hmac
 import json
 import os
 
@@ -28,6 +29,17 @@ from slg_agent_platform.mcp_gateway import MCPGateway
 from slg_agent_platform.mcp_gateway.runtime import build_gateway
 
 _STATUS = {"ALLOW": 200, "DENY": 403, "PENDING_APPROVAL": 202}
+
+
+def _origin_verified(event) -> bool:
+    """Origin cloaking (secure variants): when ORIGIN_VERIFY_SECRET is set, require the
+    X-Origin-Verify header CloudFront injects toward the origin, so the raw execute-api
+    URL cannot be called around CloudFront/WAF. No-op when unset (base variants)."""
+    secret = os.getenv("ORIGIN_VERIFY_SECRET", "")
+    if not secret:
+        return True
+    headers = {str(k).lower(): str(v) for k, v in (event.get("headers") or {}).items()}
+    return hmac.compare_digest(headers.get("x-origin-verify", ""), secret)
 
 
 def _build_gateway() -> MCPGateway:
@@ -60,6 +72,8 @@ def _resp(status, payload):
 
 def handler(event, _ctx=None):
     try:
+        if not _origin_verified(event):
+            return _resp(403, {"decision": "DENY", "error": "origin verification failed"})
         path = event.get("pathParameters") or {}
         kind = path.get("kind") or event.get("kind")
         method = path.get("method") or event.get("method")

@@ -111,8 +111,15 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - Statement:
-            - Effect: Allow
+            # audit append-only (CISO review): this role may ADD audit records but is
+            # explicitly DENIED mutating them (Aegis mcp-gateway 'audit-append-only' pattern).
+            - Sid: AuditAllowAppend
+              Effect: Allow
               Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+            - Sid: AuditDenyMutation
+              Effect: Deny
+              Action: [dynamodb:UpdateItem, dynamodb:DeleteItem]
               Resource: !GetAtt AuditTable.Arn
         - Statement:
             - Effect: Allow
@@ -158,8 +165,15 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - Statement:
-            - Effect: Allow
+            # audit append-only (CISO review): this role may ADD audit records but is
+            # explicitly DENIED mutating them (Aegis mcp-gateway 'audit-append-only' pattern).
+            - Sid: AuditAllowAppend
+              Effect: Allow
               Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+            - Sid: AuditDenyMutation
+              Effect: Deny
+              Action: [dynamodb:UpdateItem, dynamodb:DeleteItem]
               Resource: !GetAtt AuditTable.Arn
 
   HitlNotifyFn:
@@ -187,8 +201,15 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - Statement:
-            - Effect: Allow
+            # audit append-only (CISO review): this role may ADD audit records but is
+            # explicitly DENIED mutating them (Aegis mcp-gateway 'audit-append-only' pattern).
+            - Sid: AuditAllowAppend
+              Effect: Allow
               Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+            - Sid: AuditDenyMutation
+              Effect: Deny
+              Action: [dynamodb:UpdateItem, dynamodb:DeleteItem]
               Resource: !GetAtt AuditTable.Arn
       Events:
         Tool:
@@ -358,8 +379,15 @@ Resources:
               Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:Scan]
               Resource: !GetAtt PendingApprovalsTable.Arn
         - Statement:
-            - Effect: Allow
+            # audit append-only (CISO review): this role may ADD audit records but is
+            # explicitly DENIED mutating them (Aegis mcp-gateway 'audit-append-only' pattern).
+            - Sid: AuditAllowAppend
+              Effect: Allow
               Action: [dynamodb:PutItem]
+              Resource: !GetAtt AuditTable.Arn
+            - Sid: AuditDenyMutation
+              Effect: Deny
+              Action: [dynamodb:UpdateItem, dynamodb:DeleteItem]
               Resource: !GetAtt AuditTable.Arn
         - Statement:
             - Effect: Allow
