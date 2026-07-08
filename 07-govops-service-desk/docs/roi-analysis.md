@@ -4,4 +4,4 @@
 
 **Value levers:** ticket volume, mean time to resolution, software delivery speed, legacy-skill dependency.
 
-Hard-to-monetize but real: equitable/accessible access, staff capacity redeployed to complex work, institutional-knowledge retention. Pair with the suite TCO/ROI model.
+Hard-to-monetize but real: equitable/accessible access, staff capacity redeployed to complex work, institutional-knowledge retention. Pair with the suite TCO/ROI model: [`../../offerings/TCO-MODEL.md`](../../offerings/TCO-MODEL.md).

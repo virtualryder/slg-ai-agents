@@ -1,38 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git init:*)",
-      "Bash(git remote:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git branch:*)",
-      "Bash(git push:*)",
-      "Bash(gh repo:*)",
-      "Bash(pip install:*)",
-      "Bash(PYTHONPATH=platform_core:. python -m pytest platform_core governance gov_platform 01-resident-services-311 02-forms-idp 03-permitting-licensing 04-benefits-caseworker 05-public-records-foia 06-procurement-grants 07-govops-service-desk 08-public-safety-health aws-native-reference -q 2>&1)",
-      "Bash(find /c/Users/daryd/Projects-DR/slg-ai-agents -type f -name conftest.py -not -path */.git/*)",
-      "Bash(PYTHONPATH=platform_core:. python -m pytest 02-forms-idp/tests/test_graph.py -v 2>&1)",
-      "Bash(PYTHONPATH=platform_core:. python -m pytest 01-resident-services-311/tests/test_graph.py 02-forms-idp/tests/test_graph.py --collect-only 2>&1)",
-      "Bash(PYTHONPATH=platform_core:. python -m pytest 01-resident-services-311/tests/test_graph.py 02-forms-idp/tests/test_graph.py -v 2>&1)",
-      "Bash(find . -path */tests/__pycache__/test_graph* -type f)",
-      "Bash(find . -type d -name __pycache__ -exec rm -rf {} +)",
-      "Bash(PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=platform_core:. python -m pytest 01-resident-services-311/tests/test_graph.py 02-forms-idp/tests/test_graph.py -v)",
-      "Bash(PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=platform_core:. python -m pytest 01-resident-services-311/tests/test_graph.py 02-forms-idp/tests/test_graph.py -v -o \"addopts=-q\" --import-mode=prepend 2>&1)",
-      "Bash(for d:*)",
-      "Bash(do touch:*)",
-      "Bash(done)",
-      "Bash(PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=platform_core:. python -m pytest 01-resident-services-311/tests/test_graph.py 02-forms-idp/tests/test_graph.py -v -s --co)",
-      "Bash(PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=platform_core:. python -m pytest platform_core governance gov_platform 01-resident-services-311 02-forms-idp 03-permitting-licensing 04-benefits-caseworker 05-public-records-foia 06-procurement-grants 07-govops-service-desk 08-public-safety-health aws-native-reference -q)",
-      "Bash(PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=platform_core:. python -m pytest platform_core governance gov_platform 01-resident-services-311 02-forms-idp 03-permitting-licensing 04-benefits-caseworker 05-public-records-foia 06-procurement-grants 07-govops-service-desk 08-public-safety-health aws-native-reference)",
-      "Bash(git rm:*)",
-      "Bash(find . -newer decks/SLG-Agentic-AI-Suite-Executive-Overview.pptx -not -path ./.git/* -not -path ./__pycache__/* -not -path ./_qa*/* -type f)",
-      "Bash(python -m pytest --tb=short -q)",
-      "Bash(python -m pytest --tb=line -q)",
-      "Bash(python -m pytest -q)",
-      "Bash(python -m pytest)",
-      "Bash(python -m pytest --tb=short -q 01-resident-services-311/tests/test_tools.py::test_create_request_with_approval_allows gov_platform/wog_orchestration/tests/test_govern.py::test_allowed_purpose_delegates_to_gateway_with_approval)",
-      "Bash(python:*)",
-      "Bash(ls:*)"
+      "Bash(git add:*)"
     ]
   }
 }

@@ -1,7 +1,8 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: >
   SLG Suite - Standalone network stack. A per-agent isolated VPC with private subnets,
-  NAT, a Bedrock VPC interface endpoint (in-account inference), an S3 gateway endpoint,
+  NAT, a Bedrock VPC interface endpoint (private connectivity to the regional Bedrock
+  service via AWS PrivateLink), an S3 gateway endpoint,
   and VPC Flow Logs (logging). Deployed by quickstart.yaml so EACH agent has its own
   secure network boundary with NO dependency on the Whole-of-Government platform.
 Parameters:

@@ -6,7 +6,8 @@ cd "$(dirname "$0")"
 STACK="${1:-slg-311-dev}"
 REGION="${AWS_REGION:-us-east-1}"
 # must match the stack's TokenSecret so the reviewer-minted approval verifies in finalize
-export APPROVAL_TOKEN_SECRET="${APPROVAL_TOKEN_SECRET:-dev-only-not-for-production}"
+export APPROVAL_TOKEN_SECRET="${APPROVAL_TOKEN_SECRET:-${TOKEN_SECRET:-}}"
+[ -n "$APPROVAL_TOKEN_SECRET" ] || { echo "FAIL: set TOKEN_SECRET (or APPROVAL_TOKEN_SECRET) to the stack's TokenSecret parameter before running the smoke test."; exit 1; }
 
 SM_ARN=$(aws cloudformation describe-stacks --stack-name "$STACK" --region "$REGION" \
   --query "Stacks[0].Outputs[?OutputKey=='StateMachineArn'].OutputValue" --output text)

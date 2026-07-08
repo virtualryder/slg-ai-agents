@@ -24,8 +24,8 @@ Parameters:
   TokenSecret:
     Type: String
     NoEcho: true
-    Default: dev-only-not-for-production
-    Description: "HMAC secret shared by gateway/approval tokens so a reviewer-minted bound approval verifies in finalize. PRODUCTION - replace with an asymmetric KMS / AgentCore Identity key via Secrets Manager (docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md)."
+    MinLength: 32
+    Description: "Required. Strong random secret (>=32 chars) used to sign gateway/approval tokens so a reviewer-minted bound approval verifies in finalize. Generate with: openssl rand -hex 32. For production use AWS Secrets Manager / an asymmetric KMS / AgentCore Identity key (docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md)."
   KnowledgeBaseId:
     Type: String
     Default: PLACEHOLDER

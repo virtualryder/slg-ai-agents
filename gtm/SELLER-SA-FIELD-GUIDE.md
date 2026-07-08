@@ -39,7 +39,7 @@
    - **Consequential actions withheld in code** — issue-permit / adjudicate / release-records / award are *absent from the agent's grants*, enforced by a passing test. A human owns them.
    - **Framework-enforced human gate** — `interrupt_before` / Step Functions `waitForTaskToken`; no path to commit without approval.
    - **Tamper-evident audit + WORM** — append-only DynamoDB + S3 Object Lock; PII/CJI/FTI masked at every boundary.
-   - **In-account inference** — Bedrock via VPC endpoint + mandatory Guardrails; constituent data never leaves the VPC.
+   - **Private-connectivity inference** — Bedrock via VPC endpoint + mandatory Guardrails; constituent data reaches the regional Bedrock service only over AWS PrivateLink — never the public internet.
 4. **Know the deployment switches:** Standalone vs WoG · commercial vs GovCloud · `portable` vs `agentcore` gateway · `native` vs `container` runtime.
 
 ---

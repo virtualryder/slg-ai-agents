@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   SLG Golden Path - 06 Procurement & Grants, fully wired end to end.
   Deploys the deployable agent workflow (deterministic reference core; Bedrock + live-connector
-  wiring is the next delivery step — see docs/REVIEW-2-IMPROVEMENTS-BACKLOG.md): a shared layer (platform_core + governance + core), the five
+  wiring is the next delivery step): a shared layer (platform_core + governance + core), the five
   workflow Lambdas (classify -> draft -> check -> human gate -> finalize), the governed
   connector Lambda, the real Step Functions state machine (human gate = waitForTaskToken),
   an HTTP API gateway with a Cognito JWT authorizer + access logging + throttling, and an
@@ -26,8 +26,8 @@ Parameters:
   TokenSecret:
     Type: String
     NoEcho: true
-    Default: dev-only-not-for-production
-    Description: "HMAC secret shared by gateway/approval tokens so a reviewer-minted bound approval verifies in finalize. PRODUCTION - replace with an asymmetric KMS / AgentCore Identity key via Secrets Manager (docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md)."
+    MinLength: 32
+    Description: "Required. Strong random secret (>=32 chars) used to sign gateway/approval tokens so a reviewer-minted bound approval verifies in finalize. Generate with: openssl rand -hex 32. For production use AWS Secrets Manager / an asymmetric KMS / AgentCore Identity key (docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md)."
   KnowledgeBaseId:
     Type: String
     Default: PLACEHOLDER

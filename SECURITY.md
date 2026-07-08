@@ -4,7 +4,7 @@
 This repository is a **governed reference accelerator** for State & Local Government (SLG) agentic AI on AWS. It is **not** an AWS-authorized or ATO/StateRAMP/FedRAMP-certified production system. The Python control plane is a **reference implementation** of the authorization, approval, token, audit, and masking semantics; production deployments substitute the managed AWS equivalents (Amazon Bedrock AgentCore Gateway/Identity, API Gateway + Cedar/Verified Permissions, STS, KMS, DynamoDB, S3 Object Lock). See `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`.
 
 ## Reporting a vulnerability
-Report suspected vulnerabilities privately to the maintainer: **ryderdavid75@gmail.com** (subject: `SECURITY — slg-ai-agents`). Please include affected file/commit, reproduction, and impact. Do **not** open a public issue for an unfixed vulnerability. Target response: acknowledgement within 5 business days; triage and remediation plan within 15 business days. Coordinated disclosure is appreciated.
+Report vulnerabilities privately via GitHub Security Advisories: use the *Security* tab → *Report a vulnerability* on this repository. Please do not open public issues for security reports. Include affected file/commit, reproduction, and impact. Target response: acknowledgement within 5 business days; triage and remediation plan within 15 business days. Coordinated disclosure is appreciated.
 
 ## What is in scope
 - The Python control plane (`platform_core/`, `governance/`, `aws-native-reference/`).
@@ -25,7 +25,7 @@ Defense in depth, fail-closed by default:
 4. **Scoped, short-lived tokens** — per-call, request-bound, single-use (`mcp_gateway/tokens.py`).
 5. **Append-only audit + WORM** — conditional writes + IAM Update/Delete deny + S3 Object Lock (`mcp_gateway/audit_sinks.py`, `infra/cloudformation/data.yaml`).
 6. **Fail-closed PII/CJI/FTI masking** (`pii.py`); **Bedrock Guardrails** on input and output.
-7. **In-account inference** — Bedrock via VPC endpoint; no constituent-data egress.
+7. **Private-connectivity inference** — Bedrock reached via VPC interface endpoint (AWS PrivateLink); no constituent-data egress to external AI APIs — traffic to the regional Bedrock service stays on AWS private networking.
 
 Full threat model: `docs/THREAT-MODEL.md`. Control-to-NIST mapping: `docs/NIST-800-53-CONTROL-MATRIX.md`. OWASP LLM / MITRE ATLAS mapping: `docs/OWASP-LLM-ATLAS-MAPPING.md`. Incident response & key management: `docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md`.
 

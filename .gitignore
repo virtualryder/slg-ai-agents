@@ -5,3 +5,6 @@ __pycache__/
 *.egg-info/
 _qa*/
 .env
+node_modules/
+.aws-sam/
+.claude/

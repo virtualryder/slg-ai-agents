@@ -5,7 +5,7 @@
 
 A **reference accelerator** of **8 governed SLG AI agents** — each with a **standalone reference architecture** (own VPC, identity, data, and audit stack) — plus an **optional Whole-of-Government orchestration platform** that coordinates them across agencies. A no-API-key automated test suite — including new negative-case tests for bound approvals, cryptographic JWT verification, append-only audit, and fail-closed masking — exercises the governance and control-plane logic. Grounded in current AWS and SLG sources (`SOURCES.md`, `decks/DECK-SOURCES.md`).
 
-> **Status & maturity (read first).** This is a **reference accelerator for discovery, architecture workshops, and scoped pilots — not an AWS-authorized, production-ready system.** **All 8 agents are now one-command deployable golden paths** (SAM) under `infra/golden-path-*/`; Resident Services / 311 is the fully-documented reference the others mirror. These golden paths are **deployable, governed workflow skeletons** (the HTTP tool route is enforced through the policy/approval/token/audit gateway; the Step-Functions agent functions now reason with Bedrock + ground via governed RAG, with a deterministic fallback for offline/CI). **all 8 agents now execute their consequential write *through* the governed gateway** — policy + bound approval + scoped token + append-only audit, proven by 19 workflow tests; **all 8 agents now draft via Bedrock + the deployed Guardrail and ground via governed RAG** (a Retrieve step calls `kb.search_policy` through the gateway — an audited read — backed by a Bedrock Knowledge Base in live mode; deterministic fallback for offline/CI); the **human gate is served by a real authenticated reviewer service** (verified-JWT reviewer, authority + separation-of-duties + single-use, server-side bound-token minting, Step Functions resume, audited — `GET/POST /approvals`). **Every agent now ships a secure combined deploy** (`infra/golden-path-*-secure/`) that stands up the secure baseline (in-VPC Lambdas, PrivateLink endpoints, customer-managed CMK, S3 Object-Lock WORM, CloudFront/WAF) **and** the full governed app in one `sam deploy`. **All 8 golden paths have now been deployed to a real AWS account (us-east-1), runtime-verified, and torn down** — see the "Deployed & validated on AWS" section below. Live system-of-record connectors are the remaining tracked delivery phase in `docs/REVIEW-2-IMPROVEMENTS-BACKLOG.md`). Live connectors, production identity, security testing, and an authorization (ATO / StateRAMP / FedRAMP) are customer-engagement work. See `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` (gap assessment + RACI) and `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` (independent review, verified findings, and the gap-closure plan currently in progress).
+> **Status & maturity (read first).** This is a **reference accelerator for discovery, architecture workshops, and scoped pilots — not an AWS-authorized, production-ready system.** **All 8 agents are now one-command deployable golden paths** (SAM) under `infra/golden-path-*/`; Resident Services / 311 is the fully-documented reference the others mirror. These golden paths are **deployable, governed workflow skeletons** (the HTTP tool route is enforced through the policy/approval/token/audit gateway; the Step-Functions agent functions now reason with Bedrock + ground via governed RAG, with a deterministic fallback for offline/CI). **all 8 agents now execute their consequential write *through* the governed gateway** — policy + bound approval + scoped token + append-only audit, proven by 19 workflow tests; **all 8 agents now draft via Bedrock + the deployed Guardrail and ground via governed RAG** (a Retrieve step calls `kb.search_policy` through the gateway — an audited read — backed by a Bedrock Knowledge Base in live mode; deterministic fallback for offline/CI); the **human gate is served by a real authenticated reviewer service** (verified-JWT reviewer, authority + separation-of-duties + single-use, server-side bound-token minting, Step Functions resume, audited — `GET/POST /approvals`). **Every agent now ships a secure combined deploy** (`infra/golden-path-*-secure/`) that stands up the secure baseline (in-VPC Lambdas, PrivateLink endpoints, customer-managed CMK, S3 Object-Lock WORM, CloudFront/WAF) **and** the full governed app in one `sam deploy`. **All 8 golden paths have now been deployed to a real AWS account (us-east-1), runtime-verified, and torn down** — see the "Deployed & validated on AWS" section below. Live system-of-record connectors are the remaining tracked delivery phase. Live connectors, production identity, security testing, and an authorization (ATO / StateRAMP / FedRAMP) are customer-engagement work. See `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` (gap assessment + RACI) and `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` (independent review, verified findings, and the gap-closure plan currently in progress).
 
 ---
 
@@ -14,7 +14,6 @@ A **reference accelerator** of **8 governed SLG AI agents** — each with a **st
 1. **This README** — the need, the solution, the regulations, and who owns what.
 2. **`docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md`** — an independent review with **verified findings** and the gap-closure status. **P0–P4 are closed:** claims aligned to reality, **all 8 agents wired as one-command golden paths**, the **control plane hardened** (bound/single-use approvals, JWT verification, append-only audit, scoped IAM, fail-closed masking — all unit-tested), a full **security package**, and a **CI security pipeline**.
 3. **`docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`** — honest gap assessment + RACI (read before any production decision).
-   - and **`docs/REVIEW-2-IMPROVEMENTS-BACKLOG.md`** — the latest independent review + the integration backlog (what's a *deployable skeleton* vs. a *functionally-real* agent).
 4. **`infra/GOLDEN-PATHS.md`** — deploy any agent in one command (`sam build && sam deploy` → `./smoke_test.sh`); 311 walk-through in `infra/golden-path-311/DEPLOY-GOLDEN-PATH.md`.
 
 **I want to…**
@@ -41,6 +40,33 @@ All 8 golden paths were deployed to a live AWS account (`us-east-1`), verified a
 **Deploy prerequisites / gotcha**
 - The `SharedLayer` uses a **Makefile build** (`sam build` needs `make` on PATH). On a host without `make` (e.g. stock Windows), either install `make`, or pre-assemble the dependency-free layer (`platform_core/slg_agent_platform` + `governance` + the agent's `core.py` → `layer/python/`) and deploy a template variant that drops the Makefile metadata. A future cleanup is to switch the layer to a `python3.12` build method to remove the `make` dependency.
 - Deploy in `us-east-1` for the secure variants (the CloudFront-scoped WAF must live there).
+
+---
+
+## Capability maturity matrix
+
+✅ = evidence in this repo (code + tests, or the documented live AWS validation) · ◻ = not done here / engagement work.
+Live-AWS cells reflect the 2026-06-30 validation-account run (all 8 golden paths deployed, runtime-verified, torn down — stacks `slg-311-deploytest`, `slg-02…08-deploytest`; see **Deployed & validated on AWS** above).
+
+| Capability | Designed | Implemented (offline/tested) | Deployed on AWS (validated) | Integration-tested on AWS | Production-ready | Owner (Repo/Customer) |
+|---|:--:|:--:|:--:|:--:|:--:|---|
+| Identity / authN | ✅ | ✅ | ✅ | ✅ | ◻ | Repo (Cognito JWT authorizer; enterprise IdP federation: Customer) |
+| MCP / tool authorization gateway | ✅ | ✅ | ✅ | ✅ | ◻ | Repo |
+| Policy enforcement (deny-by-default) | ✅ | ✅ | ✅ | ✅ | ◻ | Repo |
+| Human approval (SoD, single-use) | ✅ | ✅ | ✅ | ✅ | ◻ | Repo (`waitForTaskToken` gate exercised live) |
+| PII/PHI masking | ✅ | ✅ | ◻ | ◻ | ◻ | Repo (fail-closed masking unit-tested; not runtime-verified on AWS) |
+| Audit (append-only + WORM) | ✅ | ✅ | ✅ | ✅ | ◻ | Repo (append-only audit written live; WORM ships in the `-secure` variants, not runtime-validated) |
+| Bedrock + Guardrails | ✅ | ✅ | ✅ | ✅ | ◻ | Repo |
+| IaC deploy (golden path) | ✅ | ✅ | ✅ | ✅ | ◻ | Repo (all 8 golden paths) |
+| Live connectors | ✅ | ✅ | ◻ | ◻ | ◻ | Customer (fixtures here; live system-of-record connectors are the tracked delivery phase) |
+| CI/CD | ✅ | ✅ | ◻ | ◻ | ◻ | Repo (CI security pipeline; no cloud deploys in CI) / Customer |
+| Monitoring / alerts | ✅ | ◻ | ◻ | ◻ | ◻ | Customer |
+| DR / backup | ✅ | ◻ | ◻ | ◻ | ◻ | Customer |
+| Compliance evidence | ✅ | ✅ | ◻ | ◻ | ◻ | Repo (NIST 800-53 matrix, security package) / Customer (ATO/StateRAMP evidence) |
+
+Nothing in this repository is production-certified; see [`docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`](docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md) for the full RACI.
+
+> **Validation update (2026-07-07).** The 2026-06-30 eight-golden-path deployment was independently re-verified against the validation account (CloudTrail `ExecuteChangeSet`/`DeleteStack` events, deleted-stack history; actual stack names used the `-deploytest` suffix). `TokenSecret` no longer has a development default in any template. Sanitized proof pack: [`evidence/CLEAN-ACCOUNT-ACCEPTANCE.md`](evidence/CLEAN-ACCOUNT-ACCEPTANCE.md).
 
 ---
 
@@ -88,6 +114,15 @@ Plus the **Whole-of-Government Orchestration Platform** (`gov_platform/wog_orche
 ---
 
 ## 3. How it satisfies the regulations & security architecture
+
+![SLG governed data flow — constituent PII, CJI, and FTI](docs/diagrams/slg-data-flow.png)
+
+The shared Aegis control-plane pattern — how every tool call is authenticated, authorized, human-approved, and audited, including the deny paths:
+
+![Aegis MCP gateway authorization flow — shared control plane](docs/diagrams/mcp-gateway-auth-flow.png)
+
+Editable source: the SVG in [`docs/diagrams/`](docs/diagrams/) (open in draw.io, Inkscape, or any text editor).
+
 **A complete AWS architecture, edge to data tier** (see any deck's architecture slide and `docs/SUITE-ARCHITECTURE.md`):
 
 ```
@@ -175,7 +210,7 @@ Build the governance once and every future agent inherits it — the way out of 
 
 ## Repository map
 ```
-README.md  ENTERPRISE-PLATFORM.md  SUITE-STATUS.md  SOURCES.md  IMPROVEMENTS-OVER-EDU-HCLS.md
+README.md  ENTERPRISE-PLATFORM.md  SUITE-STATUS.md  SOURCES.md
 01-resident-services-311/ ... 08-public-safety-health/   # 8 agents (code, tests, docs, deploy runbook)
 platform_core/slg_agent_platform/                        # gateway, masker, LLM factory, connectors, A2A
 gov_platform/wog_orchestration/                          # Whole-of-Government: govern, canonical, consent, saga, events
@@ -195,24 +230,4 @@ Each agent ships: a runnable workflow (per-intent action mapping), gateway-backe
 MCP authorization gateway (deny-by-default, least-privilege intersection, HITL gate, scoped tokens, PII/CJI/FTI-masked append-only audit) · the masker · LLM factory (in-account Bedrock + Guardrails) · connector framework (fixture/live) · A2A supervisor.
 
 ## Governance & evaluation (`governance/`)
-Grounding verification · prompt registry (hash-pinned, drift-failing CI) · eval harness · red team · fairness (four-fifths) · **accessibility (WCAG/ADA Title II)** · compliance control mappings · HITL-enforced tests. All run with no API key.
-
-## Whole-of-Government Orchestration (`gov_platform/wog_orchestration/`)
-Govern-tool-access contract · canonical data + adapters · AAL-gated consent ledger · durable **saga with compensation** · compliance event bus + evidence · **5 life-events live** (moving, job_loss, new_business, disaster, bereavement). Runnable: `aws-native-reference/wog-platform/local_runner.py`. The platform story: `ENTERPRISE-PLATFORM.md`.
-
-## Deployment models — standalone first, platform when ready
-Every agent deploys **standalone** (`edge.yaml` CloudFront + WAF + Shield · `network.yaml` own VPC + Flow Logs + Bedrock endpoint · `security.yaml` KMS + Guardrail + Cognito · `data.yaml` append-only audit + S3 Object Lock WORM · gateway · agent) with **no WoG dependency**. Adopt the WoG orchestration layer later, agent by agent; the same agents become saga steps unchanged. CloudFormation + Terraform, commercial **and** GovCloud. See `docs/DEPLOYMENT-MODELS.md`.
-
-## Go-to-market & deploy assets
-`gtm/SELLER-SA-FIELD-GUIDE.md` (seller/SA playbook) · `gtm/SELLER-FIRST-MEETING-CHEATSHEET.md` (one-pager) · `gtm/WOG-PLATFORM-GTM-STORY.md` (pitch, personas, objection Q&A) · `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md` (gap assessment + RACI) · `runbooks/WOG-PLATFORM-DEPLOYMENT-RUNBOOK.md` (16-stage architect deploy) · per-agent `docs/DEPLOY-RUNBOOK.md` · ops runbooks · decks (`decks/`).
-
-## Quick start
-```bash
-pip install -e platform_core
-PYTHONPATH=platform_core:. python -m pytest platform_core/tests governance gov_platform/wog_orchestration/tests -q   # green, no API key
-cd 01-resident-services-311 && EXTRACT_MODE=demo python demo/demo_run.py
-PYTHONPATH=platform_core:. python aws-native-reference/wog-platform/local_runner.py   # 5 life-events + a rollback
-```
-
-## Compliance disclaimer
-A **decision-support accelerator** for qualified government staff — not a certified system, an ATO, or an approved adjudication tool. AI-generated content requires human review before any consequential action; the AI never takes irreversible action autonomously. Customers own ATO/GovRAMP, IdP integration, connector validation, Guardrail configuration, retention schedule, and CSV for the intended use. See `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`.
+Grounding verification · prompt registry (hash-pinned, drift-failing CI) · eval harness · red team · fairness (four-fifths) · **accessibility (WCAG/ADA Title II)** · compliance control mappings · HITL-enforced tests. All r

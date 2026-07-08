@@ -46,7 +46,7 @@
 2. **Consequential actions withheld in code** — issue-permit / adjudicate / release / award aren't in the agent's grants (tested).
 3. **Framework-enforced human gate** — no path to commit without approval.
 4. **Tamper-evident audit + WORM** — append-only DynamoDB + S3 Object Lock; PII/CJI/FTI masked.
-5. **In-account inference** — Bedrock via VPC endpoint + mandatory Guardrails.
+5. **Private-connectivity inference** — Bedrock via VPC endpoint (AWS PrivateLink) + mandatory Guardrails.
 
 ## Always say
 *"You don't have to go all-in on whole-of-government. We start with one agent in its own secure VPC, prove it in front of your CISO, and grow agent by agent."*

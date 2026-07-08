@@ -13,7 +13,7 @@ seven agents inherit from.
 - **HTTP API gateway** — Cognito **JWT authorizer**, **access logging** to CloudWatch, and **throttling** (burst/rate parameters). Route `POST /tool/{kind}/{method}` → connector.
 - **Bedrock Guardrail** — prompt-attack on **input AND output**, PII block/anonymize, denied-topic.
 - **Cognito** — admin-create, **MFA on**, advanced security **ENFORCED**, 14-char password policy, 15-minute access/ID tokens, **immutable** `slg_role` claim.
-- **Audit table** — DynamoDB with PITR + SSE. *(Append-only enforcement — conditional writes + Update/Delete deny — and data-class-driven WORM land in P2.)*
+- **Audit table** — DynamoDB with PITR + SSE. *(Append-only enforcement — conditional writes + Update/Delete deny — and data-class-driven WORM are tracked as follow-on hardening; see the remediation plan.)*
 
 ## Deploy (one command path)
 ```bash
@@ -32,11 +32,14 @@ human approved. Run it without approving and `finalize` returns `BLOCKED_NO_APPR
 gate is enforced in code, not just described.
 
 ## Verification status
-- `cfn-lint` clean (SAM transform). See `docs/REPO-REVIEW-AND-REMEDIATION-PLAN.md` (P1).
-- Live deploy + smoke test run **in the customer/SA account** — not executed in this repo's CI
-  (no account). The scripts above are the exact steps.
+- `cfn-lint` clean (SAM transform).
+- **Deployed, runtime-verified, and torn down live.** The CI pipeline itself does not run cloud
+  deploys, but all **8 golden paths** were deployed, smoke-tested, and destroyed in a validation
+  account on **2026-06-30** (stacks `slg-311-deploytest` and `slg-02…08-deploytest`). See the
+  README's **Deployed & validated** section and the evidence pack at
+  `../../../evidence/AWS-CLEAN-ACCOUNT-EVIDENCE-2026-07-07.md`. The scripts above are the exact
+  steps to reproduce in your own account.
 
-## What still differs from production (tracked in P2)
+## What still differs from production (follow-on hardening)
 Append-only audit enforcement, full IAM permissions-boundaries, WAF on the gateway, egress
-allowlisting, Cognito enterprise federation, and the AgentCore-Identity/STS token swap. See the
-remediation plan.
+allowlisting, Cognito enterprise federation, and the AgentCore-Identity/STS token swap.

@@ -11,7 +11,7 @@ Deploy a single agent into a customer-isolated environment with **no WoG depende
 |---|---|---|
 | **Edge / front-end** | `edge.yaml` | **Amazon CloudFront (TLS 1.2+) + AWS WAF** (managed rules: OWASP, known-bad-inputs, IP reputation, rate-limit) + **AWS Shield** |
 | **Identity** | `security.yaml` (Cognito) | **Amazon Cognito** federates the agency IdP and issues a short-lived **JWT**; API Gateway's Cognito JWT authorizer validates it; the gateway re-checks the `custom:slg_role` claim and mints a scoped per-call token |
-| **Network** | `network.yaml` | Own VPC · private subnets · NAT · **Bedrock VPC interface endpoint** (in-account inference) · S3 gateway endpoint · **VPC Flow Logs** |
+| **Network** | `network.yaml` | Own VPC · private subnets · NAT · **Bedrock VPC interface endpoint** (private connectivity to the regional Bedrock service) · S3 gateway endpoint · **VPC Flow Logs** |
 | **Security** | `security.yaml` | **KMS CMK** (rotation on) · **Bedrock Guardrail** (PII/denied-topics/grounding) · **Cognito** (federate your IdP) · least-privilege agent role |
 | **Data / logging** | `data.yaml` | **Append-only DynamoDB audit** (PITR) · **S3 Object Lock (WORM)** · HITL queue table |
 | **Gateway** | `gateway-portable.yaml` / `agentcore-gateway.yaml` | Deny-by-default MCP authorization gateway (portable works in GovCloud) |

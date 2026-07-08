@@ -24,5 +24,6 @@
 
 ## Hard-to-monetize but real
 Improved resident satisfaction, equitable/accessible access, reduced staff burnout,
-institutional-knowledge retention. Pair with the suite `COST-ROI-MODEL.md` for the
-narrative a CIO/CFO expects.
+institutional-knowledge retention. Pair with the suite cost model
+[`../../offerings/TCO-MODEL.md`](../../offerings/TCO-MODEL.md) (run cost + ROI netting)
+for the narrative a CIO/CFO expects.

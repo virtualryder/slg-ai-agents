@@ -7,7 +7,7 @@
 | Identity / impersonation | RS256/JWKS verification (iss/aud/exp + alg guard); roles only from a verified token | `jwt_verify.py`, `test_jwt_verify.py` |
 | Least privilege | Deny-by-default intersection (agent grant ∩ user entitlement); per-function IAM; Bedrock scoped to model+guardrail ARNs | `policy.py`, `template.yaml`, `security.yaml` |
 | Audit integrity | Append-only (conditional write + IAM Update/Delete deny); WORM by data class | `audit_sinks.py`, `test_audit_append_only.py`, `data.yaml` |
-| Data leakage | Fail-closed PII/CJI/FTI masking; Guardrails in/out; in-account inference | `pii.py`, `test_pii.py`, `security.yaml` |
+| Data leakage | Fail-closed PII/CJI/FTI masking; Guardrails in/out; private-connectivity inference (Bedrock via PrivateLink) | `pii.py`, `test_pii.py`, `security.yaml` |
 
 ## Test evidence (reproducible)
 ```bash

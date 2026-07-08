@@ -4,4 +4,4 @@
 
 **Value levers:** solicitation-development cycle, grant application speed, incomplete submissions, clause consistency.
 
-Hard-to-monetize but real: equitable/accessible access, staff capacity redeployed to complex work, institutional-knowledge retention. Pair with the suite TCO/ROI model.
+Hard-to-monetize but real: equitable/accessible access, staff capacity redeployed to complex work, institutional-knowledge retention. Pair with the suite TCO/ROI model: [`../../offerings/TCO-MODEL.md`](../../offerings/TCO-MODEL.md).
