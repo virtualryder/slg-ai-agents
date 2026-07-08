@@ -84,3 +84,5 @@ directly from repository artifacts.
 *Reference accelerator — not an AWS service, not AWS-supported software, not a compliance
 certification, and not production-ready for regulated data without customer-specific
 engineering, testing, authorization, and operational ownership.*
+
+- **Regime-overlay separation:** [`../docs/REGIME-OVERLAY-SEPARATION.md`](../docs/REGIME-OVERLAY-SEPARATION.md) — data-class-driven CJIS / IRS-1075 / HIPAA-MARS-E / FERPA / FOIA overlays per agent (don't force the max profile on all).
