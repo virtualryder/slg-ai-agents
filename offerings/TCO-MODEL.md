@@ -78,3 +78,6 @@ The business case is decided by the deflection assumption, not the AWS bill.
 
 *Related: per-agent `docs/roi-analysis.md`, `ENTERPRISE-PLATFORM.md`, `docs/`. Demand-side
 statistics are source-tagged in `SOURCES.md`.*
+
+---
+**Value side:** see [ROI-CASE-STUDY.md](ROI-CASE-STUDY.md) for a fully worked, illustrative ROI example with totals.

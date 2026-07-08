@@ -174,7 +174,7 @@ The shared concern: **an AI agent that can touch systems of record is a governan
 
 **Director of Architecture — design & operational concerns**
 
-One governed pattern, reused across eight agents: edge (CloudFront + WAF + Shield) → Cognito JWT → API Gateway → MCP gateway (deny-by-default + scoped per-call token) → Bedrock + Guardrails → human gate → append-only WORM audit. Full **IaC parity** (CloudFormation + Terraform, commercial **and** GovCloud), **per-function least-privilege roles** (Bedrock scoped to the model + guardrail ARNs, no `Resource:"*"`), and **one fully-wired golden path** (`infra/golden-path-311/`) deployable with `sam build && sam deploy`, with a smoke test and teardown. Readable Python and standard AWS services — no black box, no lock-in.
+One governed pattern, reused across eight agents: edge (CloudFront + WAF + Shield) → Cognito JWT → API Gateway → MCP gateway (deny-by-default + scoped per-call token) → Bedrock + Guardrails → human gate → append-only WORM audit. CloudFormation/SAM is the **canonical, validated IaC** (Terraform is a reference skeleton, not at parity — see [`docs/TERRAFORM-AND-GOVCLOUD-STATUS.md`](docs/TERRAFORM-AND-GOVCLOUD-STATUS.md); GovCloud is a design-time overlay), **per-function least-privilege roles** (Bedrock scoped to the model + guardrail ARNs, no `Resource:"*"`), and **one fully-wired golden path** (`infra/golden-path-311/`) deployable with `sam build && sam deploy`, with a smoke test and teardown. Readable Python and standard AWS services — no black box, no lock-in.
 
 **CIO — ROI & risk concerns**
 

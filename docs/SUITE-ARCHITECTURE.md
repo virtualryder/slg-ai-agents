@@ -38,6 +38,6 @@
 | Encryption | **KMS CMK** | per-environment key |
 | Events / workflow | **EventBridge + Step Functions** | compliance event bus + durable life-events |
 | Network isolation | **VPC** (private subnets, Bedrock VPC endpoint) | no public inbound |
-| IaC | **CloudFormation** (primary) + **Terraform** (parity) | commercial + GovCloud |
+| IaC | **CloudFormation** (primary) + **Terraform** (reference skeleton — see docs/TERRAFORM-AND-GOVCLOUD-STATUS.md) | commercial + GovCloud |
 
 Data-class isolation: separate accounts/VPC boundaries for **CJI, FTI, PHI, education, and general public** data (AWS Organizations / Control Tower) rather than one enterprise boundary. See `COMPLIANCE-CONTROL-MAPPINGS.md`.

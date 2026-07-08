@@ -131,7 +131,7 @@ This is where deals are won or lost in SLG. Walk it explicitly.
 ## PHASE 7 — Architecture & deployment fit (the SA workstream)
 - **Standalone first** (recommended): `scripts/deploy.sh <agent> <env> portable native` deploys a complete isolated stack — **own VPC + Flow Logs + Bedrock endpoint** (`network.yaml`), **CloudFront + WAF + Shield** (`edge.yaml`), KMS/Guardrail/Cognito (`security.yaml`), WORM audit (`data.yaml`), gateway, agent. No WoG dependency.
 - **Add WoG later** (`infra/cloudformation/wog-platform.yaml`) when they want cross-agency life-event orchestration; the same agents become saga steps with no rewrite.
-- **IaC parity:** CloudFormation primary + Terraform (`infra/terraform/`, incl. a GovCloud overlay).
+- **IaC:** CloudFormation/SAM is the canonical, validated path; Terraform (`infra/terraform/`) is a reference skeleton, not at parity (see docs/TERRAFORM-AND-GOVCLOUD-STATUS.md); GovCloud is a design-time overlay.
 - **Follow the runbooks:** per-agent `docs/DEPLOY-RUNBOOK.md` (numbered, with Verify checkpoints) and the 16-stage `runbooks/WOG-PLATFORM-DEPLOYMENT-RUNBOOK.md`.
 
 ---
