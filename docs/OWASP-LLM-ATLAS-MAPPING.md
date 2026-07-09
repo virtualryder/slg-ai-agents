@@ -30,6 +30,6 @@
 2. Textract/IDP extracts the text; the agent drafts. **Bedrock Guardrails** screen input and output.
 3. Even if the model "agrees," `issue_permit` is **not in the agent's tool grants** → the gateway returns DENY (verified by `test_consequential_actions_withheld_from_agents`).
 4. The most the agent can do is *draft* a recommendation, which routes to the **human gate**; a licensed reviewer issues the permit. The attempt is recorded (masked) in the append-only audit.
-5. No data leaves the VPC (Bedrock VPC endpoint), so even a successful injection cannot exfiltrate.
+5. Egress is constrained: Bedrock is reached only over a VPC interface endpoint (PrivateLink) and connectors are allow-listed, so even a successful injection has no path to an external AI API for exfiltration.
 
 **Takeaway:** authority lives in the **gateway and IAM**, not in the prompt — so prompt-level attacks cannot escalate to consequential action.

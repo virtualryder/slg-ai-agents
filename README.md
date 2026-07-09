@@ -1,4 +1,6 @@
 # SLG AI Agent Suite
+
+> ⚠️ **Before you cite anything here:** read [**What we will *not* claim**](NOT-CLAIMS.md) — this is an independent reference accelerator that runs on AWS. It is **not** an AWS service, **not** AWS-supported, **not** an official AWS solution, and **not** a compliance certification. That page governs if any wording elsewhere reads stronger.
 ### Governed AI Agents for State & Local Government — Built on AWS
 
 > **The agent is not the product. The governance that makes it deployable, auditable, and compliant in a regulated government environment is.**
