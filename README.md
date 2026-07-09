@@ -1,6 +1,8 @@
 # SLG AI Agent Suite
 
 > ⚠️ **Before you cite anything here:** read [**What we will *not* claim**](NOT-CLAIMS.md) — this is an independent reference accelerator that runs on AWS. It is **not** an AWS service, **not** AWS-supported, **not** an official AWS solution, and **not** a compliance certification. That page governs if any wording elsewhere reads stronger.
+
+> 📊 **Honest status, one source of truth:** per-agent maturity, clean-account evidence, connector tiers, and the test count live in machine-readable [`MATURITY.yaml`](MATURITY.yaml); the four connector-maturity terms are defined in [`docs/CONNECTOR-MATURITY.md`](docs/CONNECTOR-MATURITY.md). Prose defers to `MATURITY.yaml`; a portfolio drift-checker (`tools/check_maturity.py`) keeps them aligned.
 ### Governed AI Agents for State & Local Government — Built on AWS
 
 > **The agent is not the product. The governance that makes it deployable, auditable, and compliant in a regulated government environment is.**
@@ -41,7 +43,7 @@ All 8 golden paths were deployed to a live AWS account (`us-east-1`), verified a
 
 **Two real bugs found and fixed (now in the repo)**
 1. **Bedrock Guardrail** rejected `PROMPT_ATTACK` with `OutputStrength: HIGH` — that filter applies to input only, so output strength must be `NONE`. Corrected in all 16 golden-path templates and `infra/cloudformation/security.yaml`.
-2. **Lambda path resolution:** the workflow Lambdas computed `Path(__file__).resolve().parents[3]` to find sibling repo dirs, which throws `IndexError` in Lambda's flat `/var/task` layout (those modules are provided by the shared layer there). Guarded in all per-agent `_shared.py` / `check.py`; the offline suite (124 tests) still passes.
+2. **Lambda path resolution:** the workflow Lambdas computed `Path(__file__).resolve().parents[3]` to find sibling repo dirs, which throws `IndexError` in Lambda's flat `/var/task` layout (those modules are provided by the shared layer there). Guarded in all per-agent `_shared.py` / `check.py`; the offline suite (179 tests) still passes.
 
 **Deploy prerequisites / gotcha**
 - The `SharedLayer` uses a **Makefile build** (`sam build` needs `make` on PATH). On a host without `make` (e.g. stock Windows), either install `make`, or pre-assemble the dependency-free layer (`platform_core/slg_agent_platform` + `governance` + the agent's `core.py` → `layer/python/`) and deploy a template variant that drops the Makefile metadata. A future cleanup is to switch the layer to a `python3.12` build method to remove the `make` dependency.
