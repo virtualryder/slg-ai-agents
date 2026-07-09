@@ -1,6 +1,8 @@
 # 01 — Resident Services & 311 Navigator
 ### Governed AI on AWS · the reference agent for the SLG Suite
 
+> 🛡️ **Reviewer & pilot pack (hero agent):** [`ASSURANCE-PACKET.md`](ASSURANCE-PACKET.md) (architecture, controls, evidence, negative results, RACI) · [`PILOT-SOW.md`](PILOT-SOW.md) (scoped 6–10 week pilot) · **what the platform refuses:** `make neg-demo` → [`demo/negative_demo.py`](demo/negative_demo.py) proves **10/10** deny cases (CI-gated). Live connector: NYC 311 Socrata (tier-3, read-only) — see [`../docs/CONNECTOR-MATURITY.md`](../docs/CONNECTOR-MATURITY.md).
+
 > Residents must navigate hundreds of agency pages, phone numbers, PDFs, forms, and
 > departmental boundaries — often without knowing which agency owns their problem.
 > This agent understands a plain-language request, determines the responsible
