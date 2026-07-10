@@ -70,7 +70,7 @@ jobs:
       # E3006 = "resource type not in region": false-positive for global (CloudFront)
       # and newer (BedrockAgentCore) types; scoped out here, not a real defect.
       - name: cfn-lint
-        run: cfn-lint --ignore-checks E3006 infra/cloudformation/*.yaml infra/golden-path-*/template.yaml
+        run: cfn-lint --ignore-checks=E3006 infra/cloudformation/*.yaml infra/golden-path-*/template.yaml
 
   python-security:
     name: Python SAST + deps (bandit, pip-audit)
@@ -83,8 +83,11 @@ jobs:
       - run: pip install bandit pip-audit
       - name: Bandit (high severity, hard gate)
         run: bandit -r platform_core governance aws-native-reference -lll
-      - name: pip-audit (advisory)
-        run: pip-audit || echo "::warning::pip-audit reported advisories (advisory gate)"
+      - name: pip-audit (BLOCKING)
+        run: |
+          set -e
+          # Authoritative pinned lockfile; a CVE now fails the job (was advisory).
+          pip-audit --progress-spinner off -r platform_core/requirements-lock.txt
 
   semgrep:
     name: Semgrep SAST (advisory)
