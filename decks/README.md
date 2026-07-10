@@ -2,7 +2,7 @@
 
 Customer-facing presentation decks. **Single source of truth — do not duplicate elsewhere.**
 
-All 10 decks are rebuilt on the **AWS interview-deck template** (squid-ink navy `#232F3E` + AWS orange `#FF9900` + teal `#01A88D` human-gate), matching `AWS-Interview-Presentation-v2.pptx`. Each follows one **6-slide narrative**, and every slide carries a **timed talk-track in the speaker notes** (open in PowerPoint → View → Notes Page, or use Presenter View).
+All 10 decks are built on a **professional dark-theme template** (squid-ink navy `#232F3E` + amber `#FF9900` + teal `#01A88D` human-gate), using an internal reference template (internal-track only). Each follows one **6-slide narrative**, and every slide carries a **timed talk-track in the speaker notes** (open in PowerPoint → View → Notes Page, or use Presenter View).
 
 | File | Use |
 |---|---|
