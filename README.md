@@ -135,7 +135,7 @@ The pain is specific, documented, and expensive:
 **The five controls that make it deployable** (this is the product):
 1. **Deny-by-default gateway, least-privilege intersection** — `permitted ⇔ agent grant ∩ user entitlement`; the agent can never exceed the employee it acts for. **The deployed HTTP tool route runs *through* this gateway inside the connector Lambda** (policy → bound approval → scoped token → append-only audit, identity from the JWT authorizer only) — not a bypass.
 2. **Consequential actions withheld in code** — issue-permit / adjudicate / release-records / award are *absent from the agent's grants*, enforced by a passing test. A human owns them.
-3. **Framework-enforced human gate** — `interrupt_before` / Step Functions `waitForTaskToken`; no code path commits without approval.
+3. **Framework-enforced human gate** — `interrupt_before` / Step Functions `waitForTaskToken`; no code path commits without approval. Every agent ASL now adds per-state `Retry`/`Catch` + timeouts, a terminal `PipelineFailed` state, and a **bounded 14-day human-gate timeout**, so a transient fault or an unanswered approval fails safe instead of hanging.
 4. **Tamper-evident audit + WORM** — append-only DynamoDB + S3 Object Lock; PII/CJI/FTI masked at every boundary.
 5. **Private Bedrock connectivity** — Bedrock reached over **AWS PrivateLink (VPC endpoint)** so API traffic avoids the public internet, with **mandatory Guardrails**. (The model runs in the Bedrock regional service, not inside your VPC; data-residency is governed by region + your controls.)
 
@@ -153,7 +153,7 @@ Every agent tool call passes through an **authenticated gateway**; there is no u
 - **Deny-by-default policy.** A tool is callable only if it is **registered in the allow-list** and the caller's effective permission = **grant ∩ entitlement** (the agent can never exceed the human it acts for). Unregistered tool or out-of-scope data class → **deny**.
 - **Human approval for consequential actions.** Consequential tools are **withheld in code** and require a **bound, single-use, separation-of-duties** approval (approver ≠ requester; replay rejected).
 - **Scoped outbound authorization.** The gateway issues **short-lived, least-privilege** downstream credentials (IAM / OAuth / token-exchange / on-behalf-of), so "the agent acts only within the human's authority" holds end to end.
-- **Fail-closed masking.** PII / CJI / FTI data is masked before any model or audit write; on masker failure it **redacts rather than leaks**.
+- **Fail-closed masking.** PII / CJI / FTI data is masked before any model or audit write; on masker failure it **redacts rather than leaks**. In real-data mode (`ALLOW_REAL_DATA=1`) the masker fails closed — **NER is mandatory** (the regex layer alone does not mask free-text names), so real data is never emitted partially masked.
 - **Append-only audit + revocation.** Every decision (allow / deny / approval) is written to an **append-only** sink (IAM denies `UpdateItem`/`DeleteItem`) with **WORM** evidence; tools can be revoked / deny-listed at the registry.
 - **Failure modes are fail-closed.** Missing/invalid token → **401**; unregistered tool → **deny**; missing approval → **deny**; masker or audit-write failure → **deny, not proceed**; a **configured output guardrail that errors** (throttle/IAM/infra) → **block + `guardrail_failclosed` security event** (default; opt out only on non-protected paths via `GUARDRAIL_FAIL_CLOSED=0`).
 

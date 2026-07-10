@@ -37,7 +37,7 @@ SLG_STACK=slg-311-dev AWS_REGION=us-east-1 \
 (The tests **skip** automatically when `SLG_STACK` is unset, so the offline suite is unaffected.)
 
 ## 2. Tagged release (`.github/workflows/release.yml`)
-On a `v*` tag: re-runs the **hard gates** (unit tests, cfn-lint, bandit), generates a CycloneDX
+On a `v*` tag: re-runs the **hard gates** (unit tests, cfn-lint — now lints every template via `--ignore-checks=E3006`, bandit, and pip-audit blocking against the hash-pinned lockfile), generates a CycloneDX
 **SBOM**, and publishes a **GitHub Release** whose notes are the matching `CHANGELOG.md` section.
 
 ```bash
@@ -48,4 +48,4 @@ The current version is in `VERSION` (**0.1.0** — first tagged reference releas
 ## Honest status
 The pipelines are committed and the tests are real, but a **green run requires a connected AWS
 account**; attaching that run is the final piece of cloud evidence. Everything else (offline
-suite, cfn-lint, bandit, SBOM, secret scan) runs with no credentials on every push.
+suite, cfn-lint, bandit, pip-audit (blocking), SBOM, secret scan) runs with no credentials on every push.

@@ -7,9 +7,9 @@
 |---|---|---|---|
 | **LLM01** | Prompt Injection (direct & indirect) | Bedrock Guardrails (prompt-attack HIGH **input + output**); agent has **no consequential tool** without a human gate; deny-by-default tool access limits blast radius; inference can't egress (VPC endpoint) | Implemented / Configurable |
 | **LLM02** | Sensitive Information Disclosure | Fail-closed PII/CJI/FTI masking at every log/audit boundary; Guardrail PII block/anonymize; least-privilege retrieval; data-class isolation | Implemented |
-| **LLM03** | Supply Chain | Pinned deps; `pip-audit` + SBOM in CI (P4); dependency-free core; readable, reviewable code | Configurable (CI in P4) |
+| **LLM03** | Supply Chain | Hash-pinned deps (`platform_core/requirements-lock.txt`); `pip-audit` **BLOCKING** in CI + SBOM; dependency-free core; readable, reviewable code | Implemented |
 | **LLM04** | Data & Model Poisoning | Grounding verification against approved sources; prompt registry hash-pinned with drift-failing CI; KB content is agency-curated | Implemented / Configurable |
-| **LLM05** | Improper Output Handling | Grounded, cited answers; output Guardrail; structured outputs validated; consequential writes gated by a human | Implemented |
+| **LLM05** | Improper Output Handling | Grounded, cited answers; output Guardrail (**fails closed** — a configured guardrail that errors blocks the response + emits a `guardrail_failclosed` event); structured outputs validated; consequential writes gated by a human | Implemented |
 | **LLM06** | Excessive Agency | **The core design**: deny-by-default least-privilege intersection; consequential actions withheld in code; bound single-use SoD human approval; scoped, request-bound tokens | Implemented |
 | **LLM07** | System Prompt Leakage | Prompts in a registry, not secrets; no credentials in prompts; output Guardrail; least-privilege means a leaked prompt grants nothing | Implemented |
 | **LLM08** | Vector & Embedding Weaknesses | Security-trimmed / entitlement-aware retrieval; per-data-class KB isolation; consent checks | Configurable |

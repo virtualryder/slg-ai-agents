@@ -11,7 +11,7 @@ and the release packet ([`RELEASE-PACKET.md`](RELEASE-PACKET.md)).*
 |---|---|---|
 | **Bandit** (SAST) | **BLOCKING** | vs committed `.bandit-baseline.json` — a NEW medium+ finding fails CI; baselined findings don't |
 | **detect-secrets** | **BLOCKING** | vs committed `.secrets.baseline` — a NEW unbaselined secret fails CI |
-| **pip-audit** (deps) | report-only | flips to blocking once deps are hash-pinned in `platform_core/requirements-lock.txt` |
+| **pip-audit** (deps) | **BLOCKING** | deps are hash-pinned in `platform_core/requirements-lock.txt`; `\|\| true` was dropped, so a known-vulnerable dependency now fails CI (was advisory) |
 | **Semgrep** (SAST rulesets) | report-only | flips to blocking once a ruleset (e.g. `p/ci`) is pinned + triaged |
 | **Checkov** (IaC) | soft-fail | pre-existing reference-template findings surfaced, not blocking (harden templates, then remove `--soft-fail`) |
 | **CycloneDX SBOM** | artifact | published every run |
@@ -21,22 +21,27 @@ The committed baselines record the CURRENT findings (audit `.secrets.baseline` w
 EDU's `security.yml` is the enforcing reference; HCLS additionally runs a broader report-only
 supply-chain job in `ci.yml` (gitleaks, Trivy, Terraform validate) — `security.yml` is the blocking gate.
 
-### Bringing the last two to blocking
+### Enforcing the remaining scanners
 
-### How to enforce the remaining scanners
+Bandit, detect-secrets, and **pip-audit** are already blocking. Semgrep (report-only) and Checkov
+(soft-fail) are the last two to flip.
 
 | Scanner | Make it blocking |
 |---|---|
-| **Bandit** | `bandit -r . --severity-level medium --confidence-level medium --skip B101 -f json -o .bandit-baseline.json`, commit the baseline, then run with `-b .bandit-baseline.json` and drop `|| true`. New medium+ findings then fail CI; baselined ones don't. |
-| **detect-secrets** | `detect-secrets scan > .secrets.baseline`, **audit** it (`detect-secrets audit .secrets.baseline`) to mark the known false positives (`.env.example` placeholders, prompt SHA hashes), commit it, then run `--baseline .secrets.baseline` and drop `|| true`. |
-| **pip-audit** | Pin dependencies with hashes into `platform_core/requirements-lock.txt` (`pip-compile --generate-hashes`), then drop `|| true` so a known-vulnerable dependency fails CI. |
+| **Bandit** | ✅ Done — `bandit -r . --severity-level medium --confidence-level medium --skip B101 -f json -o .bandit-baseline.json`, baseline committed, run with `-b .bandit-baseline.json`; new medium+ findings fail CI, baselined ones don't. |
+| **detect-secrets** | ✅ Done — `detect-secrets scan > .secrets.baseline`, **audited** to mark known false positives (`.env.example` placeholders, prompt SHA hashes), committed, run with `--baseline .secrets.baseline`. |
+| **pip-audit** | ✅ Done — dependencies hash-pinned into `platform_core/requirements-lock.txt` (`pip-compile --generate-hashes`); `\|\| true` dropped, so a known-vulnerable dependency fails CI. |
 | **Semgrep** | Pin a ruleset (e.g. `p/ci`, `p/python`), triage, then drop `|| true`. |
 | **Checkov** | Harden the reference templates, then remove `--soft-fail` to enforce on IaC misconfigurations. |
 
+The **cfn-lint** IaC gate is separately committed in `ci.yml`; a prior mis-invocation caused it to lint
+**no** templates — it is now fixed (`--ignore-checks=E3006`) and lints every CloudFormation/SAM template.
+
 ## Dependency lockfiles
 
-Add `platform_core/requirements-lock.txt` (hash-pinned) so pip-audit and the SBOM run against exact,
-reproducible versions. Until then the harness falls back to the unpinned `requirements.txt` (advisory).
+`platform_core/requirements-lock.txt` (hash-pinned) is committed, so pip-audit and the SBOM run against
+exact, reproducible versions and pip-audit is **BLOCKING** (no longer an advisory fallback to the
+unpinned `requirements.txt`).
 
 ## Where the evidence goes
 
