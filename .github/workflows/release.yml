@@ -27,7 +27,7 @@ jobs:
       - name: Unit tests
         run: PYTHONPATH=platform_core:. python -m pytest platform_core/tests governance/tests -q
       - name: cfn-lint
-        run: cfn-lint --ignore-checks E3006 infra/cloudformation/*.yaml infra/golden-path-*/template.yaml
+        run: cfn-lint --ignore-checks=E3006 infra/cloudformation/*.yaml infra/golden-path-*/template.yaml
       - name: Bandit (high severity)
         run: bandit -r platform_core governance aws-native-reference -lll
 
