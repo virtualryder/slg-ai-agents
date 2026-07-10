@@ -21,7 +21,7 @@
 | Ops runbooks | `runbooks/` (incident, DR, model-degradation, HITL queue) |
 | The code (proof it's real) | `platform_core/`, `gov_platform/`, the 8 agent folders, `infra/` |
 
-**What it is, in one breath:** 8 governed agents (Resident Services/311, Forms/IDP, Permitting, Benefits, Public Records/FOIA, Procurement, GovOps service desk, Public Safety/Health), each deployable **standalone** with its own secure AWS stack, plus an **optional** Whole-of-Government platform that coordinates them across agencies for life events. 179 automated tests pass with no API key.
+**What it is, in one breath:** 8 governed agents (Resident Services/311, Forms/IDP, Permitting, Benefits, Public Records/FOIA, Procurement, GovOps service desk, Public Safety/Health), each deployable **standalone** with its own secure AWS stack, plus an **optional** Whole-of-Government platform that coordinates them across agencies for life events. 232 automated tests pass with no API key.
 
 ---
 
@@ -30,7 +30,7 @@
 2. **Run the demos (no AWS, no API key):**
    ```bash
    pip install -e platform_core
-   PYTHONPATH=platform_core:. python -m pytest -q          # ~179 pass
+   PYTHONPATH=platform_core:. python -m pytest -q          # ~232 pass
    cd 01-resident-services-311 && EXTRACT_MODE=demo python demo/demo_run.py
    PYTHONPATH=platform_core:. python aws-native-reference/wog-platform/local_runner.py   # 5 life-events + a rollback
    ```

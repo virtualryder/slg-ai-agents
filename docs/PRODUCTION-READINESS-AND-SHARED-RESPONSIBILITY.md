@@ -9,7 +9,7 @@
 | Level | Meaning | What's here |
 |---|---|---|
 | **Documented** | Architecture & controls designed and written | All 8 agents, the WoG platform, compliance mappings, runbooks |
-| **Demonstrated** | Runs end-to-end with deterministic fixtures, no API key | 179 automated tests; agent demos; the WoG saga `local_runner` |
+| **Demonstrated** | Runs end-to-end with deterministic fixtures, no API key | 232 automated tests; agent demos; the WoG saga `local_runner` |
 | **Deployable-by-design** | IaC + container/native contracts exist; needs a customer AWS account | CloudFormation + Terraform (commercial & GovCloud); per-agent deploy runbooks |
 | **Production-ready** | Live connectors, ATO/GovRAMP, pen test, CSV, IdP integrated, DR tested | **NOT yet — this is the engagement** |
 
