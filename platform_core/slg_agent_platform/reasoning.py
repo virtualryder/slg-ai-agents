@@ -16,8 +16,11 @@ Modes (env LLM_MODE, default "deterministic"):
 """
 from __future__ import annotations
 
+import logging
 import os
 from typing import Any, Dict, List, Tuple
+
+_log = logging.getLogger("slg.reasoning")
 
 ANSWER_PROMPT = (
     "You are a resident-services assistant for a U.S. local government. Answer the resident's "
@@ -68,9 +71,18 @@ def draft_answer(question: str, sources: List[Dict[str, Any]],
 
 
 def guardrail_check(text: str, *, source: str = "OUTPUT") -> Dict[str, Any]:
-    """Apply the DEPLOYED Bedrock Guardrail to text. {action, blocked}. Skips when not configured/offline."""
+    """Apply the DEPLOYED Bedrock Guardrail to text. Returns {action, blocked}.
+
+    When no guardrail is configured (offline/demo, ``BEDROCK_GUARDRAIL_ID`` unset) the
+    check legitimately SKIPS. But when a guardrail IS configured and the call itself
+    fails (throttle / IAM / infra), the check FAILS CLOSED by default: it returns
+    ``blocked=True`` and emits a ``guardrail_failclosed`` security event for alarming,
+    rather than silently letting un-screened output through. Set
+    ``GUARDRAIL_FAIL_CLOSED=0`` to revert to skip-and-allow (non-protected paths only).
+    """
     gid = os.getenv("BEDROCK_GUARDRAIL_ID")
     if not gid or not text:
+        # Not configured (or empty) — genuinely nothing to screen. Not a failure.
         return {"action": "SKIPPED", "blocked": False}
     try:
         import boto3
@@ -83,5 +95,15 @@ def guardrail_check(text: str, *, source: str = "OUTPUT") -> Dict[str, Any]:
         )
         action = resp.get("action", "NONE")
         return {"action": action, "blocked": action == "GUARDRAIL_INTERVENED"}
-    except Exception:
+    except Exception as exc:  # guardrail configured but the call failed
+        fail_closed = os.getenv("GUARDRAIL_FAIL_CLOSED", "1").strip().lower() not in ("0", "false", "no")
+        # Structured, greppable event so a CloudWatch metric filter + alarm can page on it.
+        _log.error(
+            "guardrail_failclosed: configured output guardrail unavailable; %s",
+            "blocking (fail-closed)" if fail_closed else "SKIPPING (fail-open, opted out)",
+            extra={"security_event": "guardrail_failclosed",
+                   "error": type(exc).__name__, "source": source, "blocked": fail_closed},
+        )
+        if fail_closed:
+            return {"action": "ERROR", "blocked": True, "fail_closed": True}
         return {"action": "SKIPPED", "blocked": False}

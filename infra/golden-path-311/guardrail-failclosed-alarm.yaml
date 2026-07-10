@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  Detection for the fail-closed output guardrail. A CloudWatch Logs metric filter
+  counts the `guardrail_failclosed` security event emitted by
+  slg_agent_platform.reasoning.guardrail_check when a CONFIGURED Bedrock Guardrail
+  errors (throttle/IAM/infra) and the response is blocked fail-closed. An alarm
+  notifies an SNS topic so an operator is paged — a blocked-but-alarmed guardrail
+  failure must never pass silently. Point LogGroupName at the workflow/check
+  Lambda's log group (e.g. /aws/lambda/<check-fn>).
+
+Parameters:
+  LogGroupName:
+    Type: String
+    Description: CloudWatch Logs group of the Lambda that runs guardrail_check (the check/draft step).
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, test, prod]
+  AlarmEmail:
+    Type: String
+    Default: ""
+    Description: Optional email to subscribe to the alarm SNS topic. Leave empty to wire subscribers later.
+  EvaluationPeriodSeconds:
+    Type: Number
+    Default: 300
+    MinValue: 60
+
+Conditions:
+  HasEmail: !Not [!Equals [!Ref AlarmEmail, ""]]
+
+Resources:
+  AlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub "slg-${Environment}-guardrail-failclosed"
+
+  AlarmEmailSubscription:
+    Type: AWS::SNS::Subscription
+    Condition: HasEmail
+    Properties:
+      TopicArn: !Ref AlarmTopic
+      Protocol: email
+      Endpoint: !Ref AlarmEmail
+
+  FailClosedMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref LogGroupName
+      FilterPattern: '{ $.security_event = "guardrail_failclosed" }'
+      MetricTransformations:
+        - MetricNamespace: !Sub "SLG/${Environment}/Guardrail"
+          MetricName: GuardrailFailClosed
+          MetricValue: "1"
+          DefaultValue: 0
+
+  FailClosedAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "slg-${Environment}-guardrail-failclosed"
+      AlarmDescription: >-
+        A configured Bedrock output guardrail failed and the response was blocked fail-closed.
+        Investigate throttling/IAM/endpoint health; screened output is being denied until resolved.
+      Namespace: !Sub "SLG/${Environment}/Guardrail"
+      MetricName: GuardrailFailClosed
+      Statistic: Sum
+      Period: !Ref EvaluationPeriodSeconds
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlarmTopic]
+      OKActions: [!Ref AlarmTopic]
+
+Outputs:
+  AlarmTopicArn:
+    Value: !Ref AlarmTopic
+  AlarmName:
+    Value: !Ref FailClosedAlarm

@@ -17,17 +17,17 @@ A release records both. A CISO reviews AGP once; each release shows the implemen
 |---|---|---|
 | **Test report** | The offline suite passes (no API key, no AWS) | `pytest platform_core/tests governance/tests -q` |
 | **SAST (bandit)** | No high-severity code security findings | `bandit -r platform_core governance -ll` |
-| **Dependency audit (pip-audit)** | No known-vulnerable dependencies (advisory until pinned with hashes) | `pip-audit` |
-| **IaC lint/scan (cfn-lint, checkov)** | CloudFormation is valid; no high IaC misconfigurations | `cfn-lint`, `checkov -d infra` |
+| **Dependency audit (pip-audit)** | No known-vulnerable dependencies — deps are hash-pinned in `platform_core/requirements-lock.txt` and pip-audit is **BLOCKING** in CI | `pip-audit` |
+| **IaC lint/scan (cfn-lint, checkov)** | Every CloudFormation/SAM template is valid; no high IaC misconfigurations (the cfn-lint gate now lints all templates via `--ignore-checks=E3006`; a prior mis-invocation linted none) | `cfn-lint`, `checkov -d infra` |
 | **SBOM (CycloneDX)** | A complete software bill of materials for supply-chain review | `cyclonedx-py` |
 | **Clean-account deploy report** | The golden path deployed, ran, and tore down in a clean account | `evidence/CLEAN-ACCOUNT-ACCEPTANCE.md` |
 | **Negative-demo result** | The platform refuses the 10 deny cases | `demo/negative_demo.py` (hero) |
 | **Known limitations** | An honest scope statement | hero `ASSURANCE-PACKET.md` §Known limitations, `NOT-CLAIMS.md` |
 | **Upgrade notes** | What changed and any migration steps | `CHANGELOG.md` (+ AGP migration notes) |
 
-The CI **supply-chain** job already runs gitleaks (secret scan), bandit, pip-audit, checkov, Terraform
-validate, CycloneDX SBOM, and Trivy on every push — a release packet is the pinned, collected snapshot
-of those for a version.
+The CI **supply-chain** job already runs gitleaks (secret scan), bandit, pip-audit (blocking, against the
+hash-pinned lockfile), checkov, Terraform validate, CycloneDX SBOM, and Trivy on every push — a release
+packet is the pinned, collected snapshot of those for a version.
 
 ## How to assemble one
 

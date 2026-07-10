@@ -26,8 +26,8 @@
 | **SC-28** | Protection of Information at Rest | KMS SSE on DynamoDB + S3 | Repo | `data.yaml` | Implemented |
 | **SI-4** | System Monitoring | CloudTrail · GuardDuty · Security Hub · Config · X-Ray | Customer | `THREAT-MODEL.md` §2 | Configurable |
 | **SI-10** | Information Input Validation | Bedrock Guardrails (input); JWT/token/approval validation; request-hash binding | Repo | `security.yaml`, `tokens.py`, `approvals.py` | Implemented |
-| **SI-15** | Information Output Filtering | Guardrails (output prompt-attack HIGH); grounded/cited outputs; fail-closed masking | Repo | `security.yaml`, `pii.py` | Implemented |
-| **RA-5** | Vulnerability Monitoring | `bandit`/`semgrep`/`pip-audit`/`checkov` in CI | Repo | CI (P4), `CONTRIBUTING.md` | Configurable (P4) |
+| **SI-15** | Information Output Filtering | Guardrails (output prompt-attack HIGH), **fail-closed** — a configured output guardrail that errors blocks + emits a `guardrail_failclosed` security event; grounded/cited outputs; fail-closed masking | Repo | `security.yaml`, `pii.py`, `infra/golden-path-311/guardrail-failclosed-alarm.yaml` | Implemented |
+| **RA-5** | Vulnerability Monitoring | `bandit`/`pip-audit`/`checkov`/`semgrep` in CI; `pip-audit` is **BLOCKING** against the hash-pinned lockfile | Repo | CI, `CONTRIBUTING.md` | Implemented (pip-audit/bandit blocking) |
 | **IR-4/6/8** | Incident Handling / Reporting / Plan | IR plan + regulatory notification matrix | Customer | `INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md` | Configurable |
 | **CA-7** | Continuous Monitoring | Security Hub + Config + audit analytics | Customer | `THREAT-MODEL.md` | Customer |
 | **PT / AI-specific** | AI risk management | Grounding, prompt registry, evals, red team, fairness, HITL gates (NIST AI RMF) | Repo | `governance/` | Implemented |

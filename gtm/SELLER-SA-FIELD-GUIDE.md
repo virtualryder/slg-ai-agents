@@ -21,7 +21,7 @@
 | Ops runbooks | `runbooks/` (incident, DR, model-degradation, HITL queue) |
 | The code (proof it's real) | `platform_core/`, `gov_platform/`, the 8 agent folders, `infra/` |
 
-**What it is, in one breath:** 8 governed agents (Resident Services/311, Forms/IDP, Permitting, Benefits, Public Records/FOIA, Procurement, GovOps service desk, Public Safety/Health), each deployable **standalone** with its own secure AWS stack, plus an **optional** Whole-of-Government platform that coordinates them across agencies for life events. 232 automated tests pass with no API key.
+**What it is, in one breath:** 8 governed agents (Resident Services/311, Forms/IDP, Permitting, Benefits, Public Records/FOIA, Procurement, GovOps service desk, Public Safety/Health), each deployable **standalone** with its own secure AWS stack, plus an **optional** Whole-of-Government platform that coordinates them across agencies for life events. 236 automated tests pass with no API key.
 
 ---
 
