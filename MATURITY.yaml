@@ -9,10 +9,10 @@ positioning: reference-accelerator
 updated: 2026-07-09
 
 tests:
-  offline_total: 179                          # matches the two most-recent docs; run make test to re-verify
+  offline_total: 232                          # collected-test count; verified by tools/check_maturity.py
   reproduce: "run per-suite pytest (platform_core/tests, governance/tests, [0-9][0-9]-*/tests); see SUITE-STATUS.md"
-  last_verified: 2026-07-09
-  note: "Agent suites run in isolated processes (reused package names). 179 is the current figure asserted by the most-recent docs; re-verify with a full-env per-suite run."
+  last_verified: 2026-07-10
+  note: "Agent suites run in isolated processes (reused package names). offline_total is the pytest --collect-only count for the reproduce paths; run `python tools/check_maturity.py` to re-verify (or --update to regenerate)."
 
 clean_account_deploy:
   status: all-golden-paths-validated
