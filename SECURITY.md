@@ -25,7 +25,7 @@ Defense in depth, fail-closed by default:
 4. **Scoped, short-lived tokens** — per-call, request-bound, single-use (`mcp_gateway/tokens.py`).
 5. **Append-only audit + WORM** — conditional writes + IAM Update/Delete deny + S3 Object Lock (`mcp_gateway/audit_sinks.py`, `infra/cloudformation/data.yaml`).
 6. **Fail-closed PII/CJI/FTI masking** (`pii.py`); **Bedrock Guardrails** on input and output.
-7. **Private-connectivity inference** — Bedrock reached via VPC interface endpoint (AWS PrivateLink); no constituent-data egress to external AI APIs — traffic to the regional Bedrock service stays on AWS private networking.
+7. **Private-connectivity inference** — private connectivity to regional Amazon Bedrock through AWS PrivateLink where configured; constituent data (PII/CJI) is masked before model invocation; no egress to external non-AWS AI APIs. Endpoint policies, logging, and compliance controls remain customer-owned (the default interface-endpoint policy allows full access and must be customized).
 
 Full threat model: `docs/THREAT-MODEL.md`. Control-to-NIST mapping: `docs/NIST-800-53-CONTROL-MATRIX.md`. OWASP LLM / MITRE ATLAS mapping: `docs/OWASP-LLM-ATLAS-MAPPING.md`. Incident response & key management: `docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md`.
 

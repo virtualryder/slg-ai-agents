@@ -52,6 +52,10 @@ Parameters:
     Type: String
     Default: COMPLIANCE
     AllowedValues: [COMPLIANCE, GOVERNANCE]
+  BreakGlassRoleArn:
+    Type: String
+    Default: ""
+    Description: "Optional ARN of the single break-glass role permitted to bypass GOVERNANCE-mode retention (MFA + second-approver + time-boxed + alarmed). Empty = no bypass permitted. See RETENTION-MODES.md."
 
 Globals:
   Function:
@@ -724,6 +728,17 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
+          # Governance-bypass control: deny s3:BypassGovernanceRetention + locked-version deletion
+          # for everyone except an optional break-glass role. Essential in GOVERNANCE mode; harmless
+          # (belt-and-suspenders) in COMPLIANCE mode. Log attempts via CloudTrail S3 data events.
+          - Sid: DenyGovernanceRetentionBypassExceptBreakGlass
+            Effect: Deny
+            Principal: "*"
+            Action: [s3:BypassGovernanceRetention, s3:DeleteObjectVersion]
+            Resource: !Sub "${WormBucket.Arn}/*"
+            Condition:
+              StringNotEquals:
+                aws:PrincipalArn: !Ref BreakGlassRoleArn
           - Sid: DenyInsecureTransport
             Effect: Deny
             Principal: "*"
