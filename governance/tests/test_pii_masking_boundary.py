@@ -36,3 +36,20 @@ def test_audit_boundary_is_masked():
 def test_masker_idempotent():
     once = mask(PII)
     assert mask(once) == once
+
+
+def test_real_data_mode_requires_ner_engine(monkeypatch):
+    """ALLOW_REAL_DATA without MASK_ENGINE=ml must FAIL CLOSED (names would leak)."""
+    import pytest
+    from slg_agent_platform.pii import mask, RealDataMaskingError
+    monkeypatch.setenv("ALLOW_REAL_DATA", "1")
+    monkeypatch.delenv("MASK_ENGINE", raising=False)
+    with pytest.raises(RealDataMaskingError):
+        mask("Applicant John Smith, SSN 123-45-6789")
+
+
+def test_demo_mode_regex_only_still_masks_structured(monkeypatch):
+    from slg_agent_platform.pii import mask
+    monkeypatch.delenv("ALLOW_REAL_DATA", raising=False)
+    monkeypatch.delenv("MASK_ENGINE", raising=False)
+    assert "123-45-6789" not in mask("SSN 123-45-6789")

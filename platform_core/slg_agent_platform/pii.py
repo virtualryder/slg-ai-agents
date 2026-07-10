@@ -18,8 +18,12 @@ compliance matrix:
     * FEIN / EIN (XX-XXXXXXX) for business registration & procurement
 
 Design notes:
-  * Deterministic and dependency-free (regex + Luhn). An optional ML NER pass
-    (Amazon Comprehend / Presidio) can be layered behind MASK_ENGINE=ml.
+  * Deterministic and dependency-free (regex + Luhn) for STRUCTURED identifiers.
+    It does NOT recognize free-text PERSONAL NAMES; an ML NER pass (Amazon
+    Comprehend / Presidio) behind MASK_ENGINE=ml is required for those. Real
+    protected-record processing must set ALLOW_REAL_DATA=1, which makes the NER
+    engine MANDATORY (mask() raises RealDataMaskingError if MASK_ENGINE!=ml)
+    rather than silently degrading to regex-only. Demo/default is regex-only.
   * Conservative: over-masking a log line is acceptable; leaking an SSN, a DL
     number, or CJI is not.
   * mask() is idempotent and safe to call on already-masked text.
@@ -36,6 +40,23 @@ import re
 from typing import Optional
 
 _log = logging.getLogger("slg.pii")
+
+_TRUTHY = {"1", "true", "yes", "on"}
+
+
+class RealDataMaskingError(RuntimeError):
+    """
+    Raised when real-data mode (ALLOW_REAL_DATA) is enabled but the mandatory NER
+    engine is not selected. The regex pass masks STRUCTURED identifiers but cannot
+    recognize free-text PERSONAL NAMES; masking those requires MASK_ENGINE=ml.
+    Real protected-record text must not fall back to regex-only, which would leave
+    names in the clear — so the masker FAILS CLOSED here instead.
+    """
+
+
+def _real_data_mode() -> bool:
+    return os.getenv("ALLOW_REAL_DATA", "").strip().lower() in _TRUTHY
+
 
 # ── Identifier patterns (order matters: most specific first) ──────────────────
 _SSN_RE = re.compile(r"\b\d{3}-\d{2}-\d{4}\b")
@@ -98,6 +119,14 @@ def mask(text: Optional[str], fail_closed: Optional[bool] = None) -> str:
     """
     if not text:
         return ""
+    # Real-data mode: the regex pass does not mask free-text personal names.
+    # Require an NER engine and fail closed if absent rather than emit regex-only
+    # output that could leak a name.
+    if _real_data_mode() and os.getenv("MASK_ENGINE", "").strip().lower() != "ml":
+        raise RealDataMaskingError(
+            "ALLOW_REAL_DATA is set but MASK_ENGINE!=ml; refusing to mask real "
+            "protected-record text with the regex-only pass (free-text names would leak)."
+        )
     out = str(text)
     out = _SSN_RE.sub("[SSN-REDACTED]", out)
     out = _EIN_RE.sub("[EIN-REDACTED]", out)
