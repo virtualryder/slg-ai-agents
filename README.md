@@ -51,7 +51,7 @@ All 8 golden paths were deployed to a live AWS account (`us-east-1`), verified a
 
 **Two real bugs found and fixed (now in the repo)**
 1. **Bedrock Guardrail** rejected `PROMPT_ATTACK` with `OutputStrength: HIGH` — that filter applies to input only, so output strength must be `NONE`. Corrected in all 16 golden-path templates and `infra/cloudformation/security.yaml`.
-2. **Lambda path resolution:** the workflow Lambdas computed `Path(__file__).resolve().parents[3]` to find sibling repo dirs, which throws `IndexError` in Lambda's flat `/var/task` layout (those modules are provided by the shared layer there). Guarded in all per-agent `_shared.py` / `check.py`; the offline suite (232 tests) still passes.
+2. **Lambda path resolution:** the workflow Lambdas computed `Path(__file__).resolve().parents[3]` to find sibling repo dirs, which throws `IndexError` in Lambda's flat `/var/task` layout (those modules are provided by the shared layer there). Guarded in all per-agent `_shared.py` / `check.py`; the offline suite (236 tests) still passes.
 
 **Deploy prerequisites / gotcha**
 - The `SharedLayer` uses a **Makefile build** (`sam build` needs `make` on PATH). On a host without `make` (e.g. stock Windows), either install `make`, or pre-assemble the dependency-free layer (`platform_core/slg_agent_platform` + `governance` + the agent's `core.py` → `layer/python/`) and deploy a template variant that drops the Makefile metadata. A future cleanup is to switch the layer to a `python3.12` build method to remove the `make` dependency.
@@ -155,7 +155,7 @@ Every agent tool call passes through an **authenticated gateway**; there is no u
 - **Scoped outbound authorization.** The gateway issues **short-lived, least-privilege** downstream credentials (IAM / OAuth / token-exchange / on-behalf-of), so "the agent acts only within the human's authority" holds end to end.
 - **Fail-closed masking.** PII / CJI / FTI data is masked before any model or audit write; on masker failure it **redacts rather than leaks**.
 - **Append-only audit + revocation.** Every decision (allow / deny / approval) is written to an **append-only** sink (IAM denies `UpdateItem`/`DeleteItem`) with **WORM** evidence; tools can be revoked / deny-listed at the registry.
-- **Failure modes are fail-closed.** Missing/invalid token → **401**; unregistered tool → **deny**; missing approval → **deny**; masker or audit-write failure → **deny, not proceed**.
+- **Failure modes are fail-closed.** Missing/invalid token → **401**; unregistered tool → **deny**; missing approval → **deny**; masker or audit-write failure → **deny, not proceed**; a **configured output guardrail that errors** (throttle/IAM/infra) → **block + `guardrail_failclosed` security event** (default; opt out only on non-protected paths via `GUARDRAIL_FAIL_CLOSED=0`).
 
 In deployment this is **Amazon Bedrock AgentCore Gateway** (managed) or the **portable API-Gateway-+-Cognito-JWT** path; the portable path is the supported default and the one live-validated (the Aegis platform repo, Run 10; the same portable pattern deploys here).
 

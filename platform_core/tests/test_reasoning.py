@@ -46,3 +46,31 @@ def test_guardrail_blocks_when_intervened(monkeypatch):
     monkeypatch.setattr(boto3, "client", lambda *a, **k: _FakeClient())
     res = reasoning.guardrail_check("SSN 123-45-6789")
     assert res["blocked"] is True and res["action"] == "GUARDRAIL_INTERVENED"
+
+
+def test_guardrail_fail_closed_on_error(monkeypatch):
+    """Configured guardrail + call failure must FAIL CLOSED (blocked=True) by default."""
+    monkeypatch.setenv("BEDROCK_GUARDRAIL_ID", "gr-err")
+    monkeypatch.delenv("GUARDRAIL_FAIL_CLOSED", raising=False)
+
+    def _boom(*a, **k):
+        raise RuntimeError("throttled")
+
+    import boto3
+    monkeypatch.setattr(boto3, "client", _boom)
+    res = reasoning.guardrail_check("some output")
+    assert res["blocked"] is True and res["action"] == "ERROR"
+
+
+def test_guardrail_fail_open_optout(monkeypatch):
+    """Explicit GUARDRAIL_FAIL_CLOSED=0 reverts to skip-and-allow on error."""
+    monkeypatch.setenv("BEDROCK_GUARDRAIL_ID", "gr-err")
+    monkeypatch.setenv("GUARDRAIL_FAIL_CLOSED", "0")
+
+    def _boom(*a, **k):
+        raise RuntimeError("throttled")
+
+    import boto3
+    monkeypatch.setattr(boto3, "client", _boom)
+    res = reasoning.guardrail_check("some output")
+    assert res["blocked"] is False and res["action"] == "SKIPPED"
