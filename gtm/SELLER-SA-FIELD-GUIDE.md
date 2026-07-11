@@ -30,7 +30,7 @@
 2. **Run the demos (no AWS, no API key):**
    ```bash
    pip install -e platform_core
-   PYTHONPATH=platform_core:. python -m pytest -q          # ~232 pass
+   PYTHONPATH=platform_core:. python -m pytest -q          # ~236 pass
    cd 01-resident-services-311 && EXTRACT_MODE=demo python demo/demo_run.py
    PYTHONPATH=platform_core:. python aws-native-reference/wog-platform/local_runner.py   # 5 life-events + a rollback
    ```
