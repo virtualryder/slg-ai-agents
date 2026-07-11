@@ -2,7 +2,7 @@
   "errors": [],
   "generated_at": "2026-07-10T04:00:44Z",
   "metrics": {
-    ".\\01-resident-services-311\\agent\\__init__.py": {
+    "./01-resident-services-311/agent/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -15,7 +15,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\agent\\core.py": {
+    "./01-resident-services-311/agent/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -28,7 +28,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\agent\\graph.py": {
+    "./01-resident-services-311/agent/graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -41,7 +41,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\agent\\nodes.py": {
+    "./01-resident-services-311/agent/nodes.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -54,7 +54,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\agent\\persistence.py": {
+    "./01-resident-services-311/agent/persistence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -67,7 +67,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\agent\\prompts.py": {
+    "./01-resident-services-311/agent/prompts.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -80,7 +80,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\agent\\serve.py": {
+    "./01-resident-services-311/agent/serve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -93,7 +93,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\agent\\state.py": {
+    "./01-resident-services-311/agent/state.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -106,7 +106,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\app.py": {
+    "./01-resident-services-311/app.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -119,7 +119,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\data\\__init__.py": {
+    "./01-resident-services-311/data/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -132,7 +132,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\data\\fixtures\\__init__.py": {
+    "./01-resident-services-311/data/fixtures/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -145,7 +145,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\demo\\__init__.py": {
+    "./01-resident-services-311/demo/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -158,7 +158,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\demo\\demo_nyc311.py": {
+    "./01-resident-services-311/demo/demo_nyc311.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -171,7 +171,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\demo\\demo_run.py": {
+    "./01-resident-services-311/demo/demo_run.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -184,7 +184,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\demo\\negative_demo.py": {
+    "./01-resident-services-311/demo/negative_demo.py": {
       "CONFIDENCE.HIGH": 1,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -197,7 +197,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\tests\\test_graph.py": {
+    "./01-resident-services-311/tests/test_graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -210,7 +210,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\tests\\test_nodes.py": {
+    "./01-resident-services-311/tests/test_nodes.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -223,7 +223,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\tests\\test_nyc311_connector.py": {
+    "./01-resident-services-311/tests/test_nyc311_connector.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -236,7 +236,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\tests\\test_tools.py": {
+    "./01-resident-services-311/tests/test_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -249,7 +249,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\tools\\__init__.py": {
+    "./01-resident-services-311/tools/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -262,7 +262,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\01-resident-services-311\\tools\\gateway_tools.py": {
+    "./01-resident-services-311/tools/gateway_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -275,7 +275,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\agent\\__init__.py": {
+    "./02-forms-idp/agent/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -288,7 +288,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\agent\\core.py": {
+    "./02-forms-idp/agent/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -301,7 +301,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\agent\\graph.py": {
+    "./02-forms-idp/agent/graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -314,7 +314,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\agent\\nodes.py": {
+    "./02-forms-idp/agent/nodes.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -327,7 +327,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\agent\\persistence.py": {
+    "./02-forms-idp/agent/persistence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -340,7 +340,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\agent\\prompts.py": {
+    "./02-forms-idp/agent/prompts.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -353,7 +353,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\agent\\serve.py": {
+    "./02-forms-idp/agent/serve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -366,7 +366,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\agent\\state.py": {
+    "./02-forms-idp/agent/state.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -379,7 +379,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\app.py": {
+    "./02-forms-idp/app.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -392,7 +392,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\data\\__init__.py": {
+    "./02-forms-idp/data/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -405,7 +405,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\data\\fixtures\\__init__.py": {
+    "./02-forms-idp/data/fixtures/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -418,7 +418,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\demo\\__init__.py": {
+    "./02-forms-idp/demo/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -431,7 +431,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\demo\\demo_run.py": {
+    "./02-forms-idp/demo/demo_run.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -444,7 +444,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\tests\\test_core.py": {
+    "./02-forms-idp/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -457,7 +457,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\tests\\test_graph.py": {
+    "./02-forms-idp/tests/test_graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -470,7 +470,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\tests\\test_tools.py": {
+    "./02-forms-idp/tests/test_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -483,7 +483,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\tools\\__init__.py": {
+    "./02-forms-idp/tools/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -496,7 +496,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\02-forms-idp\\tools\\gateway_tools.py": {
+    "./02-forms-idp/tools/gateway_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -509,7 +509,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\agent\\__init__.py": {
+    "./03-permitting-licensing/agent/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -522,7 +522,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\agent\\core.py": {
+    "./03-permitting-licensing/agent/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -535,7 +535,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\agent\\graph.py": {
+    "./03-permitting-licensing/agent/graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -548,7 +548,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\agent\\nodes.py": {
+    "./03-permitting-licensing/agent/nodes.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -561,7 +561,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\agent\\persistence.py": {
+    "./03-permitting-licensing/agent/persistence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -574,7 +574,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\agent\\prompts.py": {
+    "./03-permitting-licensing/agent/prompts.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -587,7 +587,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\agent\\serve.py": {
+    "./03-permitting-licensing/agent/serve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -600,7 +600,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\agent\\state.py": {
+    "./03-permitting-licensing/agent/state.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -613,7 +613,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\app.py": {
+    "./03-permitting-licensing/app.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -626,7 +626,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\data\\__init__.py": {
+    "./03-permitting-licensing/data/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -639,7 +639,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\data\\fixtures\\__init__.py": {
+    "./03-permitting-licensing/data/fixtures/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -652,7 +652,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\demo\\__init__.py": {
+    "./03-permitting-licensing/demo/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -665,7 +665,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\demo\\demo_run.py": {
+    "./03-permitting-licensing/demo/demo_run.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -678,7 +678,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\tests\\test_core.py": {
+    "./03-permitting-licensing/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -691,7 +691,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\tests\\test_graph.py": {
+    "./03-permitting-licensing/tests/test_graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -704,7 +704,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\tests\\test_tools.py": {
+    "./03-permitting-licensing/tests/test_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -717,7 +717,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\tools\\__init__.py": {
+    "./03-permitting-licensing/tools/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -730,7 +730,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\03-permitting-licensing\\tools\\gateway_tools.py": {
+    "./03-permitting-licensing/tools/gateway_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -743,7 +743,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\agent\\__init__.py": {
+    "./04-benefits-caseworker/agent/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -756,7 +756,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\agent\\core.py": {
+    "./04-benefits-caseworker/agent/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -769,7 +769,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\agent\\graph.py": {
+    "./04-benefits-caseworker/agent/graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -782,7 +782,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\agent\\nodes.py": {
+    "./04-benefits-caseworker/agent/nodes.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -795,7 +795,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\agent\\persistence.py": {
+    "./04-benefits-caseworker/agent/persistence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -808,7 +808,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\agent\\prompts.py": {
+    "./04-benefits-caseworker/agent/prompts.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -821,7 +821,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\agent\\serve.py": {
+    "./04-benefits-caseworker/agent/serve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -834,7 +834,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\agent\\state.py": {
+    "./04-benefits-caseworker/agent/state.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -847,7 +847,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\app.py": {
+    "./04-benefits-caseworker/app.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -860,7 +860,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\data\\__init__.py": {
+    "./04-benefits-caseworker/data/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -873,7 +873,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\data\\fixtures\\__init__.py": {
+    "./04-benefits-caseworker/data/fixtures/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -886,7 +886,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\demo\\__init__.py": {
+    "./04-benefits-caseworker/demo/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -899,7 +899,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\demo\\demo_run.py": {
+    "./04-benefits-caseworker/demo/demo_run.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -912,7 +912,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\tests\\test_core.py": {
+    "./04-benefits-caseworker/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -925,7 +925,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\tests\\test_graph.py": {
+    "./04-benefits-caseworker/tests/test_graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -938,7 +938,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\tests\\test_tools.py": {
+    "./04-benefits-caseworker/tests/test_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -951,7 +951,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\tools\\__init__.py": {
+    "./04-benefits-caseworker/tools/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -964,7 +964,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\04-benefits-caseworker\\tools\\gateway_tools.py": {
+    "./04-benefits-caseworker/tools/gateway_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -977,7 +977,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\agent\\__init__.py": {
+    "./05-public-records-foia/agent/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -990,7 +990,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\agent\\core.py": {
+    "./05-public-records-foia/agent/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1003,7 +1003,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\agent\\graph.py": {
+    "./05-public-records-foia/agent/graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1016,7 +1016,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\agent\\nodes.py": {
+    "./05-public-records-foia/agent/nodes.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1029,7 +1029,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\agent\\persistence.py": {
+    "./05-public-records-foia/agent/persistence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1042,7 +1042,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\agent\\prompts.py": {
+    "./05-public-records-foia/agent/prompts.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1055,7 +1055,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\agent\\serve.py": {
+    "./05-public-records-foia/agent/serve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -1068,7 +1068,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\agent\\state.py": {
+    "./05-public-records-foia/agent/state.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1081,7 +1081,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\app.py": {
+    "./05-public-records-foia/app.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1094,7 +1094,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\data\\__init__.py": {
+    "./05-public-records-foia/data/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1107,7 +1107,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\data\\fixtures\\__init__.py": {
+    "./05-public-records-foia/data/fixtures/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1120,7 +1120,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\demo\\__init__.py": {
+    "./05-public-records-foia/demo/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1133,7 +1133,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\demo\\demo_run.py": {
+    "./05-public-records-foia/demo/demo_run.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1146,7 +1146,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\tests\\test_core.py": {
+    "./05-public-records-foia/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1159,7 +1159,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\tests\\test_graph.py": {
+    "./05-public-records-foia/tests/test_graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1172,7 +1172,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\tests\\test_tools.py": {
+    "./05-public-records-foia/tests/test_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1185,7 +1185,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\tools\\__init__.py": {
+    "./05-public-records-foia/tools/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1198,7 +1198,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\05-public-records-foia\\tools\\gateway_tools.py": {
+    "./05-public-records-foia/tools/gateway_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1211,7 +1211,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\agent\\__init__.py": {
+    "./06-procurement-grants/agent/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1224,7 +1224,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\agent\\core.py": {
+    "./06-procurement-grants/agent/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1237,7 +1237,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\agent\\graph.py": {
+    "./06-procurement-grants/agent/graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1250,7 +1250,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\agent\\nodes.py": {
+    "./06-procurement-grants/agent/nodes.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1263,7 +1263,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\agent\\persistence.py": {
+    "./06-procurement-grants/agent/persistence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1276,7 +1276,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\agent\\prompts.py": {
+    "./06-procurement-grants/agent/prompts.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1289,7 +1289,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\agent\\serve.py": {
+    "./06-procurement-grants/agent/serve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -1302,7 +1302,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\agent\\state.py": {
+    "./06-procurement-grants/agent/state.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1315,7 +1315,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\app.py": {
+    "./06-procurement-grants/app.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1328,7 +1328,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\data\\__init__.py": {
+    "./06-procurement-grants/data/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1341,7 +1341,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\data\\fixtures\\__init__.py": {
+    "./06-procurement-grants/data/fixtures/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1354,7 +1354,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\demo\\__init__.py": {
+    "./06-procurement-grants/demo/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1367,7 +1367,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\demo\\demo_run.py": {
+    "./06-procurement-grants/demo/demo_run.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1380,7 +1380,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\tests\\test_core.py": {
+    "./06-procurement-grants/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1393,7 +1393,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\tests\\test_graph.py": {
+    "./06-procurement-grants/tests/test_graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1406,7 +1406,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\tests\\test_tools.py": {
+    "./06-procurement-grants/tests/test_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1419,7 +1419,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\tools\\__init__.py": {
+    "./06-procurement-grants/tools/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1432,7 +1432,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\06-procurement-grants\\tools\\gateway_tools.py": {
+    "./06-procurement-grants/tools/gateway_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1445,7 +1445,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\agent\\__init__.py": {
+    "./07-govops-service-desk/agent/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1458,7 +1458,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\agent\\core.py": {
+    "./07-govops-service-desk/agent/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1471,7 +1471,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\agent\\graph.py": {
+    "./07-govops-service-desk/agent/graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1484,7 +1484,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\agent\\nodes.py": {
+    "./07-govops-service-desk/agent/nodes.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1497,7 +1497,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\agent\\persistence.py": {
+    "./07-govops-service-desk/agent/persistence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1510,7 +1510,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\agent\\prompts.py": {
+    "./07-govops-service-desk/agent/prompts.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1523,7 +1523,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\agent\\serve.py": {
+    "./07-govops-service-desk/agent/serve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -1536,7 +1536,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\agent\\state.py": {
+    "./07-govops-service-desk/agent/state.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1549,7 +1549,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\app.py": {
+    "./07-govops-service-desk/app.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1562,7 +1562,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\data\\__init__.py": {
+    "./07-govops-service-desk/data/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1575,7 +1575,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\data\\fixtures\\__init__.py": {
+    "./07-govops-service-desk/data/fixtures/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1588,7 +1588,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\demo\\__init__.py": {
+    "./07-govops-service-desk/demo/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1601,7 +1601,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\demo\\demo_run.py": {
+    "./07-govops-service-desk/demo/demo_run.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1614,7 +1614,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\tests\\test_core.py": {
+    "./07-govops-service-desk/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1627,7 +1627,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\tests\\test_graph.py": {
+    "./07-govops-service-desk/tests/test_graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1640,7 +1640,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\tests\\test_tools.py": {
+    "./07-govops-service-desk/tests/test_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1653,7 +1653,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\tools\\__init__.py": {
+    "./07-govops-service-desk/tools/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1666,7 +1666,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\07-govops-service-desk\\tools\\gateway_tools.py": {
+    "./07-govops-service-desk/tools/gateway_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1679,7 +1679,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\agent\\__init__.py": {
+    "./08-public-safety-health/agent/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1692,7 +1692,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\agent\\core.py": {
+    "./08-public-safety-health/agent/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1705,7 +1705,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\agent\\graph.py": {
+    "./08-public-safety-health/agent/graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1718,7 +1718,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\agent\\nodes.py": {
+    "./08-public-safety-health/agent/nodes.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1731,7 +1731,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\agent\\persistence.py": {
+    "./08-public-safety-health/agent/persistence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1744,7 +1744,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\agent\\prompts.py": {
+    "./08-public-safety-health/agent/prompts.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1757,7 +1757,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\agent\\serve.py": {
+    "./08-public-safety-health/agent/serve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -1770,7 +1770,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\agent\\state.py": {
+    "./08-public-safety-health/agent/state.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1783,7 +1783,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\app.py": {
+    "./08-public-safety-health/app.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1796,7 +1796,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\data\\__init__.py": {
+    "./08-public-safety-health/data/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1809,7 +1809,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\data\\fixtures\\__init__.py": {
+    "./08-public-safety-health/data/fixtures/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1822,7 +1822,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\demo\\__init__.py": {
+    "./08-public-safety-health/demo/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1835,7 +1835,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\demo\\demo_run.py": {
+    "./08-public-safety-health/demo/demo_run.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1848,7 +1848,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\tests\\test_core.py": {
+    "./08-public-safety-health/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1861,7 +1861,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\tests\\test_graph.py": {
+    "./08-public-safety-health/tests/test_graph.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1874,7 +1874,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\tests\\test_tools.py": {
+    "./08-public-safety-health/tests/test_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1887,7 +1887,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\tools\\__init__.py": {
+    "./08-public-safety-health/tools/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1900,7 +1900,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\08-public-safety-health\\tools\\gateway_tools.py": {
+    "./08-public-safety-health/tools/gateway_tools.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1913,7 +1913,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\core.py": {
+    "./aws-native-reference/01-resident-services-311/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1926,7 +1926,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\lambdas\\__init__.py": {
+    "./aws-native-reference/01-resident-services-311/lambdas/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1939,7 +1939,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\lambdas\\_shared.py": {
+    "./aws-native-reference/01-resident-services-311/lambdas/_shared.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1952,7 +1952,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\lambdas\\check.py": {
+    "./aws-native-reference/01-resident-services-311/lambdas/check.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1965,7 +1965,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\lambdas\\classify.py": {
+    "./aws-native-reference/01-resident-services-311/lambdas/classify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1978,7 +1978,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\lambdas\\draft.py": {
+    "./aws-native-reference/01-resident-services-311/lambdas/draft.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -1991,7 +1991,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\lambdas\\finalize.py": {
+    "./aws-native-reference/01-resident-services-311/lambdas/finalize.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2004,7 +2004,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\lambdas\\hitl_notify.py": {
+    "./aws-native-reference/01-resident-services-311/lambdas/hitl_notify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2017,7 +2017,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\lambdas\\retrieve.py": {
+    "./aws-native-reference/01-resident-services-311/lambdas/retrieve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2030,7 +2030,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\tests\\test_asl.py": {
+    "./aws-native-reference/01-resident-services-311/tests/test_asl.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2043,7 +2043,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\01-resident-services-311\\tests\\test_core.py": {
+    "./aws-native-reference/01-resident-services-311/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2056,7 +2056,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\core.py": {
+    "./aws-native-reference/02-forms-idp/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2069,7 +2069,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\lambdas\\__init__.py": {
+    "./aws-native-reference/02-forms-idp/lambdas/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2082,7 +2082,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\lambdas\\_shared.py": {
+    "./aws-native-reference/02-forms-idp/lambdas/_shared.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2095,7 +2095,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\lambdas\\check.py": {
+    "./aws-native-reference/02-forms-idp/lambdas/check.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2108,7 +2108,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\lambdas\\classify.py": {
+    "./aws-native-reference/02-forms-idp/lambdas/classify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2121,7 +2121,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\lambdas\\draft.py": {
+    "./aws-native-reference/02-forms-idp/lambdas/draft.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2134,7 +2134,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\lambdas\\finalize.py": {
+    "./aws-native-reference/02-forms-idp/lambdas/finalize.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2147,7 +2147,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\lambdas\\hitl_notify.py": {
+    "./aws-native-reference/02-forms-idp/lambdas/hitl_notify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2160,7 +2160,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\lambdas\\retrieve.py": {
+    "./aws-native-reference/02-forms-idp/lambdas/retrieve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2173,7 +2173,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\tests\\test_asl.py": {
+    "./aws-native-reference/02-forms-idp/tests/test_asl.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2186,7 +2186,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\02-forms-idp\\tests\\test_core.py": {
+    "./aws-native-reference/02-forms-idp/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2199,7 +2199,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\core.py": {
+    "./aws-native-reference/03-permitting-licensing/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2212,7 +2212,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\lambdas\\__init__.py": {
+    "./aws-native-reference/03-permitting-licensing/lambdas/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2225,7 +2225,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\lambdas\\_shared.py": {
+    "./aws-native-reference/03-permitting-licensing/lambdas/_shared.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2238,7 +2238,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\lambdas\\check.py": {
+    "./aws-native-reference/03-permitting-licensing/lambdas/check.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2251,7 +2251,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\lambdas\\classify.py": {
+    "./aws-native-reference/03-permitting-licensing/lambdas/classify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2264,7 +2264,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\lambdas\\draft.py": {
+    "./aws-native-reference/03-permitting-licensing/lambdas/draft.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2277,7 +2277,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\lambdas\\finalize.py": {
+    "./aws-native-reference/03-permitting-licensing/lambdas/finalize.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2290,7 +2290,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\lambdas\\hitl_notify.py": {
+    "./aws-native-reference/03-permitting-licensing/lambdas/hitl_notify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2303,7 +2303,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\lambdas\\retrieve.py": {
+    "./aws-native-reference/03-permitting-licensing/lambdas/retrieve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2316,7 +2316,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\tests\\test_asl.py": {
+    "./aws-native-reference/03-permitting-licensing/tests/test_asl.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2329,7 +2329,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\03-permitting-licensing\\tests\\test_core.py": {
+    "./aws-native-reference/03-permitting-licensing/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2342,7 +2342,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\core.py": {
+    "./aws-native-reference/04-benefits-caseworker/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2355,7 +2355,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\lambdas\\__init__.py": {
+    "./aws-native-reference/04-benefits-caseworker/lambdas/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2368,7 +2368,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\lambdas\\_shared.py": {
+    "./aws-native-reference/04-benefits-caseworker/lambdas/_shared.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2381,7 +2381,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\lambdas\\check.py": {
+    "./aws-native-reference/04-benefits-caseworker/lambdas/check.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2394,7 +2394,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\lambdas\\classify.py": {
+    "./aws-native-reference/04-benefits-caseworker/lambdas/classify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2407,7 +2407,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\lambdas\\draft.py": {
+    "./aws-native-reference/04-benefits-caseworker/lambdas/draft.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2420,7 +2420,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\lambdas\\finalize.py": {
+    "./aws-native-reference/04-benefits-caseworker/lambdas/finalize.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2433,7 +2433,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\lambdas\\hitl_notify.py": {
+    "./aws-native-reference/04-benefits-caseworker/lambdas/hitl_notify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2446,7 +2446,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\lambdas\\retrieve.py": {
+    "./aws-native-reference/04-benefits-caseworker/lambdas/retrieve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2459,7 +2459,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\tests\\test_asl.py": {
+    "./aws-native-reference/04-benefits-caseworker/tests/test_asl.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2472,7 +2472,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\04-benefits-caseworker\\tests\\test_core.py": {
+    "./aws-native-reference/04-benefits-caseworker/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2485,7 +2485,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\core.py": {
+    "./aws-native-reference/05-public-records-foia/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2498,7 +2498,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\lambdas\\__init__.py": {
+    "./aws-native-reference/05-public-records-foia/lambdas/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2511,7 +2511,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\lambdas\\_shared.py": {
+    "./aws-native-reference/05-public-records-foia/lambdas/_shared.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2524,7 +2524,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\lambdas\\check.py": {
+    "./aws-native-reference/05-public-records-foia/lambdas/check.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2537,7 +2537,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\lambdas\\classify.py": {
+    "./aws-native-reference/05-public-records-foia/lambdas/classify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2550,7 +2550,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\lambdas\\draft.py": {
+    "./aws-native-reference/05-public-records-foia/lambdas/draft.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2563,7 +2563,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\lambdas\\finalize.py": {
+    "./aws-native-reference/05-public-records-foia/lambdas/finalize.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2576,7 +2576,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\lambdas\\hitl_notify.py": {
+    "./aws-native-reference/05-public-records-foia/lambdas/hitl_notify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2589,7 +2589,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\lambdas\\retrieve.py": {
+    "./aws-native-reference/05-public-records-foia/lambdas/retrieve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2602,7 +2602,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\tests\\test_asl.py": {
+    "./aws-native-reference/05-public-records-foia/tests/test_asl.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2615,7 +2615,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\05-public-records-foia\\tests\\test_core.py": {
+    "./aws-native-reference/05-public-records-foia/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2628,7 +2628,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\core.py": {
+    "./aws-native-reference/06-procurement-grants/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2641,7 +2641,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\lambdas\\__init__.py": {
+    "./aws-native-reference/06-procurement-grants/lambdas/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2654,7 +2654,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\lambdas\\_shared.py": {
+    "./aws-native-reference/06-procurement-grants/lambdas/_shared.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2667,7 +2667,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\lambdas\\check.py": {
+    "./aws-native-reference/06-procurement-grants/lambdas/check.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2680,7 +2680,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\lambdas\\classify.py": {
+    "./aws-native-reference/06-procurement-grants/lambdas/classify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2693,7 +2693,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\lambdas\\draft.py": {
+    "./aws-native-reference/06-procurement-grants/lambdas/draft.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2706,7 +2706,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\lambdas\\finalize.py": {
+    "./aws-native-reference/06-procurement-grants/lambdas/finalize.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2719,7 +2719,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\lambdas\\hitl_notify.py": {
+    "./aws-native-reference/06-procurement-grants/lambdas/hitl_notify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2732,7 +2732,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\lambdas\\retrieve.py": {
+    "./aws-native-reference/06-procurement-grants/lambdas/retrieve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2745,7 +2745,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\tests\\test_asl.py": {
+    "./aws-native-reference/06-procurement-grants/tests/test_asl.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2758,7 +2758,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\06-procurement-grants\\tests\\test_core.py": {
+    "./aws-native-reference/06-procurement-grants/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2771,7 +2771,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\core.py": {
+    "./aws-native-reference/07-govops-service-desk/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2784,7 +2784,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\lambdas\\__init__.py": {
+    "./aws-native-reference/07-govops-service-desk/lambdas/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2797,7 +2797,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\lambdas\\_shared.py": {
+    "./aws-native-reference/07-govops-service-desk/lambdas/_shared.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2810,7 +2810,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\lambdas\\check.py": {
+    "./aws-native-reference/07-govops-service-desk/lambdas/check.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2823,7 +2823,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\lambdas\\classify.py": {
+    "./aws-native-reference/07-govops-service-desk/lambdas/classify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2836,7 +2836,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\lambdas\\draft.py": {
+    "./aws-native-reference/07-govops-service-desk/lambdas/draft.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2849,7 +2849,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\lambdas\\finalize.py": {
+    "./aws-native-reference/07-govops-service-desk/lambdas/finalize.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2862,7 +2862,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\lambdas\\hitl_notify.py": {
+    "./aws-native-reference/07-govops-service-desk/lambdas/hitl_notify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2875,7 +2875,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\lambdas\\retrieve.py": {
+    "./aws-native-reference/07-govops-service-desk/lambdas/retrieve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2888,7 +2888,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\tests\\test_asl.py": {
+    "./aws-native-reference/07-govops-service-desk/tests/test_asl.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2901,7 +2901,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\07-govops-service-desk\\tests\\test_core.py": {
+    "./aws-native-reference/07-govops-service-desk/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2914,7 +2914,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\core.py": {
+    "./aws-native-reference/08-public-safety-health/core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2927,7 +2927,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\lambdas\\__init__.py": {
+    "./aws-native-reference/08-public-safety-health/lambdas/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2940,7 +2940,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\lambdas\\_shared.py": {
+    "./aws-native-reference/08-public-safety-health/lambdas/_shared.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2953,7 +2953,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\lambdas\\check.py": {
+    "./aws-native-reference/08-public-safety-health/lambdas/check.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2966,7 +2966,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\lambdas\\classify.py": {
+    "./aws-native-reference/08-public-safety-health/lambdas/classify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2979,7 +2979,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\lambdas\\draft.py": {
+    "./aws-native-reference/08-public-safety-health/lambdas/draft.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -2992,7 +2992,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\lambdas\\finalize.py": {
+    "./aws-native-reference/08-public-safety-health/lambdas/finalize.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3005,7 +3005,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\lambdas\\hitl_notify.py": {
+    "./aws-native-reference/08-public-safety-health/lambdas/hitl_notify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3018,7 +3018,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\lambdas\\retrieve.py": {
+    "./aws-native-reference/08-public-safety-health/lambdas/retrieve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3031,7 +3031,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\tests\\test_asl.py": {
+    "./aws-native-reference/08-public-safety-health/tests/test_asl.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3044,7 +3044,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\08-public-safety-health\\tests\\test_core.py": {
+    "./aws-native-reference/08-public-safety-health/tests/test_core.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3057,7 +3057,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\_shared\\connector\\__init__.py": {
+    "./aws-native-reference/_shared/connector/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3070,7 +3070,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\_shared\\connector\\handler.py": {
+    "./aws-native-reference/_shared/connector/handler.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3083,7 +3083,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\_shared\\reviewer\\handler.py": {
+    "./aws-native-reference/_shared/reviewer/handler.py": {
       "CONFIDENCE.HIGH": 1,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3096,7 +3096,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\_shared\\runtime\\serve.py": {
+    "./aws-native-reference/_shared/runtime/serve.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -3109,7 +3109,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\lambdas\\__init__.py": {
+    "./aws-native-reference/wog-platform/lambdas/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3122,7 +3122,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\lambdas\\_shared.py": {
+    "./aws-native-reference/wog-platform/lambdas/_shared.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3135,7 +3135,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\lambdas\\aws_backends.py": {
+    "./aws-native-reference/wog-platform/lambdas/aws_backends.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3148,7 +3148,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\lambdas\\compensate.py": {
+    "./aws-native-reference/wog-platform/lambdas/compensate.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3161,7 +3161,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\lambdas\\gate.py": {
+    "./aws-native-reference/wog-platform/lambdas/gate.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3174,7 +3174,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\lambdas\\step.py": {
+    "./aws-native-reference/wog-platform/lambdas/step.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3187,7 +3187,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\local_runner.py": {
+    "./aws-native-reference/wog-platform/local_runner.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3200,7 +3200,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\tests\\__init__.py": {
+    "./aws-native-reference/wog-platform/tests/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3213,7 +3213,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\tests\\test_asl.py": {
+    "./aws-native-reference/wog-platform/tests/test_asl.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3226,7 +3226,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\tests\\test_aws_backends.py": {
+    "./aws-native-reference/wog-platform/tests/test_aws_backends.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3239,7 +3239,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\tests\\test_lambdas.py": {
+    "./aws-native-reference/wog-platform/tests/test_lambdas.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3252,7 +3252,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\aws-native-reference\\wog-platform\\tests\\test_local_runner.py": {
+    "./aws-native-reference/wog-platform/tests/test_local_runner.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3265,7 +3265,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\conftest.py": {
+    "./conftest.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3278,7 +3278,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\__init__.py": {
+    "./gov_platform/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3291,7 +3291,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\__init__.py": {
+    "./gov_platform/wog_orchestration/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3304,7 +3304,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\canonical\\__init__.py": {
+    "./gov_platform/wog_orchestration/canonical/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3317,7 +3317,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\canonical\\adapters.py": {
+    "./gov_platform/wog_orchestration/canonical/adapters.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3330,7 +3330,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\canonical\\schema.py": {
+    "./gov_platform/wog_orchestration/canonical/schema.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3343,7 +3343,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\consent\\__init__.py": {
+    "./gov_platform/wog_orchestration/consent/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3356,7 +3356,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\consent\\service.py": {
+    "./gov_platform/wog_orchestration/consent/service.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3369,7 +3369,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\demo\\__init__.py": {
+    "./gov_platform/wog_orchestration/demo/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3382,7 +3382,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\demo\\demo_life_event.py": {
+    "./gov_platform/wog_orchestration/demo/demo_life_event.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3395,7 +3395,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\events\\__init__.py": {
+    "./gov_platform/wog_orchestration/events/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3408,7 +3408,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\events\\bus.py": {
+    "./gov_platform/wog_orchestration/events/bus.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3421,7 +3421,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\events\\evidence.py": {
+    "./gov_platform/wog_orchestration/events/evidence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3434,7 +3434,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\govern\\__init__.py": {
+    "./gov_platform/wog_orchestration/govern/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3447,7 +3447,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\govern\\tool_catalog.py": {
+    "./gov_platform/wog_orchestration/govern/tool_catalog.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3460,7 +3460,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\saga\\__init__.py": {
+    "./gov_platform/wog_orchestration/saga/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3473,7 +3473,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\saga\\coordinator.py": {
+    "./gov_platform/wog_orchestration/saga/coordinator.py": {
       "CONFIDENCE.HIGH": 1,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3486,7 +3486,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\saga\\life_events.py": {
+    "./gov_platform/wog_orchestration/saga/life_events.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3499,7 +3499,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\supervisor\\__init__.py": {
+    "./gov_platform/wog_orchestration/supervisor/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3512,7 +3512,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\supervisor\\orchestrator.py": {
+    "./gov_platform/wog_orchestration/supervisor/orchestrator.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3525,7 +3525,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\tests\\__init__.py": {
+    "./gov_platform/wog_orchestration/tests/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3538,7 +3538,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\tests\\test_adapters.py": {
+    "./gov_platform/wog_orchestration/tests/test_adapters.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3551,7 +3551,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\tests\\test_canonical.py": {
+    "./gov_platform/wog_orchestration/tests/test_canonical.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3564,7 +3564,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\tests\\test_consent.py": {
+    "./gov_platform/wog_orchestration/tests/test_consent.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3577,7 +3577,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\tests\\test_evidence.py": {
+    "./gov_platform/wog_orchestration/tests/test_evidence.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3590,7 +3590,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\tests\\test_govern.py": {
+    "./gov_platform/wog_orchestration/tests/test_govern.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3603,7 +3603,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\tests\\test_life_events.py": {
+    "./gov_platform/wog_orchestration/tests/test_life_events.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3616,7 +3616,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\tests\\test_orchestrator.py": {
+    "./gov_platform/wog_orchestration/tests/test_orchestrator.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3629,7 +3629,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\gov_platform\\wog_orchestration\\tests\\test_saga.py": {
+    "./gov_platform/wog_orchestration/tests/test_saga.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3642,7 +3642,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\__init__.py": {
+    "./governance/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3655,7 +3655,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\accessibility\\__init__.py": {
+    "./governance/accessibility/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3668,7 +3668,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\accessibility\\wcag.py": {
+    "./governance/accessibility/wcag.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3681,7 +3681,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\controls\\__init__.py": {
+    "./governance/controls/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3694,7 +3694,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\controls\\control_mappings.py": {
+    "./governance/controls/control_mappings.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3707,7 +3707,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\evals\\__init__.py": {
+    "./governance/evals/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3720,7 +3720,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\evals\\gen_golden_311.py": {
+    "./governance/evals/gen_golden_311.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3733,7 +3733,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\evals\\golden_artifacts.py": {
+    "./governance/evals/golden_artifacts.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3746,7 +3746,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\evals\\run_evals.py": {
+    "./governance/evals/run_evals.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3759,7 +3759,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\evals\\score_311.py": {
+    "./governance/evals/score_311.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3772,7 +3772,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\evals\\scorers_311.py": {
+    "./governance/evals/scorers_311.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3785,7 +3785,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\evals\\test_score_311.py": {
+    "./governance/evals/test_score_311.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3798,7 +3798,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\fairness\\__init__.py": {
+    "./governance/fairness/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3811,7 +3811,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\fairness\\disparate_impact.py": {
+    "./governance/fairness/disparate_impact.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3824,7 +3824,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\grounding.py": {
+    "./governance/grounding.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3837,7 +3837,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\prompt_registry.py": {
+    "./governance/prompt_registry.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3850,7 +3850,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\redteam\\__init__.py": {
+    "./governance/redteam/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3863,7 +3863,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\redteam\\scenarios.py": {
+    "./governance/redteam/scenarios.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3876,7 +3876,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\__init__.py": {
+    "./governance/tests/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3889,7 +3889,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_accessibility.py": {
+    "./governance/tests/test_accessibility.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3902,7 +3902,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_agp_conformance.py": {
+    "./governance/tests/test_agp_conformance.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3915,7 +3915,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_evidence_vault.py": {
+    "./governance/tests/test_evidence_vault.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3928,7 +3928,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_fairness.py": {
+    "./governance/tests/test_fairness.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3941,7 +3941,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_grounding.py": {
+    "./governance/tests/test_grounding.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3954,7 +3954,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_hitl_enforced.py": {
+    "./governance/tests/test_hitl_enforced.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3967,7 +3967,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_mcp_authz_matrix.py": {
+    "./governance/tests/test_mcp_authz_matrix.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3980,7 +3980,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_negative_demo.py": {
+    "./governance/tests/test_negative_demo.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -3993,7 +3993,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_no_status_drift.py": {
+    "./governance/tests/test_no_status_drift.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4006,7 +4006,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_prompt_registry.py": {
+    "./governance/tests/test_prompt_registry.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4019,7 +4019,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\governance\\tests\\test_redteam.py": {
+    "./governance/tests/test_redteam.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4032,7 +4032,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-02-forms-idp-secure\\mint_approval.py": {
+    "./infra/golden-path-02-forms-idp-secure/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4045,7 +4045,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-02-forms-idp\\mint_approval.py": {
+    "./infra/golden-path-02-forms-idp/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4058,7 +4058,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-03-permitting-licensing-secure\\mint_approval.py": {
+    "./infra/golden-path-03-permitting-licensing-secure/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4071,7 +4071,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-03-permitting-licensing\\mint_approval.py": {
+    "./infra/golden-path-03-permitting-licensing/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4084,7 +4084,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-04-benefits-caseworker-secure\\mint_approval.py": {
+    "./infra/golden-path-04-benefits-caseworker-secure/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4097,7 +4097,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-04-benefits-caseworker\\mint_approval.py": {
+    "./infra/golden-path-04-benefits-caseworker/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4110,7 +4110,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-05-public-records-foia-secure\\mint_approval.py": {
+    "./infra/golden-path-05-public-records-foia-secure/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4123,7 +4123,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-05-public-records-foia\\mint_approval.py": {
+    "./infra/golden-path-05-public-records-foia/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4136,7 +4136,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-06-procurement-grants-secure\\mint_approval.py": {
+    "./infra/golden-path-06-procurement-grants-secure/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4149,7 +4149,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-06-procurement-grants\\mint_approval.py": {
+    "./infra/golden-path-06-procurement-grants/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4162,7 +4162,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-07-govops-service-desk-secure\\mint_approval.py": {
+    "./infra/golden-path-07-govops-service-desk-secure/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4175,7 +4175,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-07-govops-service-desk\\mint_approval.py": {
+    "./infra/golden-path-07-govops-service-desk/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4188,7 +4188,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-08-public-safety-health-secure\\mint_approval.py": {
+    "./infra/golden-path-08-public-safety-health-secure/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4201,7 +4201,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-08-public-safety-health\\mint_approval.py": {
+    "./infra/golden-path-08-public-safety-health/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4214,7 +4214,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-311-secure\\mint_approval.py": {
+    "./infra/golden-path-311-secure/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4227,7 +4227,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\infra\\golden-path-311\\mint_approval.py": {
+    "./infra/golden-path-311/mint_approval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4240,7 +4240,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\__init__.py": {
+    "./platform_core/slg_agent_platform/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4253,7 +4253,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\a2a\\__init__.py": {
+    "./platform_core/slg_agent_platform/a2a/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4266,7 +4266,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\a2a\\supervisor.py": {
+    "./platform_core/slg_agent_platform/a2a/supervisor.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4279,7 +4279,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\auth.py": {
+    "./platform_core/slg_agent_platform/auth.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4292,7 +4292,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\budget.py": {
+    "./platform_core/slg_agent_platform/budget.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4305,7 +4305,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\connectors\\__init__.py": {
+    "./platform_core/slg_agent_platform/connectors/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4318,7 +4318,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\connectors\\base.py": {
+    "./platform_core/slg_agent_platform/connectors/base.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4331,7 +4331,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\connectors\\factory.py": {
+    "./platform_core/slg_agent_platform/connectors/factory.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4344,7 +4344,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\connectors\\fixtures.py": {
+    "./platform_core/slg_agent_platform/connectors/fixtures.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4357,7 +4357,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\connectors\\live.py": {
+    "./platform_core/slg_agent_platform/connectors/live.py": {
       "CONFIDENCE.HIGH": 1,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4370,7 +4370,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\connectors\\nyc311.py": {
+    "./platform_core/slg_agent_platform/connectors/nyc311.py": {
       "CONFIDENCE.HIGH": 1,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 1,
@@ -4383,7 +4383,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\jwt_verify.py": {
+    "./platform_core/slg_agent_platform/jwt_verify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4396,7 +4396,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\llm_factory.py": {
+    "./platform_core/slg_agent_platform/llm_factory.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4409,7 +4409,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\mcp_gateway\\__init__.py": {
+    "./platform_core/slg_agent_platform/mcp_gateway/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4422,7 +4422,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\mcp_gateway\\approvals.py": {
+    "./platform_core/slg_agent_platform/mcp_gateway/approvals.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4435,7 +4435,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\mcp_gateway\\audit.py": {
+    "./platform_core/slg_agent_platform/mcp_gateway/audit.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4448,7 +4448,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\mcp_gateway\\audit_sinks.py": {
+    "./platform_core/slg_agent_platform/mcp_gateway/audit_sinks.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4461,7 +4461,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\mcp_gateway\\errors.py": {
+    "./platform_core/slg_agent_platform/mcp_gateway/errors.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4474,7 +4474,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\mcp_gateway\\gateway.py": {
+    "./platform_core/slg_agent_platform/mcp_gateway/gateway.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4487,7 +4487,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\mcp_gateway\\policy.py": {
+    "./platform_core/slg_agent_platform/mcp_gateway/policy.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4500,7 +4500,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\mcp_gateway\\runtime.py": {
+    "./platform_core/slg_agent_platform/mcp_gateway/runtime.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4513,7 +4513,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\mcp_gateway\\tokens.py": {
+    "./platform_core/slg_agent_platform/mcp_gateway/tokens.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4526,7 +4526,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\pii.py": {
+    "./platform_core/slg_agent_platform/pii.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4539,7 +4539,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\reasoning.py": {
+    "./platform_core/slg_agent_platform/reasoning.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4552,7 +4552,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\reviewer\\__init__.py": {
+    "./platform_core/slg_agent_platform/reviewer/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4565,7 +4565,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\reviewer\\service.py": {
+    "./platform_core/slg_agent_platform/reviewer/service.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4578,7 +4578,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\reviewer\\store.py": {
+    "./platform_core/slg_agent_platform/reviewer/store.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4591,7 +4591,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\secrets.py": {
+    "./platform_core/slg_agent_platform/secrets.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4604,7 +4604,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\slg_agent_platform\\tracing.py": {
+    "./platform_core/slg_agent_platform/tracing.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4617,7 +4617,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\__init__.py": {
+    "./platform_core/tests/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4630,7 +4630,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_a2a.py": {
+    "./platform_core/tests/test_a2a.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4643,7 +4643,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_agp_conformance.py": {
+    "./platform_core/tests/test_agp_conformance.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4656,7 +4656,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_audit_append_only.py": {
+    "./platform_core/tests/test_audit_append_only.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4669,7 +4669,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_budget.py": {
+    "./platform_core/tests/test_budget.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4682,7 +4682,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_connector_gateway.py": {
+    "./platform_core/tests/test_connector_gateway.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4695,7 +4695,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_connectors.py": {
+    "./platform_core/tests/test_connectors.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4708,7 +4708,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_jwt_verify.py": {
+    "./platform_core/tests/test_jwt_verify.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4721,7 +4721,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_kb_retrieval.py": {
+    "./platform_core/tests/test_kb_retrieval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4734,7 +4734,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_mcp_gateway.py": {
+    "./platform_core/tests/test_mcp_gateway.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4747,7 +4747,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_pii.py": {
+    "./platform_core/tests/test_pii.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4760,7 +4760,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_policy.py": {
+    "./platform_core/tests/test_policy.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4773,7 +4773,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_reasoning.py": {
+    "./platform_core/tests/test_reasoning.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4786,7 +4786,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_reviewer_service.py": {
+    "./platform_core/tests/test_reviewer_service.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 2,
@@ -4799,7 +4799,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_tokens.py": {
+    "./platform_core/tests/test_tokens.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4812,7 +4812,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_workflow_311_governed.py": {
+    "./platform_core/tests/test_workflow_311_governed.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4825,7 +4825,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_workflow_agents_governed.py": {
+    "./platform_core/tests/test_workflow_agents_governed.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4838,7 +4838,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\platform_core\\tests\\test_workflow_agents_retrieval.py": {
+    "./platform_core/tests/test_workflow_agents_retrieval.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4851,7 +4851,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\tests\\integration\\__init__.py": {
+    "./tests/integration/__init__.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4864,7 +4864,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\tests\\integration\\conftest.py": {
+    "./tests/integration/conftest.py": {
       "CONFIDENCE.HIGH": 0,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4877,7 +4877,7 @@
       "nosec": 0,
       "skipped_tests": 0
     },
-    ".\\tests\\integration\\test_authenticated_api.py": {
+    "./tests/integration/test_authenticated_api.py": {
       "CONFIDENCE.HIGH": 1,
       "CONFIDENCE.LOW": 0,
       "CONFIDENCE.MEDIUM": 0,
@@ -4909,7 +4909,7 @@
       "code": "37     port = int(os.getenv(\"PORT\", \"8080\"))\n38     HTTPServer((\"0.0.0.0\", port), Handler).serve_forever()\n",
       "col_offset": 16,
       "end_col_offset": 25,
-      "filename": ".\\01-resident-services-311\\agent\\serve.py",
+      "filename": "./01-resident-services-311/agent/serve.py",
       "issue_confidence": "MEDIUM",
       "issue_cwe": {
         "id": 605,
@@ -4929,7 +4929,7 @@
       "code": "18 if __name__==\"__main__\":\n19     HTTPServer((\"0.0.0.0\", int(os.getenv(\"PORT\",\"8080\"))), H).serve_forever()\n",
       "col_offset": 16,
       "end_col_offset": 25,
-      "filename": ".\\02-forms-idp\\agent\\serve.py",
+      "filename": "./02-forms-idp/agent/serve.py",
       "issue_confidence": "MEDIUM",
       "issue_cwe": {
         "id": 605,
@@ -4949,7 +4949,7 @@
       "code": "18 if __name__==\"__main__\":\n19     HTTPServer((\"0.0.0.0\", int(os.getenv(\"PORT\",\"8080\"))), H).serve_forever()\n",
       "col_offset": 16,
       "end_col_offset": 25,
-      "filename": ".\\03-permitting-licensing\\agent\\serve.py",
+      "filename": "./03-permitting-licensing/agent/serve.py",
       "issue_confidence": "MEDIUM",
       "issue_cwe": {
         "id": 605,
@@ -4969,7 +4969,7 @@
       "code": "18 if __name__==\"__main__\":\n19     HTTPServer((\"0.0.0.0\", int(os.getenv(\"PORT\",\"8080\"))), H).serve_forever()\n",
       "col_offset": 16,
       "end_col_offset": 25,
-      "filename": ".\\04-benefits-caseworker\\agent\\serve.py",
+      "filename": "./04-benefits-caseworker/agent/serve.py",
       "issue_confidence": "MEDIUM",
       "issue_cwe": {
         "id": 605,
@@ -4989,7 +4989,7 @@
       "code": "18 if __name__==\"__main__\":\n19     HTTPServer((\"0.0.0.0\", int(os.getenv(\"PORT\",\"8080\"))), H).serve_forever()\n",
       "col_offset": 16,
       "end_col_offset": 25,
-      "filename": ".\\05-public-records-foia\\agent\\serve.py",
+      "filename": "./05-public-records-foia/agent/serve.py",
       "issue_confidence": "MEDIUM",
       "issue_cwe": {
         "id": 605,
@@ -5009,7 +5009,7 @@
       "code": "18 if __name__==\"__main__\":\n19     HTTPServer((\"0.0.0.0\", int(os.getenv(\"PORT\",\"8080\"))), H).serve_forever()\n",
       "col_offset": 16,
       "end_col_offset": 25,
-      "filename": ".\\06-procurement-grants\\agent\\serve.py",
+      "filename": "./06-procurement-grants/agent/serve.py",
       "issue_confidence": "MEDIUM",
       "issue_cwe": {
         "id": 605,
@@ -5029,7 +5029,7 @@
       "code": "18 if __name__==\"__main__\":\n19     HTTPServer((\"0.0.0.0\", int(os.getenv(\"PORT\",\"8080\"))), H).serve_forever()\n",
       "col_offset": 16,
       "end_col_offset": 25,
-      "filename": ".\\07-govops-service-desk\\agent\\serve.py",
+      "filename": "./07-govops-service-desk/agent/serve.py",
       "issue_confidence": "MEDIUM",
       "issue_cwe": {
         "id": 605,
@@ -5049,7 +5049,7 @@
       "code": "18 if __name__==\"__main__\":\n19     HTTPServer((\"0.0.0.0\", int(os.getenv(\"PORT\",\"8080\"))), H).serve_forever()\n",
       "col_offset": 16,
       "end_col_offset": 25,
-      "filename": ".\\08-public-safety-health\\agent\\serve.py",
+      "filename": "./08-public-safety-health/agent/serve.py",
       "issue_confidence": "MEDIUM",
       "issue_cwe": {
         "id": 605,
@@ -5069,7 +5069,7 @@
       "code": "20 if __name__ == \"__main__\":\n21     HTTPServer((\"0.0.0.0\", int(os.getenv(\"PORT\",\"8080\"))), H).serve_forever()\n",
       "col_offset": 16,
       "end_col_offset": 25,
-      "filename": ".\\aws-native-reference\\_shared\\runtime\\serve.py",
+      "filename": "./aws-native-reference/_shared/runtime/serve.py",
       "issue_confidence": "MEDIUM",
       "issue_cwe": {
         "id": 605,
@@ -5089,7 +5089,7 @@
       "code": "47             req = urllib.request.Request(url, data=data, headers={\"Content-Type\": \"application/json\"})\n48             with urllib.request.urlopen(req, timeout=self.timeout) as resp:\n49                 return json.loads(resp.read().decode())\n",
       "col_offset": 17,
       "end_col_offset": 66,
-      "filename": ".\\platform_core\\slg_agent_platform\\connectors\\live.py",
+      "filename": "./platform_core/slg_agent_platform/connectors/live.py",
       "issue_confidence": "HIGH",
       "issue_cwe": {
         "id": 22,
@@ -5109,7 +5109,7 @@
       "code": "125         try:\n126             with _urllib_request.urlopen(req, timeout=_TIMEOUT) as resp:\n127                 data = json.loads(resp.read().decode(\"utf-8\"))\n",
       "col_offset": 17,
       "end_col_offset": 63,
-      "filename": ".\\platform_core\\slg_agent_platform\\connectors\\nyc311.py",
+      "filename": "./platform_core/slg_agent_platform/connectors/nyc311.py",
       "issue_confidence": "HIGH",
       "issue_cwe": {
         "id": 22,
@@ -5129,7 +5129,7 @@
       "code": "34     try:\n35         with urllib.request.urlopen(req, timeout=30) as r:\n36             return r.status, json.loads(r.read() or \"{}\")\n",
       "col_offset": 13,
       "end_col_offset": 52,
-      "filename": ".\\tests\\integration\\test_authenticated_api.py",
+      "filename": "./tests/integration/test_authenticated_api.py",
       "issue_confidence": "HIGH",
       "issue_cwe": {
         "id": 22,
