@@ -89,7 +89,7 @@ The governing invariant: **the orchestrator holds no tool grants, and agents nev
 
 **"What's the accessibility story?"** AI-generated output is ADA Title II in-scope; we run deterministic WCAG checks (alt text, heading order, link purpose, plain-language grade) in CI and recommend axe-core for full auditing.
 
-**"Who owns the data?"** The customer. Inference runs on Bedrock, reached from the VPC over AWS PrivateLink (a regional AWS service, not in-VPC hosting); constituent PII is masked before any model call with no egress to external AI APIs; the customer owns the KMS keys.
+**"Who owns the data?"** The customer. Inference runs on Bedrock, reached from the VPC over AWS PrivateLink (a regional AWS service, not in-VPC hosting); constituent PII is masked at the audit and model-output boundaries (input filterable by Bedrock Guardrails, not blanket pre-scrubbed) with no egress to external AI APIs; the customer owns the KMS keys.
 
 **"Why AWS?"** AgentCore (Runtime/Gateway/Identity), Bedrock + Guardrails, Step Functions for durable sagas, EventBridge for events, DynamoDB/S3 Object Lock for tamper-evident retention, GovCloud authorizations — the whole pattern is native and authorized.
 
