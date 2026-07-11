@@ -23,7 +23,7 @@ grounding without re-deriving them. The canonical, versioned contract lives in t
 | 4. Human approval (SoD, single-use) — consequential acts withheld in code; bound, single-use, approver ≠ requester | `mcp_gateway/approvals.py` (bound + NonceStore) | negative-demo #5–7 |
 | 5. PII/PHI/regulated-data masking — fail-closed at every log/audit boundary (real-data mode requires NER; regex alone does not mask free-text names) | `pii.py` + `mcp_gateway/audit.py` | negative-demo #8 |
 | 6. Audit (append-only + WORM) — every decision recorded; IAM deny on mutate; S3 Object Lock | `mcp_gateway/audit.py` + `audit_sinks.py` | negative-demo #9; clean-account run |
-| 7. Token budgets — per-agent hard cap enforced before spend | `budget.py` | `platform_core/tests/test_budget.py`; negative-demo #10 |
+| 7. Token budgets — per-agent token-budget **metering** implemented (hard/soft preflight + threshold alerts); gateway hard-cap **enforcement is engagement work — not wired** into the gateway spend path (`budget.py` is exercised by tests + the negative demo, not called on the live invoke path) | `budget.py` | `platform_core/tests/test_budget.py`; negative-demo #10 |
 | 8. Model gateway + grounding — brokered model access; grounding / output-schema checks; output guardrail **fails closed** (a configured guardrail that errors blocks + emits `guardrail_failclosed`) | `llm_factory.py` + `reasoning.py` + governance grounding | `make eval-311` |
 
 Hero: Agent 01 (Resident Services / 311).
