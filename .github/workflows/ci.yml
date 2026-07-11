@@ -80,7 +80,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install bandit pip-audit
+      - run: pip install bandit==1.9.4 pip-audit
       - name: Bandit (high severity, hard gate)
         run: bandit -r platform_core governance aws-native-reference -lll
       - name: pip-audit (BLOCKING)
