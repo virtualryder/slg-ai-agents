@@ -9,6 +9,10 @@ Parameters:
   CodeBucket: {Type: String, Description: "S3 bucket holding the WoG saga Lambda zip"}
   CodeKey: {Type: String, Default: wog-platform-lambdas.zip}
   DeploymentResidency: {Type: String, Default: us, AllowedValues: [us, us-gov]}
+  BedrockModelArn:
+    Type: String
+    Default: "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0"
+    Description: "ARN of the Bedrock foundation model the WoG saga may invoke/guardrail. Scopes bedrock:InvokeModel/ApplyGuardrail off Resource:* to a single model (mirrors the golden-path templates). Override per region/model."
 Resources:
   ComplianceBus:
     Type: AWS::Events::EventBus
@@ -75,7 +79,7 @@ Resources:
             Statement:
               - {Effect: Allow, Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:Query], Resource: [!GetAtt EventStore.Arn, !GetAtt ConsentStore.Arn, !GetAtt IdempotencyTable.Arn]}
               - {Effect: Allow, Action: [events:PutEvents], Resource: !GetAtt ComplianceBus.Arn}
-              - {Effect: Allow, Action: [bedrock:InvokeModel, bedrock:ApplyGuardrail], Resource: "*"}
+              - {Effect: Allow, Action: [bedrock:InvokeModel, bedrock:ApplyGuardrail], Resource: !Ref BedrockModelArn}
               - {Effect: Allow, Action: [kms:Decrypt, kms:GenerateDataKey], Resource: !Ref KmsKeyArn}
   GateFunction:
     Type: AWS::Lambda::Function

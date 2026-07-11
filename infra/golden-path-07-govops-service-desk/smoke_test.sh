@@ -5,9 +5,17 @@ set -euo pipefail
 cd "$(dirname "$0")"
 STACK="${1:-slg-07-dev}"
 REGION="${AWS_REGION:-us-east-1}"
-# must match the stack's TokenSecret so the reviewer-minted approval verifies in finalize
-export APPROVAL_TOKEN_SECRET="${APPROVAL_TOKEN_SECRET:-${TOKEN_SECRET:-}}"
-[ -n "$APPROVAL_TOKEN_SECRET" ] || { echo "FAIL: set TOKEN_SECRET (or APPROVAL_TOKEN_SECRET) to the stack's TokenSecret parameter before running the smoke test."; exit 1; }
+# fetch the stack's IN-STACK token-signing secret (TokenSecretArn output) so the reviewer-minted
+# approval verifies in finalize. Export APPROVAL_TOKEN_SECRET to override the fetch.
+if [ -z "${APPROVAL_TOKEN_SECRET:-}" ]; then
+  SECRET_ARN=$(aws cloudformation describe-stacks --stack-name "$STACK" --region "$REGION" \
+    --query "Stacks[0].Outputs[?OutputKey=='TokenSecretArn'].OutputValue" --output text)
+  { [ -n "$SECRET_ARN" ] && [ "$SECRET_ARN" != "None" ]; } || { echo "FAIL: no TokenSecretArn output on $STACK"; exit 1; }
+  APPROVAL_TOKEN_SECRET=$(aws secretsmanager get-secret-value --secret-id "$SECRET_ARN" --region "$REGION" \
+    --query SecretString --output text)
+fi
+export APPROVAL_TOKEN_SECRET
+[ -n "$APPROVAL_TOKEN_SECRET" ] || { echo "FAIL: could not read the token-signing secret from Secrets Manager"; exit 1; }
 
 SM_ARN=$(aws cloudformation describe-stacks --stack-name "$STACK" --region "$REGION" \
   --query "Stacks[0].Outputs[?OutputKey=='StateMachineArn'].OutputValue" --output text)
