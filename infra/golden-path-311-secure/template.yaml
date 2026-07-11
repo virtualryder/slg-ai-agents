@@ -21,11 +21,6 @@ Parameters:
   BedrockModelId:
     Type: String
     Default: anthropic.claude-3-5-sonnet-20240620-v1:0
-  TokenSecret:
-    Type: String
-    NoEcho: true
-    MinLength: 32
-    Description: "Required. Strong random secret (>=32 chars) used to sign gateway/approval tokens so a reviewer-minted bound approval verifies in finalize. Generate with: openssl rand -hex 32. For production use AWS Secrets Manager / an asymmetric KMS / AgentCore Identity key (docs/INCIDENT-RESPONSE-AND-KEY-MANAGEMENT.md)."
   OriginVerifySecret:
     Type: String
     NoEcho: true
@@ -73,8 +68,8 @@ Globals:
         AUDIT_TABLE: !Ref AuditTable
         PENDING_TABLE: !Ref PendingApprovalsTable
         AGENT_ID: 01-resident-services-311
-        GATEWAY_TOKEN_SECRET: !Ref TokenSecret
-        APPROVAL_TOKEN_SECRET: !Ref TokenSecret
+        GATEWAY_TOKEN_SECRET: !Sub "{{resolve:secretsmanager:${TokenSecretResource}:SecretString}}"
+        APPROVAL_TOKEN_SECRET: !Sub "{{resolve:secretsmanager:${TokenSecretResource}:SecretString}}"
         ORIGIN_VERIFY_SECRET: !Ref OriginVerifySecret
         LLM_MODE: bedrock
         BEDROCK_GUARDRAIL_ID: !Ref ResidentGuardrail
@@ -86,6 +81,18 @@ Globals:
         POWERTOOLS_SERVICE_NAME: slg-311
 
 Resources:
+  # ---- token-signing secret: generated IN-STACK (never committed, never passed on the CLI).
+  #      Resolved into GATEWAY/APPROVAL_TOKEN_SECRET below via a Secrets Manager dynamic
+  #      reference. RESIDUAL LIMITATION: the resolved value still materializes as a Lambda
+  #      env var (plaintext in the function config) - see SECURITY.md. In production the
+  #      reviewer/gateway reads the signing key from Secrets Manager / KMS at runtime. ----
+  TokenSecretResource:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: !Sub "Token-signing HMAC secret (gateway + approval) for ${AWS::StackName}."
+      GenerateSecretString:
+        PasswordLength: 64
+        ExcludePunctuation: true
 
   # ---- shared dependency layer (platform_core + governance + core) ----
   SharedLayer:
@@ -794,6 +801,9 @@ Resources:
               - {HeaderName: X-Origin-Verify, HeaderValue: !Ref OriginVerifySecret}
 
 Outputs:
+  TokenSecretArn:
+    Description: ARN of the in-stack token-signing secret; smoke_test.sh reads it to mint a bound approval.
+    Value: !Ref TokenSecretResource
   CloudFrontDomain:
     Description: Public edge — CloudFront + WAF in front of the API.
     Value: !GetAtt Distribution.DomainName

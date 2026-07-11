@@ -47,6 +47,6 @@ id) to make that agent a secure combined deploy. 311 is the worked reference.
 ## Honest scope
 This is a **reference** secure deploy for workshops and scoped pilots, not an authorized
 production system. Cognito is the demo IdP (production federates the agency IdP); `TokenSecret`
-must move to Secrets Manager/KMS; WORM retention must be set from the agency's records schedule;
+is now generated in-stack (Secrets Manager) but still resolves into a Lambda env var (production should read it from Secrets Manager/KMS at runtime); WORM retention must be set from the agency's records schedule;
 and an ATO / StateRAMP / FedRAMP authorization is customer-engagement work. See
 `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`.

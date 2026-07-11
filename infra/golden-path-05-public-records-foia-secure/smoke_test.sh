@@ -5,7 +5,7 @@
 #   2) probe the DIRECT execute-api URL without the origin header         -> 401/403 (cloaked)
 #   3) negative control: approve the human gate WITHOUT a valid approval  -> write BLOCKED
 #   4) positive control (base assertion): reviewer-minted bound approval  -> workflow completes
-#      (step 4 needs TOKEN_SECRET = the stack's TokenSecret; skipped with a warning otherwise)
+#      (step 4 reads the stack's in-stack token-signing secret automatically)
 set -euo pipefail
 cd "$(dirname "$0")"
 STACK="${1:-slg-05-secure-dev}"
@@ -72,10 +72,6 @@ else
 fi
 
 echo "==> 4) positive control: base golden-path smoke test (reviewer-minted bound approval)"
-if [ -n "${TOKEN_SECRET:-}${APPROVAL_TOKEN_SECRET:-}" ]; then
-  ../golden-path-05-public-records-foia/smoke_test.sh "$STACK"
-else
-  echo "    SKIP: export TOKEN_SECRET (the stack's TokenSecret) to run the approved-write flow."
-fi
+../golden-path-05-public-records-foia/smoke_test.sh "$STACK"
 
 echo "PASS: secure smoke test complete for $STACK."

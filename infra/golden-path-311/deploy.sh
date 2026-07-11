@@ -6,13 +6,9 @@ cd "$(dirname "$0")"
 STACK="${1:-slg-311-dev}"
 REGION="${AWS_REGION:-us-east-1}"
 
-# TokenSecret has no template default: generate a strong random one unless provided.
-TOKEN_SECRET="${TOKEN_SECRET:-${APPROVAL_TOKEN_SECRET:-}}"
-if [ -z "$TOKEN_SECRET" ]; then
-  TOKEN_SECRET="$(openssl rand -hex 32)"
-  echo "NOTICE: TOKEN_SECRET was not set - generated a random secret for this deployment (value not shown)."
-  echo "        Export TOKEN_SECRET before deploying if you need it later (e.g. for smoke_test.sh)."
-fi
+# Token-signing secret is now generated IN-STACK (AWS::SecretsManager::Secret) and resolved
+# into the token env vars via a dynamic reference - nothing to pass or generate here.
+# smoke_test.sh reads it back from the TokenSecretArn stack output.
 
 echo "==> sam build"
 sam build
@@ -24,7 +20,7 @@ sam deploy \
   --capabilities CAPABILITY_IAM \
   --resolve-s3 \
   --no-confirm-changeset \
-  --parameter-overrides "Environment=dev ConnectorMode=fixture TokenSecret=$TOKEN_SECRET"
+  --parameter-overrides "Environment=dev ConnectorMode=fixture"
 
 echo "==> outputs"
 aws cloudformation describe-stacks --stack-name "$STACK" --region "$REGION" \

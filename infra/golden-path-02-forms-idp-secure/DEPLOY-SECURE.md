@@ -27,6 +27,6 @@ WAFv2 attaches at the CloudFront edge (not to HTTP APIs), so the secure variant 
 
 ## Honest scope
 A **reference** secure deploy for workshops and scoped pilots, not an authorized production
-system: Cognito is the demo IdP, `TokenSecret` must move to Secrets Manager/KMS, WORM retention
+system: Cognito is the demo IdP, the token-signing secret is now generated in-stack (Secrets Manager) but still resolves into a Lambda env var - production should read it from Secrets Manager/KMS at runtime, WORM retention
 must be set from the agency's records schedule, and ATO / StateRAMP / FedRAMP is customer work.
 See `docs/PRODUCTION-READINESS-AND-SHARED-RESPONSIBILITY.md`.
