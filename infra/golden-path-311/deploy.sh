@@ -10,6 +10,9 @@ REGION="${AWS_REGION:-us-east-1}"
 # into the token env vars via a dynamic reference - nothing to pass or generate here.
 # smoke_test.sh reads it back from the TokenSecretArn stack output.
 
+echo "==> stage shared layer (platform_core + governance + core.py)"
+bash prepare_layer.sh    # Windows without a bash shell: run prepare_layer.sh's three copies by hand, or use Git Bash
+
 echo "==> sam build"
 sam build
 

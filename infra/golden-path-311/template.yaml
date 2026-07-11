@@ -72,10 +72,11 @@ Resources:
         ExcludePunctuation: true
 
   # ---- shared dependency layer (platform_core + governance + core) ----
+  # ContentUri points at layer/, whose python/ subtree is pre-staged by
+  # prepare_layer.sh before `sam build` (no makefile, no repo-relative copies,
+  # no `make`/Docker needed) — builds identically on Linux, macOS, Windows, CI.
   SharedLayer:
     Type: AWS::Serverless::LayerVersion
-    Metadata:
-      BuildMethod: makefile
     Properties:
       LayerName: !Sub "slg-311-${Environment}-shared"
       Description: platform_core, governance, and agent core for the 311 golden path.

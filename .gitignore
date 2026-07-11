@@ -8,3 +8,6 @@ _qa*/
 node_modules/
 .aws-sam/
 .claude/
+
+# staged Lambda layer (populated by prepare_layer.sh)
+infra/golden-path-311/layer/python/
