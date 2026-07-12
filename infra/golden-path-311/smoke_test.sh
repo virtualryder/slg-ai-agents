@@ -29,10 +29,10 @@ echo "Started: $EXEC_ARN"
 
 echo "==> waiting for the human gate (waitForTaskToken)…"
 TOKEN=""
-for i in $(seq 1 30); do
+for i in $(seq 1 90); do   # up to ~180s (the draft/model step can be slow)
   TOKEN=$(aws stepfunctions get-execution-history --execution-arn "$EXEC_ARN" --region "$REGION" \
     --query "events[?type=='TaskScheduled'].taskScheduledEventDetails.parameters" --output text 2>/dev/null | \
-    grep -o '"Token":"[^"]*"' | head -1 | cut -d'"' -f4 || true)
+    grep -oE '"(task_)?token":"[^"]*"' | head -1 | cut -d'"' -f4 || true)
   [ -n "$TOKEN" ] && break; sleep 2
 done
 [ -n "$TOKEN" ] || { echo "FAIL: human-gate task token never appeared"; exit 1; }
